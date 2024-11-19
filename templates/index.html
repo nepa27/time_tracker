@@ -97,7 +97,6 @@
       </div>
       <div class="task-list">
         <h3>Предыдущие дела</h3>
-        
 
       <template id="template__task-item">
         <div class="task-item">
@@ -106,6 +105,7 @@
           <p>Время: <span class="time">02:20:10</span></p>
         </div>
       </template>
+      
     </div>
     <script>
       let timerField;
@@ -210,9 +210,9 @@
                 },
                 body: JSON.stringify(objInf),
             })
-            .then(data=> data.json())
-            .then(data => console.log(data))
-            .catch(error => console.error(error))
+            // .then(data=> data.json())
+            // .then(data => console.log(data))
+            // .catch(error => console.error(error))
           
          
 
