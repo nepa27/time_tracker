@@ -150,8 +150,6 @@
           startTimer();
         } else { 
 
-
-
           const input = document.querySelector("#taskName");
           const timer = document.querySelector("#timer");
 
@@ -172,9 +170,7 @@
           
           const nameWorkAll = document.querySelectorAll('.nameWork')
 
-
-
-          let isExist =  Array.from(nameWorkAll).some(elem=>{
+          const isExist =  Array.from(nameWorkAll).some(elem=>{
 
                 
         if (elem.textContent == input.value) {
@@ -204,7 +200,6 @@
                 time: `${time.textContent}`,
                 date: `${date.textContent}`
             }
-            console.log(objInf);
 
             if(!isExist) conteiner.append(item);
 
