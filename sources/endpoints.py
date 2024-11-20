@@ -1,6 +1,6 @@
 from datetime import datetime, time, timedelta
 
-from flask import render_template, request
+from flask import render_template, redirect, request, url_for
 from flask_smorest import Blueprint
 from flask.views import MethodView
 
@@ -25,7 +25,7 @@ class HomePage(MethodView):
     def post(self):
         data = request.json
         time_obj = datetime.strptime(data['time'], '%H:%M:%S').time()
-        date_obj = datetime.strptime(data['date'], '%d.%m.%Y').date()
+        date_obj = datetime.strptime(data['date'], '%Y-%m-%d').date()
 
         values = TimeTrackerModel.query.all()
         for value in values:
@@ -65,4 +65,37 @@ class HomePage(MethodView):
         db.session.commit()
         db.session.close()
 
-        return {'message': 'Ok'}, 204
+        return {'message': 'Data add in BD'}, 204
+
+
+@blp.route('/edit/<int:work_id>', endpoint='edit')
+class EditData(MethodView):
+    def get(self, work_id):
+        data = TimeTrackerModel.query.filter(
+            TimeTrackerModel.id == work_id
+        )
+        return render_template('edit.html', data=data)
+
+    def post(self, work_id):
+        work_data = TimeTrackerModel.query.get_or_404(work_id)
+        form_data = request.form.to_dict()
+
+        time_obj = datetime.strptime(form_data['time'], '%H:%M:%S').time()
+        date_obj = datetime.strptime(form_data['date'], '%Y-%m-%d').date()
+
+        work_data.name_of_work = form_data['name_of_work']
+        work_data.date = date_obj
+        work_data.time = time_obj
+
+        db.session.commit()
+        db.session.close()
+        return redirect(url_for('timer.home'))
+
+
+@blp.route('/delete/<int:work_id>', methods=['DELETE'], endpoint='delete')
+def delete_item(work_id):
+    TimeTrackerModel.query.filter(
+        TimeTrackerModel.id == work_id
+    ).delete()
+    db.session.commit()
+    return {'message': 'Task has delete'}, 204

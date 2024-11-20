@@ -1,5 +1,4 @@
 from config import app, db
-from models import TimeTrackerModel
 from sources.endpoints import blp as timer
 
 
