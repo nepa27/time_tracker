@@ -1,226 +1,55 @@
-<!DOCTYPE html>
-<html lang="ru">
-  <head>
-    <title>Учет рабочего времени</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      body {
-        font-family: "Roboto", sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f4;
-      }
-      .navbar {
-        background-color: #333;
-        color: #fff;
-        padding: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      } 
-      .navbar a {
-        color: #fff;
-        text-decoration: none;
-        margin: 0 15px;
-      }
-      .navbar a:hover {
-        text-decoration: underline;
-      }
-      .container {
-        padding: 20px;
-      }
-      .task-input {
-        display: flex;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-      .task-input input {
-        padding: 10px;
-        font-size: 16px;
-        flex: 1;
-        margin-right: 10px;
-      }
-      .task-input button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #28a745;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-      }
-      .task-input button:hover {
-        background-color: #218838;
-      } 
-      .task-input .timer {
-        font-size: 16px;
-        margin-left: 10px;
-      }
-      .task-list {
-        margin-top: 20px;
-      }
-      .task-list h3 {
-        margin-top: 0;
-      }
-      .task-item {
-        background-color: #fff;
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 5px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-    </style>
-  </head>
-  <body>
-    <div class="navbar">
-      <div class="logo">
-        <a href="#">Учет рабочего времени</a>
-      </div>
-      <div class="nav-links">
-        <a href="#">Главная</a>
-        <a href="#">Проекты</a>
-        <a href="#">Статистика</a>
-        <a href="#">Войти</a>
-      </div>
-    </div>
-    <div class="container">
-      <div class="task-input">
-        <input type="text" id="taskName" placeholder="Название дела" />
+{% extends 'base.html' %}
+{% block title %}Учет рабочего времени{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="task-input">
+        <input type="text" id="taskName" placeholder="Название дела" list="taskNames" />
+        <datalist id="taskNames"></datalist>
         <button id="startButton">Пуск</button>
         <div class="timer" id="timer">00:00:00</div>
-      </div>
-      <div class="task-list">
-        <h3>Предыдущие дела</h3>
-
-      <template id="template__task-item">
-        <div class="task-item">
-          <strong>Дата: <span class="date">2023-09-28</span></strong>
-          <p>Название дела: <span class="nameWork">Название</span></p>
-          <p>Время: <span class="time">02:20:10</span></p>
-        </div>
-      </template>
-      
     </div>
-    <script>
-      let timerField;
-      let seconds = 0;
- 
-      const timerElement = document.getElementById("timer");
-      const startButton = document.getElementById("startButton");
+    <div class="total-time-container">
+        <strong>Всего за день:</strong>
+        <p class="timer" id="total_timer">{{ total_time }}</p>
+    </div>
+    <h3>Предыдущие дела</h3>
+    <div class="task-list">
+        {% if data %}
+            {% for item in data %}
+            <div class="task-item">
+                <strong>Дата: <span class="date">{{ item.date }}</span></strong>
+                <p>Название дела: <span class="nameWork">{{ item.name_of_work }}</span></p>
+                <p>Время: <span class="time">{{ item.time }}</span></p>
+                <button class="table-button" onclick="location.href='{{ url_for('timer.edit', work_id=item.id) }}'">Изменить</button>
+                <button class="table-button" onclick="deleteTable('{{ (item.id) }}', event)">Удалить</button>
+            </div>
+            {% endfor %}
+        {% endif %}
+        <template id="template__task-item">
+            <div class="task-item">
+                <strong>Дата: <span class="date">2023-09-28</span></strong>
+                <p>Название дела: <span class="nameWork">Название</span></p>
+                <p>Время: <span class="time">02:20:10</span></p>
+                <button class="table-button" onclick="location.href='#'">Изменить</button>
+                <button class="table-button" onclick="location.href='#'">Удалить</button>
+            </div>
+        </template>
+    </div>
+</div>
+{% if pagination.total == 0 %}
+    <h4 style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">Ты пока ничего не сделал :)</h4>
+{% else %}
+    <div class="pagination" style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">
+        {% if pagination.has_prev %}
+            <a class="table-button" href="{{ url_for('timer.home', page=pagination.prev_num) }}">« Предыдущая</a>
+        {% endif %}
 
-      function startTimer() {
-        timerField = setInterval(() => {
-          seconds++;
-          const hrs = Math.floor(seconds / 3600);
-          const mins = Math.floor((seconds % 3600) / 60);
-          const secs = seconds % 60;
-          timerElement.textContent = `${hrs.toString().padStart(2, "0")}:${mins
-            .toString()
-            .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-        }, 1000);
-      }
+        <span style="margin: 0 15px;">Страница {{ pagination.page }} из {{ pagination.pages }}</span>
 
-      function stopTimer() {
-        clearInterval(timerField);
-        seconds = 0
-        timerElement.textContent = '00:00:00'
-      }
-
-      function formattedDate() {
-          const now = new Date();
-          const day = String(now.getDate()).padStart(2, '0'); // Get the day, pad with zero if needed
-          const month = String(now.getMonth() + 1).padStart(2, '0'); // Get the month, add 1 because January is month 0
-          const year = now.getFullYear();
-          const formattedDate = `${day}-${month}-${year}`;
-          return formattedDate
-      }
-
-      startButton.addEventListener("click", () => {
-        if (startButton.textContent === "Пуск") {
-          startButton.textContent = "Стоп";
-
-
-
-          startTimer();
-        } else { 
-
-          const input = document.querySelector("#taskName");
-          const timer = document.querySelector("#timer");
-
-          const conteiner = document.querySelector(".container");
-          const itemTemplate = document.querySelector("#template__task-item");
-          const cloneTemplate = itemTemplate.content.cloneNode(true);
-          const item = cloneTemplate.querySelector(".task-item");
-
-
-          const name = item.querySelector(".nameWork")
-          name.textContent = input.value;
-          const date = item.querySelector(".date")
-          date.textContent = formattedDate()
-          const time = item.querySelector(".time")
-          time.textContent = timer.textContent;
-
-          
-          
-          const nameWorkAll = document.querySelectorAll('.nameWork')
-
-          const isExist =  Array.from(nameWorkAll).some(elem=>{
-
-                
-        if (elem.textContent == input.value) {
-            const item = elem.closest('.task-item')
-            const time = item.querySelector('.time')
-            const timeString = time.textContent
-            const [hoursWork, minutesWork, secondsWork] = timeString.split(':').map(Number); // Convert strings to numbers
-
-            const sec = (hoursWork * 3600) + (minutesWork * 60) + secondsWork;
-            seconds +=  sec
-            const hrs = Math.floor(seconds / 3600);
-            const mins = Math.floor((seconds % 3600) / 60);
-            const secs = seconds % 60;
-
-            time.textContent = `${hrs.toString().padStart(2, "0")}:${mins
-                .toString()
-                .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-            return true
-        }
-
-            })
-
-
-
-            const objInf = {
-                name: `${input.value}`,
-                time: `${time.textContent}`,
-                date: `${date.textContent}`
-            }
-
-            if(!isExist) conteiner.append(item);
-
-             fetch(`/`, {
-                method: "POST",
-                headers: {
-                "Content-Type": "application/json;charset=utf-8",
-                },
-                body: JSON.stringify(objInf),
-            })
-            // .then(data=> data.json())
-            // .then(data => console.log(data))
-            // .catch(error => console.error(error))
-          
-         
-
-          startButton.textContent = "Пуск";
-          input.value = ''
-          stopTimer()
-        }
-      });
-    </script>
-  </body>
-</html>
+        {% if pagination.has_next %}
+            <a class="table-button" href="{{ url_for('timer.home', page=pagination.next_num) }}">Следующая »</a>
+        {% endif %}
+    </div>
+{% endif %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}
