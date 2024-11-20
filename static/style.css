@@ -1,0 +1,97 @@
+  body {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+  }
+  .navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .navbar a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 15px;
+  }
+  .navbar a:hover {
+    color:#e30303;
+    transition: color 0.3s ease-in-out;
+  }
+  .container {
+    padding: 20px;
+  }
+  .task-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .task-input input {
+    padding: 10px;
+    font-size: 16px;
+    flex: 1;
+    margin-right: 10px;
+  }
+  .task-input button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: #000602;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  .task-input button:hover {
+    background-color: #3d3d3d;
+    transition: background-color 0.3s ease-in-out;
+  }
+  .table-button{
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: #000602;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  .table-button:hover {
+    background-color: #3d3d3d;
+    transition: background-color 0.3s ease-in-out;
+  }
+  .task-input .timer {
+    font-size: 16px;
+    margin-left: 10px;
+  }
+  .task-list {
+    margin-top: 20px;
+  }
+  .task-list h3 {
+    margin-top: 0;
+  }
+  .task-item {
+    background-color: #fff;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  .form-control {
+    display: block;
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0.375rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
