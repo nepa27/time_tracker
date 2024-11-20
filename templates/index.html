@@ -24,7 +24,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-      } 
+      }
       .navbar a {
         color: #fff;
         text-decoration: none;
@@ -57,7 +57,7 @@
       }
       .task-input button:hover {
         background-color: #218838;
-      } 
+      }
       .task-input .timer {
         font-size: 16px;
         margin-left: 10px;
@@ -79,148 +79,144 @@
   </head>
   <body>
     <div class="navbar">
-      <div class="logo">
-        <a href="#">Учет рабочего времени</a>
-      </div>
-      <div class="nav-links">
-        <a href="#">Главная</a>
-        <a href="#">Проекты</a>
-        <a href="#">Статистика</a>
-        <a href="#">Войти</a>
-      </div>
+        <div class="logo">
+            <a href="#">Учет рабочего времени</a>
+        </div>
+        <div class="nav-links">
+            <a href="#">Главная</a>
+            <a href="#">Проекты</a>
+            <a href="#">Статистика</a>
+            <a href="#">Войти</a>
+        </div>
     </div>
     <div class="container">
-      <div class="task-input">
-        <input type="text" id="taskName" placeholder="Название дела" />
-        <button id="startButton">Пуск</button>
-        <div class="timer" id="timer">00:00:00</div>
-      </div>
-      <div class="task-list">
-        <h3>Предыдущие дела</h3>
-
-      <template id="template__task-item">
-        <div class="task-item">
-          <strong>Дата: <span class="date">2023-09-28</span></strong>
-          <p>Название дела: <span class="nameWork">Название</span></p>
-          <p>Время: <span class="time">02:20:10</span></p>
+        <div class="task-input">
+            <input type="text" id="taskName" placeholder="Название дела" list="taskNames" />
+            <datalist id="taskNames"></datalist>
+            <button id="startButton">Пуск</button>
+            <div class="timer" id="timer">00:00:00</div>
         </div>
-      </template>
-      
+        <div class="task-list">
+            <h3>Предыдущие дела</h3>
+            {% for item in data %}
+            <div class="task-item">
+                <strong>Дата: <span class="date">{{ item.date }}</span></strong>
+                <p>Название дела: <span class="nameWork">{{ item.name_of_work }}</span></p>
+                <p>Время: <span class="time">{{ item.time }}</span></p>
+            </div>
+            {% endfor %}
+            <template id="template__task-item">
+                <div class="task-item">
+                    <strong>Дата: <span class="date">2023-09-28</span></strong>
+                    <p>Название дела: <span class="nameWork">Название</span></p>
+                    <p>Время: <span class="time">02:20:10</span></p>
+                </div>
+            </template>
+        </div>
     </div>
     <script>
-      let timerField;
-      let seconds = 0;
- 
-      const timerElement = document.getElementById("timer");
-      const startButton = document.getElementById("startButton");
+        let timerField;
+        let seconds = 0;
+        const timerElement = document.getElementById("timer");
+        const startButton = document.getElementById("startButton");
+        const taskNamesDatalist = document.getElementById("taskNames");
 
-      function startTimer() {
-        timerField = setInterval(() => {
-          seconds++;
-          const hrs = Math.floor(seconds / 3600);
-          const mins = Math.floor((seconds % 3600) / 60);
-          const secs = seconds % 60;
-          timerElement.textContent = `${hrs.toString().padStart(2, "0")}:${mins
-            .toString()
-            .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-        }, 1000);
-      }
-
-      function stopTimer() {
-        clearInterval(timerField);
-        seconds = 0
-        timerElement.textContent = '00:00:00'
-      }
-
-      function formattedDate() {
-          const now = new Date();
-          const day = String(now.getDate()).padStart(2, '0'); // Get the day, pad with zero if needed
-          const month = String(now.getMonth() + 1).padStart(2, '0'); // Get the month, add 1 because January is month 0
-          const year = now.getFullYear();
-          const formattedDate = `${day}-${month}-${year}`;
-          return formattedDate
-      }
-
-      startButton.addEventListener("click", () => {
-        if (startButton.textContent === "Пуск") {
-          startButton.textContent = "Стоп";
-
-
-
-          startTimer();
-        } else { 
-
-          const input = document.querySelector("#taskName");
-          const timer = document.querySelector("#timer");
-
-          const conteiner = document.querySelector(".container");
-          const itemTemplate = document.querySelector("#template__task-item");
-          const cloneTemplate = itemTemplate.content.cloneNode(true);
-          const item = cloneTemplate.querySelector(".task-item");
-
-
-          const name = item.querySelector(".nameWork")
-          name.textContent = input.value;
-          const date = item.querySelector(".date")
-          date.textContent = formattedDate()
-          const time = item.querySelector(".time")
-          time.textContent = timer.textContent;
-
-          
-          
-          const nameWorkAll = document.querySelectorAll('.nameWork')
-
-          const isExist =  Array.from(nameWorkAll).some(elem=>{
-
-                
-        if (elem.textContent == input.value) {
-            const item = elem.closest('.task-item')
-            const time = item.querySelector('.time')
-            const timeString = time.textContent
-            const [hoursWork, minutesWork, secondsWork] = timeString.split(':').map(Number); // Convert strings to numbers
-
-            const sec = (hoursWork * 3600) + (minutesWork * 60) + secondsWork;
-            seconds +=  sec
-            const hrs = Math.floor(seconds / 3600);
-            const mins = Math.floor((seconds % 3600) / 60);
-            const secs = seconds % 60;
-
-            time.textContent = `${hrs.toString().padStart(2, "0")}:${mins
-                .toString()
-                .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-            return true
+        // Функция для добавления названий дел в datalist
+        function populateDatalist() {
+            const nameWorkAll = document.querySelectorAll('.nameWork');
+            nameWorkAll.forEach(elem => {
+                const option = document.createElement('option');
+                option.value = elem.textContent;
+                taskNamesDatalist.appendChild(option);
+            });
         }
 
-            })
+        function startTimer() {
+            timerField = setInterval(() => {
+                seconds++;
+                const hrs = Math.floor(seconds / 3600);
+                const mins = Math.floor((seconds % 3600) / 60);
+                const secs = seconds % 60;
+                timerElement.textContent = `${hrs.toString().padStart(2, "0")}:${mins
+                    .toString()
+                    .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+            }, 1000);
+        }
 
+        function stopTimer() {
+            clearInterval(timerField);
+            seconds = 0;
+            timerElement.textContent = '00:00:00';
+        }
 
+        function formattedDate() {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            return `${day}.${month}.${year}`;
+        }
 
-            const objInf = {
-                name: `${input.value}`,
-                time: `${time.textContent}`,
-                date: `${date.textContent}`
+        startButton.addEventListener("click", () => {
+            if (startButton.textContent === "Пуск") {
+                startButton.textContent = "Стоп";
+                startTimer();
+            } else {
+                const input = document.querySelector("#taskName");
+                const timer = document.querySelector("#timer");
+                const conteiner = document.querySelector(".container");
+                const itemTemplate = document.querySelector("#template__task-item");
+                const cloneTemplate = itemTemplate.content.cloneNode(true);
+                const item = cloneTemplate.querySelector(".task-item");
+
+                const name = item.querySelector(".nameWork");
+                name.textContent = input.value;
+                const date = item.querySelector(".date");
+                date.textContent = formattedDate();
+                const time = item.querySelector(".time");
+                time.textContent = timer.textContent;
+
+                const nameWorkAll = document.querySelectorAll('.nameWork');
+                const isExist = Array.from(nameWorkAll).some(elem => {
+                    if (elem.textContent === input.value) {
+                        const item = elem.closest('.task-item');
+                        const time = item.querySelector('.time');
+                        const timeString = time.textContent;
+                        const [hoursWork, minutesWork, secondsWork] = timeString.split(':').map(Number);
+                        const sec = (hoursWork * 3600) + (minutesWork * 60) + secondsWork;
+                        seconds += sec;
+                        const hrs = Math.floor(seconds / 3600);
+                        const mins = Math.floor((seconds % 3600) / 60);
+                        const secs = seconds % 60;
+                        time.textContent = `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+                        return true;
+                    }
+                });
+
+                const objInf = {
+                    name_of_work: `${input.value}`,
+                    time: `${time.textContent}`,
+                    date: `${date.textContent}`
+                };
+
+                if (!isExist) conteiner.append(item);
+
+                fetch(`/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json;charset=utf-8",
+                    },
+                    body: JSON.stringify(objInf),
+                });
+
+                startButton.textContent = "Пуск";
+                input.value = '';
+                stopTimer();
             }
+        });
 
-            if(!isExist) conteiner.append(item);
-
-             fetch(`/`, {
-                method: "POST",
-                headers: {
-                "Content-Type": "application/json;charset=utf-8",
-                },
-                body: JSON.stringify(objInf),
-            })
-            // .then(data=> data.json())
-            // .then(data => console.log(data))
-            // .catch(error => console.error(error))
-          
-         
-
-          startButton.textContent = "Пуск";
-          input.value = ''
-          stopTimer()
-        }
-      });
+        // Заполнение datalist при загрузке страницы
+        document.addEventListener("DOMContentLoaded", populateDatalist);
     </script>
-  </body>
+</body>
 </html>
