@@ -8,18 +8,23 @@
         <button id="startButton">Пуск</button>
         <div class="timer" id="timer">00:00:00</div>
     </div>
+    <div class="total-time-container">
+        <strong>Всего за день:</strong>
+        <p class="timer" id="total_timer">{{ total_time }}</p>
+    </div>
+    <h3>Предыдущие дела</h3>
     <div class="task-list">
-        <h3>Предыдущие дела</h3>
-        {% for item in data %}
-        <div class="task-item">
-            <strong>Дата: <span class="date">{{ item.date }}</span></strong>
-            <p>Название дела: <span class="nameWork">{{ item.name_of_work }}</span></p>
-            <p>Время: <span class="time">{{ item.time }}</span></p>
-            <button class="table-button" onclick="location.href='{{ url_for('timer.edit', work_id=item.id) }}'">Изменить</button>
-<!--            <button class="table-button" onclick="location.href='{{ url_for('timer.delete', work_id=item.id) }}'">Удалить</button>-->
-            <button class="table-button" onclick="deleteTable('{{ (item.id) }}', event)">Удалить</button>
-        </div>
-        {% endfor %}
+        {% if data %}
+            {% for item in data %}
+            <div class="task-item">
+                <strong>Дата: <span class="date">{{ item.date }}</span></strong>
+                <p>Название дела: <span class="nameWork">{{ item.name_of_work }}</span></p>
+                <p>Время: <span class="time">{{ item.time }}</span></p>
+                <button class="table-button" onclick="location.href='{{ url_for('timer.edit', work_id=item.id) }}'">Изменить</button>
+                <button class="table-button" onclick="deleteTable('{{ (item.id) }}', event)">Удалить</button>
+            </div>
+            {% endfor %}
+        {% endif %}
         <template id="template__task-item">
             <div class="task-item">
                 <strong>Дата: <span class="date">2023-09-28</span></strong>
@@ -31,5 +36,20 @@
         </template>
     </div>
 </div>
+{% if pagination.total == 0 %}
+    <h4 style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">Ты пока ничего не сделал :)</h4>
+{% else %}
+    <div class="pagination" style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">
+        {% if pagination.has_prev %}
+            <a class="table-button" href="{{ url_for('timer.home', page=pagination.prev_num) }}">« Предыдущая</a>
+        {% endif %}
+
+        <span style="margin: 0 15px;">Страница {{ pagination.page }} из {{ pagination.pages }}</span>
+
+        {% if pagination.has_next %}
+            <a class="table-button" href="{{ url_for('timer.home', page=pagination.next_num) }}">Следующая »</a>
+        {% endif %}
+    </div>
+{% endif %}
 <script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}

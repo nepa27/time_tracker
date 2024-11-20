@@ -27,7 +27,6 @@
   .task-input {
     display: flex;
     align-items: center;
-    margin-bottom: 20px;
   }
   .task-input input {
     padding: 10px;
@@ -65,9 +64,6 @@
     font-size: 16px;
     margin-left: 10px;
   }
-  .task-list {
-    margin-top: 20px;
-  }
   .task-list h3 {
     margin-top: 0;
   }
@@ -95,3 +91,16 @@
     border-radius: 0.375rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
   }
+.total-time-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 2px;
+}
+.total-time-container strong {
+    font-size: 16px;
+    margin-right: 5px;
+}
+.total-time-container p {
+    font-size: 16px;
+}

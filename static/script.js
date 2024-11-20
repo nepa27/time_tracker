@@ -1,10 +1,16 @@
 let timerField;
 let seconds = 0;
+let totalSeconds = 0;
 const timerElement = document.getElementById("timer");
+const totalTimerElement = document.getElementById("total_timer");
 const startButton = document.getElementById("startButton");
 const taskNamesDatalist = document.getElementById("taskNames");
 
-// Функция для добавления названий дел в datalist
+function timeStringToSeconds(timeString) {
+    const [hrs, mins, secs] = timeString.split(':').map(Number);
+    return hrs * 3600 + mins * 60 + secs;
+}
+
 function populateDatalist() {
     const nameWorkAll = document.querySelectorAll('.nameWork');
     nameWorkAll.forEach(elem => {
@@ -14,23 +20,34 @@ function populateDatalist() {
     });
 }
 
+function updateTotalTime() {
+    const hrs = Math.floor(totalSeconds / 3600);
+    const mins = Math.floor((totalSeconds % 3600) / 60);
+    const secs = totalSeconds % 60;
+    totalTimerElement.textContent = `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
+
 function startTimer() {
     timerField = setInterval(() => {
         seconds++;
+        totalSeconds++;
         const hrs = Math.floor(seconds / 3600);
         const mins = Math.floor((seconds % 3600) / 60);
         const secs = seconds % 60;
         timerElement.textContent = `${hrs.toString().padStart(2, "0")}:${mins
             .toString()
             .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+        updateTotalTime();
     }, 1000);
 }
 
 function stopTimer() {
     clearInterval(timerField);
+    totalSeconds += seconds;
     seconds = 0;
     timerElement.textContent = '00:00:00';
 }
+
 
 function formattedDate() {
     const now = new Date();
@@ -47,7 +64,7 @@ startButton.addEventListener("click", () => {
     } else {
         const input = document.querySelector("#taskName");
         const timer = document.querySelector("#timer");
-        const conteiner = document.querySelector(".container");
+        const conteiner = document.querySelector(".task-list");
         const itemTemplate = document.querySelector("#template__task-item");
         const cloneTemplate = itemTemplate.content.cloneNode(true);
         const item = cloneTemplate.querySelector(".task-item");
@@ -82,7 +99,17 @@ startButton.addEventListener("click", () => {
             date: `${date.textContent}`
         };
 
-        if (!isExist) conteiner.append(item);
+        if (!isExist) {
+            const currentItems = document.querySelectorAll('.task-item');
+            const perPage = 5;
+            const currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
+
+            if (currentItems.length >= perPage && currentPage === Math.ceil(currentItems.length / perPage)) {
+                location.reload();
+            } else {
+                conteiner.prepend(item);
+            }
+        }
 
         fetch(`/`, {
             method: "POST",
@@ -97,20 +124,20 @@ startButton.addEventListener("click", () => {
         stopTimer();
     }
 });
-
-// Заполнение datalist при загрузке страницы
-
-document.addEventListener("DOMContentLoaded", populateDatalist);
-
+document.addEventListener("DOMContentLoaded", () => {
+    const totalTimeString = totalTimerElement.textContent;
+    totalSeconds = timeStringToSeconds(totalTimeString);
+    updateTotalTime();
+    populateDatalist();
+});
 function deleteTable(idWork, event) {
-event.stopPropagation(); // Остановить всплытие события
+event.stopPropagation();
 if (confirm('Вы уверены, что хотите удалить эту запись?')) {
     fetch(`/delete/${idWork}`, {
         method: 'DELETE'
     }).then(response => {
         if (response.ok) {
-//            alert('Записи удалены');
-            location.reload(); // Перезагрузить страницу
+            location.reload();
         } else {
             alert('Ошибка при удалении записей');
         }

@@ -6,6 +6,9 @@ from flask.views import MethodView
 
 from config import db
 from models import TimeTrackerModel
+from utils.utils import sum_time
+# from schemas import TimeTrackerSchema
+
 
 blp = Blueprint(
     'timer',
@@ -17,11 +20,27 @@ blp = Blueprint(
 @blp.route('/', endpoint='home')
 class HomePage(MethodView):
     def get(self):
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 5, type=int)
+
+        now_date = datetime.now().date()
+        data_time = TimeTrackerModel.query.filter(
+            TimeTrackerModel.date == now_date
+        ).order_by('time')
+
+        data = TimeTrackerModel.query.order_by(
+            TimeTrackerModel.id.desc()
+        ).paginate(page=page, per_page=per_page)
+        total_time = sum_time(data_time.all())
+
         return render_template(
             'index.html',
-            data=TimeTrackerModel.query.all()
+            data=data,
+            total_time=total_time,
+            pagination=data
         )
 
+    # @blp.arguments(TimeTrackerSchema)
     def post(self):
         data = request.json
         time_obj = datetime.strptime(data['time'], '%H:%M:%S').time()
