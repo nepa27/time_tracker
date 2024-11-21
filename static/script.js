@@ -6,6 +6,13 @@ const totalTimerElement = document.getElementById("total_timer");
 const startButton = document.getElementById("startButton");
 const taskNamesDatalist = document.getElementById("taskNames");
 
+document.addEventListener("DOMContentLoaded", () => {
+    const totalTimeString = totalTimerElement.textContent;
+    totalSeconds = timeStringToSeconds(totalTimeString);
+    updateTotalTime();
+    populateDatalist();
+});
+
 function timeStringToSeconds(timeString) {
     const [hrs, mins, secs] = timeString.split(':').map(Number);
     return hrs * 3600 + mins * 60 + secs;
@@ -124,12 +131,7 @@ startButton.addEventListener("click", () => {
         stopTimer();
     }
 });
-document.addEventListener("DOMContentLoaded", () => {
-    const totalTimeString = totalTimerElement.textContent;
-    totalSeconds = timeStringToSeconds(totalTimeString);
-    updateTotalTime();
-    populateDatalist();
-});
+
 function deleteTable(idWork, event) {
 event.stopPropagation();
 if (confirm('Вы уверены, что хотите удалить эту запись?')) {
