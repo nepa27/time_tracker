@@ -104,3 +104,23 @@
 .total-time-container p {
     font-size: 16px;
 }
+.current-page {
+    font-weight: bold;
+    color: black;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+  .table-button-page{
+    margin-right: 5px;
+    margin-left: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    background-color: #000602;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  .table-button-page:hover {
+    background-color: #3d3d3d;
+    transition: background-color 0.3s ease-in-out;

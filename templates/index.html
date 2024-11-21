@@ -12,8 +12,8 @@
         <strong>Всего за день:</strong>
         <p class="timer" id="total_timer">{{ total_time }}</p>
     </div>
-    <h3>Предыдущие дела</h3>
-    <div class="task-list">
+    <h3>Список дел</h3>
+    <div class="task-list" id="work-container">
         {% if data %}
             {% for item in data %}
             <div class="task-item">
@@ -40,14 +40,31 @@
     <h4 style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">Ты пока ничего не сделал :)</h4>
 {% else %}
     <div class="pagination" style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">
-        {% if pagination.has_prev %}
-            <a class="table-button" href="{{ url_for('timer.home', page=pagination.prev_num) }}">« Предыдущая</a>
+        {% if pagination.page > 1 %}
+            <a class="table-button-page" href="{{ url_for('timer.home', page=1) }}">Первая</a>
+        {% endif %}
+        {% set start_page = pagination.page - 2 %}
+        {% set end_page = pagination.page + 2 %}
+
+        {% if start_page > 1 %}
+            <span>...</span>
         {% endif %}
 
-        <span style="margin: 0 15px;">Страница {{ pagination.page }} из {{ pagination.pages }}</span>
+        {% for page_num in range(start_page, end_page + 1) %}
+            {% if page_num >= 1 and page_num <= pagination.pages %}
+                {% if page_num == pagination.page %}
+                    <span class="current-page">{{ page_num }}</span>
+                {% else %}
+                    <a class="table-button-page" href="{{ url_for('timer.home', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
 
-        {% if pagination.has_next %}
-            <a class="table-button" href="{{ url_for('timer.home', page=pagination.next_num) }}">Следующая »</a>
+        {% if end_page < pagination.pages %}
+            <span>...</span>
+        {% endif %}
+        {% if pagination.page < pagination.pages %}
+            <a class="table-button-page" href="{{ url_for('timer.home', page=pagination.pages) }}">Последняя</a> <!-- Кнопка на последнюю страницу -->
         {% endif %}
     </div>
 {% endif %}
