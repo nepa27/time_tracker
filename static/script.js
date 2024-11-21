@@ -41,9 +41,7 @@ function startTimer() {
         const hrs = Math.floor(seconds / 3600);
         const mins = Math.floor((seconds % 3600) / 60);
         const secs = seconds % 60;
-        timerElement.textContent = `${hrs.toString().padStart(2, "0")}:${mins
-            .toString()
-            .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+        timerElement.textContent = `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
         updateTotalTime();
     }, 1000);
 }
@@ -54,7 +52,6 @@ function stopTimer() {
     seconds = 0;
     timerElement.textContent = '00:00:00';
 }
-
 
 function formattedDate() {
     const now = new Date();
@@ -84,8 +81,12 @@ startButton.addEventListener("click", () => {
         time.textContent = timer.textContent;
 
         const nameWorkAll = document.querySelectorAll('.nameWork');
-        const isExist = Array.from(nameWorkAll).some(elem => {
+        let isExist = false; // Изначально предполагаем, что элемента нет
+
+        // Проверка существования задачи
+        nameWorkAll.forEach(elem => {
             if (elem.textContent === input.value) {
+                isExist = true; // Если нашли, устанавливаем флаг
                 const item = elem.closest('.task-item');
                 const time = item.querySelector('.time');
                 const timeString = time.textContent;
@@ -96,7 +97,6 @@ startButton.addEventListener("click", () => {
                 const mins = Math.floor((seconds % 3600) / 60);
                 const secs = seconds % 60;
                 time.textContent = `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-                return true;
             }
         });
 
@@ -111,10 +111,14 @@ startButton.addEventListener("click", () => {
             const perPage = 5;
             const currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
 
+            // Добавление элемента на первую страницу
+            conteiner.prepend(item);
+
+//             Если количество элементов больше или равно лимиту, перезагружаем страницу
             if (currentItems.length >= perPage && currentPage === Math.ceil(currentItems.length / perPage)) {
-                location.reload();
-            } else {
-                conteiner.prepend(item);
+                setTimeout(() => {
+                    location.reload();
+                }, 500); // Задержка в 500 мс
             }
         }
 
@@ -133,16 +137,16 @@ startButton.addEventListener("click", () => {
 });
 
 function deleteTable(idWork, event) {
-event.stopPropagation();
-if (confirm('Вы уверены, что хотите удалить эту запись?')) {
-    fetch(`/delete/${idWork}`, {
-        method: 'DELETE'
-    }).then(response => {
-        if (response.ok) {
-            location.reload();
-        } else {
-            alert('Ошибка при удалении записей');
-        }
-    });
-}
+    event.stopPropagation();
+    if (confirm('Вы уверены, что хотите удалить эту запись?')) {
+        fetch(`/delete/${idWork}`, {
+            method: 'DELETE'
+        }).then(response => {
+            if (response.ok) {
+                location.reload();
+            } else {
+                alert('Ошибка при удалении записей');
+            }
+        });
+    }
 }
