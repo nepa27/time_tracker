@@ -29,6 +29,7 @@ class HomePage(MethodView):
         ).order_by('time')
 
         data = TimeTrackerModel.query.order_by(
+            TimeTrackerModel.date.desc(),
             TimeTrackerModel.id.desc()
         ).paginate(page=page, per_page=per_page)
         total_time = sum_time(data_time.all())
@@ -43,31 +44,32 @@ class HomePage(MethodView):
     @blp.arguments(TimeTrackerSchema)
     def post(self, data):
         time_obj = datetime.strptime(data['time'], '%H:%M:%S').time()
-        date_obj = datetime.strptime(data['date'], '%Y-%m-%d').date()
+        date_obj = datetime.strptime(data['date'], '%d.%m.%Y').date()
 
         values = TimeTrackerModel.query.all()
         for value in values:
             if value.name_of_work == data['name_of_work']:
-                timedelta_bd = timedelta(
-                    hours=value.time.hour,
-                    minutes=value.time.minute,
-                    seconds=value.time.second
-                )
-                timedelta_form = timedelta(
-                    hours=time_obj.hour,
-                    minutes=time_obj.minute,
-                    seconds=time_obj.second
-                )
-
-                total_seconds = int(
-                    (timedelta_bd + timedelta_form).total_seconds()
-                )
-                result_time = time(
-                    total_seconds // 3600,
-                    (total_seconds % 3600) // 60,
-                    total_seconds % 60
-                )
-
+                result_time = sum_time(value.time, time_obj)
+                # timedelta_bd = timedelta(
+                #     hours=value.time.hour,
+                #     minutes=value.time.minute,
+                #     seconds=value.time.second
+                # )
+                # timedelta_form = timedelta(
+                #     hours=time_obj.hour,
+                #     minutes=time_obj.minute,
+                #     seconds=time_obj.second
+                # )
+                #
+                # total_seconds = int(
+                #     (timedelta_bd + timedelta_form).total_seconds()
+                # )
+                # result_time = time(
+                #     total_seconds // 3600,
+                #     (total_seconds % 3600) // 60,
+                #     total_seconds % 60
+                # )
+                #
                 value.time = result_time
                 db.session.commit()
                 db.session.close()

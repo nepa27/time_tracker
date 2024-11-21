@@ -58,7 +58,7 @@ function formattedDate() {
     const day = String(now.getDate()).padStart(2, '0');
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const year = now.getFullYear();
-    return `${year}-${month}-${day}`;
+    return `${day}.${month}.${year}`;
 }
 
 startButton.addEventListener("click", () => {
@@ -81,12 +81,11 @@ startButton.addEventListener("click", () => {
         time.textContent = timer.textContent;
 
         const nameWorkAll = document.querySelectorAll('.nameWork');
-        let isExist = false; // Изначально предполагаем, что элемента нет
+        let isExist = false;
 
-        // Проверка существования задачи
         nameWorkAll.forEach(elem => {
             if (elem.textContent === input.value) {
-                isExist = true; // Если нашли, устанавливаем флаг
+                isExist = true;
                 const item = elem.closest('.task-item');
                 const time = item.querySelector('.time');
                 const timeString = time.textContent;
@@ -111,15 +110,13 @@ startButton.addEventListener("click", () => {
             const perPage = 5;
             const currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
 
-            // Добавление элемента на первую страницу
             conteiner.prepend(item);
 
-//             Если количество элементов больше или равно лимиту, перезагружаем страницу
-            if (currentItems.length >= perPage && currentPage === Math.ceil(currentItems.length / perPage)) {
-                setTimeout(() => {
-                    location.reload();
-                }, 500); // Задержка в 500 мс
-            }
+//            if (currentItems.length >= perPage && currentPage === Math.ceil(currentItems.length / perPage)) {
+//                setTimeout(() => {
+//                    location.reload();
+//                }, 500);
+//            }
         }
 
         fetch(`/`, {
