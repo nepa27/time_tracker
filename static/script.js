@@ -72,11 +72,12 @@ startButton.addEventListener("click", () => {
         const itemTemplate = document.querySelector("#template__task-item");
         const cloneTemplate = itemTemplate.content.cloneNode(true);
         const item = cloneTemplate.querySelector(".task-item");
+        const nowDate = formattedDate();
 
         const name = item.querySelector(".nameWork");
         name.textContent = input.value;
         const date = item.querySelector(".date");
-        date.textContent = formattedDate();
+        date.textContent = nowDate;
         const time = item.querySelector(".time");
         time.textContent = timer.textContent;
 
@@ -84,10 +85,12 @@ startButton.addEventListener("click", () => {
         let isExist = false;
 
         nameWorkAll.forEach(elem => {
-            if (elem.textContent === input.value) {
+            const existingItem = elem.closest('.task-item');
+            const existingDate = existingItem.querySelector('.date').textContent;
+
+            if (elem.textContent === input.value && existingDate === nowDate) {
                 isExist = true;
-                const item = elem.closest('.task-item');
-                const time = item.querySelector('.time');
+                const time = existingItem.querySelector('.time');
                 const timeString = time.textContent;
                 const [hoursWork, minutesWork, secondsWork] = timeString.split(':').map(Number);
                 const sec = (hoursWork * 3600) + (minutesWork * 60) + secondsWork;
@@ -98,7 +101,6 @@ startButton.addEventListener("click", () => {
                 time.textContent = `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
             }
         });
-
         const objInf = {
             name_of_work: `${input.value}`,
             time: `${time.textContent}`,
@@ -111,12 +113,6 @@ startButton.addEventListener("click", () => {
             const currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
 
             conteiner.prepend(item);
-
-//            if (currentItems.length >= perPage && currentPage === Math.ceil(currentItems.length / perPage)) {
-//                setTimeout(() => {
-//                    location.reload();
-//                }, 500);
-//            }
         }
 
         fetch(`/`, {

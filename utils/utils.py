@@ -4,14 +4,14 @@ from datetime import time, timedelta
 def sum_time(*args):
     total_seconds = 0
     for arg in args:
-        if isinstance(arg, list):  # Проверяем, является ли аргумент списком
+        if isinstance(arg, list):
             for value in arg:
                 total_seconds += int(timedelta(
                     hours=value.time.hour,
                     minutes=value.time.minute,
                     seconds=value.time.second
                 ).total_seconds())
-        else:  # Если это не список, предполагаем, что это одиночный объект
+        else:
             total_seconds += int(timedelta(
                 hours=arg.hour,
                 minutes=arg.minute,
