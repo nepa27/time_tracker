@@ -7,7 +7,7 @@ from flask.views import MethodView
 from config import db
 from models import TimeTrackerModel
 from utils.utils import sum_time
-# from schemas import TimeTrackerSchema
+from schemas import TimeTrackerSchema
 
 
 blp = Blueprint(
@@ -40,9 +40,8 @@ class HomePage(MethodView):
             pagination=data
         )
 
-    # @blp.arguments(TimeTrackerSchema)
-    def post(self):
-        data = request.json
+    @blp.arguments(TimeTrackerSchema)
+    def post(self, data):
         time_obj = datetime.strptime(data['time'], '%H:%M:%S').time()
         date_obj = datetime.strptime(data['date'], '%Y-%m-%d').date()
 
@@ -84,7 +83,7 @@ class HomePage(MethodView):
         db.session.commit()
         db.session.close()
 
-        return {'message': 'Data add in BD'}, 204
+        return {'message': 'Data add in BD'}, 201
 
 
 @blp.route('/edit/<int:work_id>', endpoint='edit')
