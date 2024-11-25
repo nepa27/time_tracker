@@ -1,12 +1,13 @@
-from datetime import datetime, time, timedelta
+from datetime import datetime
 
 from flask import render_template, redirect, request, url_for
 from flask_smorest import Blueprint
 from flask.views import MethodView
+import sqlalchemy
 
 from config import db
 from models import TimeTrackerModel
-from utils.utils import sum_time
+from utils.utils import data_to_template, sum_time
 from schemas import TimeTrackerSchema
 
 
@@ -36,7 +37,7 @@ class HomePage(MethodView):
 
         return render_template(
             'index.html',
-            data=data,
+            data=data_to_template(data),
             total_time=total_time,
             pagination=data
         )
@@ -77,7 +78,10 @@ class EditData(MethodView):
         data = TimeTrackerModel.query.filter(
             TimeTrackerModel.id == work_id
         )
-        return render_template('edit.html', data=data)
+        return render_template(
+            'edit.html',
+            data=data
+        )
 
     def post(self, work_id):
         work_data = TimeTrackerModel.query.get_or_404(work_id)
@@ -90,7 +94,10 @@ class EditData(MethodView):
         work_data.date = date_obj
         work_data.time = time_obj
 
-        db.session.commit()
+        try:
+            db.session.commit()
+        except sqlalchemy.exc.IntegrityError as e:
+            print(f'Нельзя создать два одинаковых объекта для одной даты: {e}')
         db.session.close()
         return redirect(url_for('timer.home'))
 

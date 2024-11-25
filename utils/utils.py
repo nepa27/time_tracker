@@ -1,7 +1,8 @@
 from datetime import time, timedelta
 
 
-def sum_time(*args):
+def sum_time(*args) -> time:
+    """ Функция складывает время. """
     total_seconds = 0
     for arg in args:
         if isinstance(arg, list):
@@ -25,3 +26,19 @@ def sum_time(*args):
     )
 
     return result_time
+
+
+def data_to_template(data) -> dict:
+    """ Функция преобразует данные из БД в словарь. """
+    result_data = {}
+
+    for value in data:
+        date = value.date
+        temp = []
+        for el in data:
+            if el.date == date:
+                temp.append((el.id, el.name_of_work, el.time))
+        date = date.strftime("%d.%m.%Y")
+        result_data[date] = temp
+
+    return result_data

@@ -68,7 +68,7 @@ startButton.addEventListener("click", () => {
     } else {
         const input = document.querySelector("#taskName");
         const timer = document.querySelector("#timer");
-        const conteiner = document.querySelector(".task-list");
+        const conteiner = document.querySelector(".date-item");
         const itemTemplate = document.querySelector("#template__task-item");
         const cloneTemplate = itemTemplate.content.cloneNode(true);
         const item = cloneTemplate.querySelector(".task-item");
@@ -76,7 +76,7 @@ startButton.addEventListener("click", () => {
 
         const name = item.querySelector(".nameWork");
         name.textContent = input.value;
-        const date = item.querySelector(".date");
+        const date = document.querySelector(".strongDate");
         date.textContent = nowDate;
         const time = item.querySelector(".time");
         time.textContent = timer.textContent;
@@ -86,7 +86,7 @@ startButton.addEventListener("click", () => {
 
         nameWorkAll.forEach(elem => {
             const existingItem = elem.closest('.task-item');
-            const existingDate = existingItem.querySelector('.date').textContent;
+            const existingDate = date.textContent;
 
             if (elem.textContent === input.value && existingDate === nowDate) {
                 isExist = true;
@@ -106,13 +106,13 @@ startButton.addEventListener("click", () => {
             time: `${time.textContent}`,
             date: `${date.textContent}`
         };
-
+        date.textContent = `Дата: ${date.textContent}`
         if (!isExist) {
             const currentItems = document.querySelectorAll('.task-item');
             const perPage = 5;
             const currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
-
             conteiner.prepend(item);
+            conteiner.lastElementChild.remove();
         }
 
         fetch(`/`, {
