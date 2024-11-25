@@ -32,7 +32,7 @@ class TimeTrackerModel(db.Model):
     proj_id = db.Column(
         db.Integer,
         ForeignKey('projects.id'),
-        nullable=False
+        nullable=True
     )
 
     __table_args__ = (

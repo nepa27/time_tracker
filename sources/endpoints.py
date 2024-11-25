@@ -10,7 +10,6 @@ from models import TimeTrackerModel
 from utils.utils import data_to_template, sum_time
 from schemas import TimeTrackerSchema
 
-
 blp = Blueprint(
     'timer',
     __name__,
@@ -97,6 +96,7 @@ class EditData(MethodView):
         try:
             db.session.commit()
         except sqlalchemy.exc.IntegrityError as e:
+            # TODO Переделать print() на логгирование!
             print(f'Нельзя создать два одинаковых объекта для одной даты: {e}')
         db.session.close()
         return redirect(url_for('timer.home'))

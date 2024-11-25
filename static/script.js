@@ -73,6 +73,7 @@ startButton.addEventListener("click", () => {
         const cloneTemplate = itemTemplate.content.cloneNode(true);
         const item = cloneTemplate.querySelector(".task-item");
         const nowDate = formattedDate();
+        const helloMessage = document.querySelector(".hello-message");
 
         const name = item.querySelector(".nameWork");
         name.textContent = input.value;
@@ -110,9 +111,13 @@ startButton.addEventListener("click", () => {
         if (!isExist) {
             const currentItems = document.querySelectorAll('.task-item');
             const perPage = 5;
-            const currentPage = parseInt(new URLSearchParams(window.location.search).get('page')) || 1;
             conteiner.prepend(item);
-            conteiner.lastElementChild.remove();
+            if (currentItems.length === perPage){
+                conteiner.lastElementChild.remove();
+            }
+            if (currentItems.length === 0){
+                helloMessage.textContent = ''
+            }
         }
 
         fetch(`/`, {
