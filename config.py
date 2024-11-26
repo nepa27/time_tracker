@@ -18,7 +18,7 @@ stream_handler = logging.StreamHandler(stream=sys.stdout)
 stream_handler.setFormatter(logging.Formatter(log_format))
 
 file_handler = RotatingFileHandler(
-    f'{__file__}.log',
+    'time_tracker.log',
     maxBytes=5 * 1024 * 1024,
     backupCount=5,
     encoding='UTF-8',

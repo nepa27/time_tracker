@@ -56,7 +56,7 @@ class HomePage(MethodView):
                 result_time = sum_time(value.time, time_obj)
                 value.time = result_time
                 db.session.commit()
-                logger.info(f'Обновлены данные по задаче {name_of_work}')
+                logger.info(f'Обновлены данные по задаче {name_of_work}. Время: {result_time}')
                 db.session.close()
 
                 return {'message': 'Item from BD has UPDATE'}, 204
