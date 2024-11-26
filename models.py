@@ -29,11 +29,6 @@ class TimeTrackerModel(db.Model):
         db.String(LENGHT_STRING),
         nullable=True
     )
-    proj_id = db.Column(
-        db.Integer,
-        ForeignKey('projects.id'),
-        nullable=True
-    )
 
     __table_args__ = (
         UniqueConstraint(
@@ -41,26 +36,4 @@ class TimeTrackerModel(db.Model):
             'date',
             name='un_name_date'
         ),
-    )
-    project = relationship(
-        'ProjectsModel',
-        back_populates='time_trackers'
-    )
-
-
-class ProjectsModel(db.Model):
-    __tablename__ = 'projects'
-
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
-    name_of_proj = db.Column(
-        db.String,
-        nullable=False
-    )
-
-    time_trackers = relationship(
-        'TimeTrackerModel',
-        back_populates='project'
     )
