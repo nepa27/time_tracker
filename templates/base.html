@@ -2,21 +2,24 @@
 <html lang="ru">
   <head>
     <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
   </head>
   <body>
     <div class="navbar">
-        <div class="logo">
-            <a href="{{ url_for('timer.home') }}">Учет рабочего времени</a>
-        </div>
-        <div class="nav-links">
-            <a href="{{ url_for('timer.home') }}">Главная</a>
-            <a href="#">Проекты</a>
-            <a href="{{ url_for('timer.statistics') }}">Статистика</a>
-            <a href="#">Войти</a>
-        </div>
+      <div class="logo">
+        <a href="{{ url_for('timer.home') }}">Учет рабочего времени</a>
+      </div>
+      <div class="nav-links">
+        <a href="{{ url_for('timer.home') }}">Главная</a>
+        <a href="#">Проекты</a>
+        <a href="{{ url_for('timer.home') }}">Статистика</a>
+        <!--  url_for('timer.statistics') -->
+        <a href="#">Войти</a>
+      </div>
     </div>
-    {% block content %}
-    {% endblock %}
-</body>
+    {% block content %} {% endblock %}
+  </body>
 </html>

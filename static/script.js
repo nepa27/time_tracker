@@ -67,7 +67,6 @@ startButton.addEventListener("click", () => {
         startTimer();
     } else {
         const input = document.querySelector("#taskName");
-        const timer = document.querySelector("#timer");
         const conteiner = document.querySelector(".date-item");
         const itemTemplate = document.querySelector("#template__task-item");
         const cloneTemplate = itemTemplate.content.cloneNode(true);
@@ -80,7 +79,7 @@ startButton.addEventListener("click", () => {
         const date = document.querySelector(".strongDate");
         date.textContent = nowDate;
         const time = item.querySelector(".time");
-        time.textContent = timer.textContent;
+        time.textContent = timerElement.textContent;
 
         const nameWorkAll = document.querySelectorAll('.nameWork');
         let isExist = false;
@@ -107,6 +106,7 @@ startButton.addEventListener("click", () => {
             time: `${time.textContent}`,
             date: `${date.textContent}`
         };
+
         date.textContent = `Дата: ${date.textContent}`
         if (!isExist) {
             const currentItems = document.querySelectorAll('.task-item');
