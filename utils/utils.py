@@ -1,5 +1,7 @@
 from datetime import time, timedelta
 
+from constants import TO_HOUR, TO_MINUTE, TO_SEC
+
 
 def sum_time(*args) -> time:
     """ Функция складывает время. """
@@ -20,9 +22,9 @@ def sum_time(*args) -> time:
             ).total_seconds())
 
     result_time = time(
-        total_seconds // 3600,
-        (total_seconds % 3600) // 60,
-        total_seconds % 60
+        total_seconds // TO_HOUR,
+        (total_seconds % TO_HOUR) // TO_MINUTE,
+        total_seconds % TO_SEC
     )
 
     return result_time

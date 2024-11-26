@@ -1,11 +1,11 @@
 from datetime import datetime
 
-from flask import render_template, redirect, request, url_for
+from flask import render_template, request
 from flask_smorest import Blueprint
 from flask.views import MethodView
 import sqlalchemy
 
-from config import db
+from config import db, logger
 from models import TimeTrackerModel
 from utils.utils import data_to_template, sum_time
 from schemas import TimeTrackerSchema
@@ -50,22 +50,25 @@ class HomePage(MethodView):
         values = TimeTrackerModel.query.filter(
             TimeTrackerModel.date == now_date
         )
+        name_of_work = data['name_of_work']
         for value in values:
-            if value.name_of_work == data['name_of_work']:
+            if value.name_of_work == name_of_work:
                 result_time = sum_time(value.time, time_obj)
                 value.time = result_time
                 db.session.commit()
+                logger.info(f'Обновлены данные по задаче {name_of_work}')
                 db.session.close()
 
                 return {'message': 'Item from BD has UPDATE'}, 204
 
         work = TimeTrackerModel(
-            name_of_work=data['name_of_work'],
+            name_of_work=name_of_work,
             date=date_obj,
             time=time_obj,
         )
         db.session.add(work)
         db.session.commit()
+        logger.info(f'Данные по задаче {name_of_work} добавлены в БД')
         db.session.close()
 
         return {'message': 'Data add in BD'}, 201
@@ -89,6 +92,8 @@ class EditData(MethodView):
         time_obj = datetime.strptime(form_data['time'], '%H:%M:%S').time()
         date_obj = datetime.strptime(form_data['date'], '%Y-%m-%d').date()
 
+        old_name = work_data.name_of_work
+
         work_data.name_of_work = form_data['name_of_work']
         work_data.date = date_obj
         work_data.time = time_obj
@@ -96,10 +101,18 @@ class EditData(MethodView):
         try:
             db.session.commit()
         except sqlalchemy.exc.IntegrityError as e:
-            # TODO Переделать print() на логгирование!
-            print(f'Нельзя создать два одинаковых объекта для одной даты: {e}')
+            error_info = 'Нельзя создать два одинаковых объекта для одной даты.'
+            logger.error(f'{error_info}')
+            db.session.rollback()
+            error_message = f'{error_info}'
+            return {'message': error_message}, 400
+
+        logger.info(f'Измененны данные по задаче {old_name}.'
+                    f' Название: {work_data.name_of_work},'
+                    f' Время: {work_data.time},'
+                    f' Дата: {work_data.date}.')
         db.session.close()
-        return redirect(url_for('timer.home'))
+        return {'message': 'Task has update'}, 204
 
 
 @blp.route('/delete/<int:work_id>', methods=['DELETE'], endpoint='delete')
@@ -108,4 +121,5 @@ def delete_item(work_id):
         TimeTrackerModel.id == work_id
     ).delete()
     db.session.commit()
+    logger.info(f'Удалена задаче с id = {work_id}')
     return {'message': 'Task has delete'}, 204

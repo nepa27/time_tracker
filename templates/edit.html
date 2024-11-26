@@ -2,17 +2,45 @@
 {% block title %}Изменение данных{% endblock %}
 {% block content %}
 
+<div id="error-message" style="color: red; display: none;"></div>
+
 {% for item in data %}
-<form method="post" action="{{ url_for('timer.edit', work_id=item.id) }}">
+<form id="edit-form-{{ item.id }}" class="edit-form">
   <div class="task-item">
-      <div class="task-item">
-          <strong>Дата: <input class="form-control" type="date" id="date" name="date" value="{{ item.date }}" ></strong>
-          <p>Название дела:<input class="form-control" type="text" id="name_of_work" name="name_of_work" value="{{ item.name_of_work }}" ></p>
-          <p>Время: <input class="form-control" type="text" id="time" name="time" value="{{ item.time }}" ></p>
-          <button type="submit" class="table-button">Обновить задачу</button>
-      </div>
-   </div>
-  {% endfor %}
+      <strong>Дата: <input class="form-control" type="date" id="date" name="date" value="{{ item.date }}" required></strong>
+      <p>Название дела:<input class="form-control" type="text" id="name_of_work" name="name_of_work" value="{{ item.name_of_work }}" required></p>
+      <p>Время: <input class="form-control" type="text" id="time" name="time" value="{{ item.time }}" required></p>
+      <button type="submit" class="table-button">Обновить задачу</button>
+  </div>
 </form>
+{% endfor %}
+
+<script src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"></script>
+<script>
+$(document).ready(function() {
+    $('.edit-form').on('submit', function(event) {
+        event.preventDefault(); // Отменяем стандартное поведение формы
+
+        var form = $(this);
+        var work_id = form.attr('id').split('-')[2]; // Извлекаем ID работы из ID формы
+        var formData = form.serialize(); // Сбор данных формы
+
+        $.ajax({
+            type: 'POST',
+            url: '{{ url_for("timer.edit", work_id=0) }}'.replace('0', work_id), // Формируем URL для AJAX-запроса
+            data: formData,
+            success: function(response) {
+                // Если все прошло успешно, перенаправляем на главную страницу
+                window.location.href = '/'; // Или другой путь
+            },
+            error: function(xhr) {
+                // Обработка ошибок
+                var errorMessage = xhr.responseJSON.message || 'Произошла ошибка';
+                $('#error-message').text(errorMessage).show(); // Отображаем сообщение об ошибке
+            }
+        });
+    });
+});
+</script>
 
 {% endblock %}
