@@ -86,20 +86,20 @@ def inject_user():
 
 
 @app.after_request
-# @jwt_required()
 def refresh_expiring_jwts(response):
     try:
-        exp_timestamp = get_jwt()['exp']
-        now = datetime.now(timezone.utc)
-        target_timestamp = datetime.timestamp(
-            now + timedelta(minutes=30)
-        )
-
-        if target_timestamp > exp_timestamp:
-            access_token = create_access_token(
-                identity=get_jwt_identity()
+        if g.user:
+            exp_timestamp = get_jwt()['exp']
+            now = datetime.now(timezone.utc)
+            target_timestamp = datetime.timestamp(
+                now + timedelta(minutes=30)
             )
-            set_access_cookies(response, access_token)
+
+            if target_timestamp > exp_timestamp:
+                access_token = create_access_token(
+                    identity=get_jwt_identity()
+                )
+                set_access_cookies(response, access_token)
 
         response.headers['Access-Control-Allow-Origin'] = '*'
         return response
@@ -120,7 +120,7 @@ def expired_token_loader(jwt_header, jwt_payload):
 @jwt.unauthorized_loader
 def unauthorized_loader_callback(error):
     return jsonify(
-        {'Message': 'token is not found.',
+        {'Message': 'The token is not found.',
          'error': 'missing_token'}
     ), 401
 

@@ -1,16 +1,16 @@
 from datetime import datetime
-import hashlib
 
 from flask import jsonify, render_template, redirect, url_for
 from flask.views import MethodView
-from flask_smorest import Blueprint, abort
-from flask_jwt_extended import jwt_required, create_access_token
 from flask_jwt_extended import (
     get_jwt,
     set_access_cookies,
     unset_access_cookies
 )
+from flask_jwt_extended import jwt_required, create_access_token
+from flask_smorest import Blueprint, abort
 from sqlalchemy.exc import SQLAlchemyError
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from config import db, logger
 from models import BlocklistJwt, UserModel
@@ -30,11 +30,12 @@ class UserRegister(MethodView):
         if UserModel.query.filter(
                 UserModel.username == user_data['username']
         ).first():
-            abort(409, message='User already exists')
+            abort(409, message='User  already exists')
+
+        # Используем generate_password_hash для хэширования пароля
         user = UserModel(
             username=user_data['username'],
-            password=hashlib.sha256(user_data['password'].encode()
-                                    ).hexdigest()
+            password=generate_password_hash(user_data['password'])
         )
         db.session.add(user)
         db.session.commit()
@@ -51,12 +52,11 @@ class UserLogin(MethodView):
         author = UserModel.query.filter(
             UserModel.username == user_data['username']
         ).first()
-        if not author or hashlib.sha256(
-                user_data['password'].encode()
-        ).hexdigest() != author.password:
-            abort(400,
-                  message='Username or password is invalid'
-                  )
+        if not author or not check_password_hash(
+                author.password,
+                user_data['password']
+        ):
+            abort(400, message='Username or password is invalid')
 
         access_token = create_access_token(
             identity=author.username,

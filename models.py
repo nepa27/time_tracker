@@ -62,16 +62,13 @@ class UserModel(db.Model):
     )
     username = db.Column(
         db.String(LENGHT_USERNAME),
-        nullable=False
+        nullable=False,
+        unique=True
     )
     password = db.Column(
         db.String(LENGHT_PASSWORD),
         nullable=False
     )
-    token = db.Column(
-        db.String(LENGHT_TOKEN)
-    )
-
     time_tracker = db.relationship(
         'TimeTrackerModel',
         back_populates='user'

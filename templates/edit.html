@@ -15,27 +15,35 @@
 </form>
 {% endfor %}
 
-<script src="{{ url_for('static', filename='jquery-3.6.0.min.js') }}"></script>
 <script>
-$(document).ready(function() {
-    $('.edit-form').on('submit', function(event) {
-        event.preventDefault();
+document.addEventListener('DOMContentLoaded', function() {
+    const editForms = document.querySelectorAll('.edit-form');
 
-        var form = $(this);
-        var work_id = form.attr('id').split('-')[2];
-        var formData = form.serialize();
+    editForms.forEach(form => {
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-        $.ajax({
-            type: 'POST',
-            url: '{{ url_for("timer.edit", work_id=0) }}'.replace('0', work_id),
-            data: formData,
-            success: function(response) {
+            const work_id = form.id.split('-')[2];
+            const formData = new FormData(form);
+
+            fetch('{{ url_for("timer.edit", work_id=0) }}'.replace('0', work_id), {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
                 window.location.href = '/';
-            },
-            error: function(xhr) {
-                var errorMessage = xhr.responseJSON.message || 'Произошла ошибка';
-                $('#error-message').text(errorMessage).show();
-            }
+            })
+            .catch(error => {
+                const errorMessage = error.message || 'Произошла ошибка';
+                document.getElementById('error-message').textContent = errorMessage;
+                document.getElementById('error-message').style.display = 'block';
+            });
         });
     });
 });

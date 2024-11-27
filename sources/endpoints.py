@@ -56,8 +56,10 @@ class HomePage(MethodView):
                 result_time = sum_time(value.time, time_obj)
                 value.time = result_time
                 db.session.commit()
-                logger.info(f'Обновлены данные по задаче {name_of_work}. Время: {result_time}')
-                db.session.close()
+                logger.info(
+                    f'Обновлены данные по задаче {name_of_work}.'
+                    f' Время: {result_time}'
+                )
 
                 return {'message': 'Item from BD has UPDATE'}, 204
 
@@ -69,7 +71,6 @@ class HomePage(MethodView):
         db.session.add(work)
         db.session.commit()
         logger.info(f'Данные по задаче {name_of_work} добавлены в БД')
-        db.session.close()
 
         return {'message': 'Data add in BD'}, 201
 
@@ -111,7 +112,6 @@ class EditData(MethodView):
                     f' Название: {work_data.name_of_work},'
                     f' Время: {work_data.time},'
                     f' Дата: {work_data.date}.')
-        db.session.close()
         return {'message': 'Task has update'}, 204
 
 
