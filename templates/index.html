@@ -45,17 +45,7 @@
     {% endfor %} {% else %}
     <strong class="strongDate"><span class="date"></span></strong>
     <div class="date-item"></div>
-    <h4
-      class="hello-message"
-      style="
-        margin-top: 20px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      "
-    >
-      Ты пока ничего не сделал :)
-    </h4>
+    <h4 class="hello-message">Ты пока ничего не сделал :)</h4>
     {% endif %}
     <template id="template__task-item">
       <div class="task-item">
@@ -73,15 +63,7 @@
 </div>
 
 {% if pagination.total > 0 %}
-<div
-  class="pagination"
-  style="
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  "
->
+<div class="pagination">
   {% if pagination.page > 1 %}
   <a class="table-button-page" href="{{ url_for('timer.home', page=1) }}"
     >Первая</a
