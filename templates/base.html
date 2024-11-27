@@ -11,11 +11,19 @@
         </div>
         <div class="nav-links">
             <a href="{{ url_for('timer.home') }}">Главная</a>
+          {% if user %}
             <a href="#">Статистика</a>
-            <a href="#">Войти</a>
+            <a href="#">Профиль</a>
+            <span>| Пользователь: <b>{{ user }} |</b></span>
+            <a href="{{ url_for('users.logout') }}">Выйти</a>
+          {% else %}
+            <a href="{{ url_for('users.login') }}">Войти</a>
+            <a href="{{ url_for('users.register') }}">Регистрация</a>
+          {% endif %}
         </div>
     </div>
-    {% block content %}
-    {% endblock %}
+      {% block content %}
+      {% endblock %}
+
 </body>
 </html>

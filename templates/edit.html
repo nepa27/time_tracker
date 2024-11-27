@@ -19,24 +19,22 @@
 <script>
 $(document).ready(function() {
     $('.edit-form').on('submit', function(event) {
-        event.preventDefault(); // Отменяем стандартное поведение формы
+        event.preventDefault();
 
         var form = $(this);
-        var work_id = form.attr('id').split('-')[2]; // Извлекаем ID работы из ID формы
-        var formData = form.serialize(); // Сбор данных формы
+        var work_id = form.attr('id').split('-')[2];
+        var formData = form.serialize();
 
         $.ajax({
             type: 'POST',
-            url: '{{ url_for("timer.edit", work_id=0) }}'.replace('0', work_id), // Формируем URL для AJAX-запроса
+            url: '{{ url_for("timer.edit", work_id=0) }}'.replace('0', work_id),
             data: formData,
             success: function(response) {
-                // Если все прошло успешно, перенаправляем на главную страницу
-                window.location.href = '/'; // Или другой путь
+                window.location.href = '/';
             },
             error: function(xhr) {
-                // Обработка ошибок
                 var errorMessage = xhr.responseJSON.message || 'Произошла ошибка';
-                $('#error-message').text(errorMessage).show(); // Отображаем сообщение об ошибке
+                $('#error-message').text(errorMessage).show();
             }
         });
     });

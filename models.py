@@ -1,9 +1,14 @@
-from sqlalchemy import ForeignKey, UniqueConstraint
-from sqlalchemy.orm import relationship
+from datetime import date
 
 from config import db
 
-from constants import LENGHT_STRING
+from constants import (
+    LENGHT_STRING,
+    LENGHT_USERNAME,
+    LENGHT_PASSWORD,
+    LENGHT_TOKEN,
+    LENGHT_JTI
+)
 
 
 class TimeTrackerModel(db.Model):
@@ -29,11 +34,64 @@ class TimeTrackerModel(db.Model):
         db.String(LENGHT_STRING),
         nullable=True
     )
+    user_id = db.Column(
+        db.Integer,
+        db.ForeignKey('users.id')
+    )
 
     __table_args__ = (
-        UniqueConstraint(
+        db.UniqueConstraint(
             'name_of_work',
             'date',
             name='un_name_date'
         ),
+    )
+
+    user = db.relationship(
+        'UserModel',
+        back_populates='time_tracker'
+    )
+
+
+class UserModel(db.Model):
+    __tablename__ = 'users'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    username = db.Column(
+        db.String(LENGHT_USERNAME),
+        nullable=False
+    )
+    password = db.Column(
+        db.String(LENGHT_PASSWORD),
+        nullable=False
+    )
+    token = db.Column(
+        db.String(LENGHT_TOKEN)
+    )
+
+    time_tracker = db.relationship(
+        'TimeTrackerModel',
+        back_populates='user'
+    )
+
+
+class BlocklistJwt(db.Model):
+    __tablename__ = 'blocklistjwt'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    jti = db.Column(
+        db.String(LENGHT_JTI),
+        nullable=False,
+        index=True
+    )
+    created_at = db.Column(
+        db.Date,
+        default=date.today,
+        nullable=False
     )
