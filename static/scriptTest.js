@@ -92,40 +92,40 @@ class Button extends Component {
   }
 }
 
-class ButtonTimerStart extends Button{
-    cinstructor(){
-        super(id,title)
-        // this.text = text;
-    }
+// class ButtonTimerStart extends Button{
+//     cinstructor(){
+//         super({id,title})
+//         // this.text = text;
+//     }
 
-    startStopTimer(){
-            console.log(startButton.textContent);
+//     startStopTimer(){
+//             console.log(startButton.textContent);
         
-            if (this.title === "Пуск") {
+//             if (this.title === "Пуск") {
         
-                startButton.update( {title: "Стоп"});
-                timer.createTimer();
-                totalTimer.createTimer();
+//                 startButton.update( {title: "Стоп"});
+//                 timer.createTimer();
+//                 totalTimer.createTimer();
         
-              } else {
-                const taskItem = new TimerItem({
-                  title: input.value,
-                });
+//               } else {
+//                 const taskItem = new TimerItem({
+//                   title: input.value,
+//                 });
         
-                taskItem.update({ time: timer.text });
-                timer.destroyTimer();
-                totalTimer.destroyTimerTotal();
+//                 taskItem.update({ time: timer.text });
+//                 timer.destroyTimer();
+//                 totalTimer.destroyTimerTotal();
         
-                startButton.update( {title: "Пуск"});
-                input.value = "";
-                // stopTimer();
+//                 startButton.update( {title: "Пуск"});
+//                 input.value = "";
+//                 // stopTimer();
         
-                const container = document.querySelector(".date-item");
+//                 const container = document.querySelector(".date-item");
         
-                taskItem.renderIn(container);
-              }
-        }
-}
+//                 taskItem.renderIn(container);
+//               }
+//         }
+// }
 
 class TimerItem extends Component {
   constructor({
@@ -227,9 +227,9 @@ class Timer extends Component {
 // });
 
 const input = document.querySelector("#taskName");
-// const startButton = document.getElementById("startButton");
+const startButton = document.getElementById("startButton");
 
-const startButton = new ButtonTimerStart({ id: "startButton", title: "Пуск" });
+// const startButton = new ButtonTimerStart({ id: "startButton", title: "Пуск" });
 const timer = new Timer({ id: "timer" });
 const totalTimer = new Timer({ id: "total_timer" });
 const inputBox = document.querySelector(".task-input");
