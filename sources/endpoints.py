@@ -1,7 +1,12 @@
 from datetime import datetime
 
-from flask import render_template, request
+from flask import flash, redirect, render_template, request, url_for
 from flask_smorest import Blueprint
+from flask_jwt_extended import (
+    get_jwt_identity,
+    jwt_required,
+    verify_jwt_in_request
+)
 from flask.views import MethodView
 import sqlalchemy
 
@@ -20,35 +25,49 @@ blp = Blueprint(
 @blp.route('/', endpoint='home')
 class HomePage(MethodView):
     def get(self):
-        page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('per_page', 5, type=int)
+        try:
+            verify_jwt_in_request(optional=True)
+            page = request.args.get('page', 1, type=int)
+            per_page = request.args.get('per_page', 5, type=int)
 
-        now_date = datetime.now().date()
-        data_time = TimeTrackerModel.query.filter(
-            TimeTrackerModel.date == now_date
-        ).order_by('time')
+            now_date = datetime.now().date()
 
-        data = TimeTrackerModel.query.order_by(
-            TimeTrackerModel.date.desc(),
-            TimeTrackerModel.id.desc()
-        ).paginate(page=page, per_page=per_page)
-        total_time = sum_time(data_time.all())
+            data = TimeTrackerModel.query.filter(
+                TimeTrackerModel.username == get_jwt_identity()
+            ).order_by(
+                TimeTrackerModel.date.desc(),
+                TimeTrackerModel.id.desc()
+            )
 
-        return render_template(
-            'index.html',
-            data=data_to_template(data),
-            total_time=total_time,
-            pagination=data
-        )
+            data_paginate = data.paginate(page=page, per_page=per_page)
+            data_total_time = data.filter(TimeTrackerModel.date == now_date)
+            total_time = sum_time(data_total_time.all())
+
+            return render_template(
+                'index.html',
+                data=data_to_template(data),
+                total_time=total_time,
+                pagination=data_paginate
+            )
+        except BaseException:
+            logger.info('Анонимный пользователь зашел на страницу')
+            return render_template(
+                'index.html',
+                data=None,
+                total_time=None,
+                pagination=None
+            )
 
     @blp.arguments(TimeTrackerSchema)
+    @jwt_required()
     def post(self, data):
         time_obj = datetime.strptime(data['time'], '%H:%M:%S').time()
         date_obj = datetime.strptime(data['date'], '%d.%m.%Y').date()
 
         now_date = datetime.now().date()
         values = TimeTrackerModel.query.filter(
-            TimeTrackerModel.date == now_date
+            TimeTrackerModel.date == now_date,
+            TimeTrackerModel.username == get_jwt_identity()
         )
         name_of_work = data['name_of_work']
         for value in values:
@@ -67,6 +86,7 @@ class HomePage(MethodView):
             name_of_work=name_of_work,
             date=date_obj,
             time=time_obj,
+            username=get_jwt_identity()
         )
         db.session.add(work)
         db.session.commit()
@@ -77,48 +97,62 @@ class HomePage(MethodView):
 
 @blp.route('/edit/<int:work_id>', endpoint='edit')
 class EditData(MethodView):
+    @jwt_required()
     def get(self, work_id):
-        data = TimeTrackerModel.query.filter(
+        data = TimeTrackerModel.query.get(work_id)
+        if data:
+            if data.username == get_jwt_identity():
+                return render_template(
+                    'edit.html',
+                    data=data
+                )
+            else:
+                return {'message': 'You don`t have permission'}, 403
+        return {'message': 'Page doesn`t exist'}, 404
+
+    @jwt_required()
+    def post(self, work_id):
+        work_data = TimeTrackerModel.query.filter(
             TimeTrackerModel.id == work_id
         )
-        return render_template(
-            'edit.html',
-            data=data
-        )
-
-    def post(self, work_id):
-        work_data = TimeTrackerModel.query.get_or_404(work_id)
         form_data = request.form.to_dict()
 
         time_obj = datetime.strptime(form_data['time'], '%H:%M:%S').time()
         date_obj = datetime.strptime(form_data['date'], '%Y-%m-%d').date()
 
-        old_name = work_data.name_of_work
-
-        work_data.name_of_work = form_data['name_of_work']
-        work_data.date = date_obj
-        work_data.time = time_obj
-
         try:
+            old_name = work_data[0].name_of_work
+            work_data[0].name_of_work = form_data['name_of_work']
+            work_data[0].date = date_obj
+            work_data[0].time = time_obj
             db.session.commit()
-        except sqlalchemy.exc.IntegrityError as e:
-            error_info = 'Нельзя создать два одинаковых объекта для одной даты.'
-            logger.error(f'{error_info}')
+        except sqlalchemy.exc.IntegrityError:
+            logger.error('Нельзя создать два одинаковых'
+                         ' объекта для одной даты')
             db.session.rollback()
-            error_message = f'{error_info}'
-            return {'message': error_message}, 400
+            flash(
+                'You don`t create two objects for one date',
+                category='error'
+            )
+        else:
+            logger.info(f'Измененны данные по задаче {old_name}.'
+                        f' Название: {work_data[0].name_of_work},'
+                        f' Время: {work_data[0].time},'
+                        f' Дата: {work_data[0].date}.')
+            return redirect(url_for('timer.home'))
 
-        logger.info(f'Измененны данные по задаче {old_name}.'
-                    f' Название: {work_data.name_of_work},'
-                    f' Время: {work_data.time},'
-                    f' Дата: {work_data.date}.')
-        return {'message': 'Task has update'}, 204
+        return render_template(
+            'edit.html',
+            data=work_data
+        )
 
 
 @blp.route('/delete/<int:work_id>', methods=['DELETE'], endpoint='delete')
+@jwt_required()
 def delete_item(work_id):
     TimeTrackerModel.query.filter(
-        TimeTrackerModel.id == work_id
+        TimeTrackerModel.id == work_id,
+        TimeTrackerModel.username == get_jwt_identity()
     ).delete()
     db.session.commit()
     logger.info(f'Удалена задаче с id = {work_id}')

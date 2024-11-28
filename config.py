@@ -10,7 +10,6 @@ from flask_jwt_extended import (
     get_jwt,
     get_jwt_identity,
     JWTManager,
-    jwt_required,
     set_access_cookies,
     verify_jwt_in_request
 )
@@ -75,7 +74,7 @@ def load_logged_in_user():
             g.user = user_identity
         else:
             g.user = None
-    except Exception as e:
+    except BaseException as e:
         g.user = None
         print(f'Error in load_logged_in_user: {e}')
 

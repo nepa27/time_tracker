@@ -34,16 +34,17 @@ class TimeTrackerModel(db.Model):
         db.String(LENGHT_STRING),
         nullable=True
     )
-    user_id = db.Column(
+    username = db.Column(
         db.Integer,
-        db.ForeignKey('users.id')
+        db.ForeignKey('users.username')
     )
 
     __table_args__ = (
         db.UniqueConstraint(
             'name_of_work',
             'date',
-            name='un_name_date'
+            'username',
+            name='un_name_date_user'
         ),
     )
 

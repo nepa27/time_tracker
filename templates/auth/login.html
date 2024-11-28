@@ -29,9 +29,9 @@
             })
             .then(response => {
                 if (response.ok) {
-                    window.location.href = '/'; // Перенаправить на страницу профиля
-                } else if (response.status === 409) {
-                    alert('Пользователь уже зарегистирован!');
+                    window.location.href = '/';
+                } else if (response.status === 400) {
+                    alert('Неверное имя пользователя или пароль!');
                 } else {
                     alert('Неудачная регистрация!');
                 }
