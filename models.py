@@ -4,8 +4,8 @@ from config import db
 
 from constants import (
     LENGHT_STRING,
-    LENGHT_USERNAME,
-    LENGHT_PASSWORD,
+    MAX_LENGHT_USERNAME,
+    MAX_LENGHT_PASSWORD,
     LENGHT_TOKEN,
     LENGHT_JTI
 )
@@ -62,12 +62,12 @@ class UserModel(db.Model):
         primary_key=True
     )
     username = db.Column(
-        db.String(LENGHT_USERNAME),
+        db.String(MAX_LENGHT_USERNAME),
         nullable=False,
         unique=True
     )
     password = db.Column(
-        db.String(LENGHT_PASSWORD),
+        db.String(MAX_LENGHT_PASSWORD),
         nullable=False
     )
     time_tracker = db.relationship(
