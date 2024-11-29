@@ -127,24 +127,21 @@ class EditData(MethodView):
             work_data[0].time = time_obj
             db.session.commit()
         except sqlalchemy.exc.IntegrityError:
-            logger.error('Нельзя создать два одинаковых'
-                         ' объекта для одной даты')
+            error_message = ('Нельзя создать два одинаковых '
+                             'объекта для одной даты')
+            logger.error(error_message)
             db.session.rollback()
             flash(
-                'You don`t create two objects for one date',
+                error_message,
                 category='error'
             )
+            return redirect(url_for('timer.edit', work_id=work_id))
         else:
             logger.info(f'Измененны данные по задаче {old_name}.'
                         f' Название: {work_data[0].name_of_work},'
                         f' Время: {work_data[0].time},'
                         f' Дата: {work_data[0].date}.')
             return redirect(url_for('timer.home'))
-
-        return render_template(
-            'edit.html',
-            data=work_data
-        )
 
 
 @blp.route('/delete/<int:work_id>', methods=['DELETE'], endpoint='delete')

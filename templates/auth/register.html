@@ -1,44 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}Регистрация{% endblock %}
+{% block title %}Авторизация{% endblock %}
 
 {% block content %}
-
-    <form id="register-form">
+{% for cat, msg in get_flashed_messages(True) %}
+  <div class="flash {{ cat }}">{{ msg }}</div>
+{% endfor %}
+{% if 'register' in request.url %}
+    <form id="register-form" action="{{ url_for('users.register') }}" method="POST">
+        {{ form.hidden_tag() }}
         <div class="task-item">
             <h2>Регистрация</h2>
-            <p>Имя пользователя:<input type="text" class="form-control" id="username" name="username" required></p>
-            <p>Пароль:<input type="password" class="form-control" id="password" name="password" required></p>
-            <button type="submit" class="table-button">Зарегистрироваться</button>
+{% else %}
+    <form id="login-form" action="{{ url_for('users.login') }}" method="POST">
+        {{ form.hidden_tag() }}
+        <div class="task-item">
+            <h2>Вход в аккаунт</h2>
+{% endif %}
+            <p>{{ form.username.label }} {{ form.username(size=32, class="form-control") }}</p>
+            <p>{{ form.password.label }} {{ form.password(size=32, class="form-control") }}</p>
+            {% if 'register' in request.url %}
+              <button type="submit" class="table-button">Зарегистрироваться</button>
+            {% else %}
+              <button type="submit" class="table-button">Войти</button>
+            {% endif %}
         </div>
     </form>
-    <script>
-        document.getElementById('register-form').addEventListener('submit', function(event) {
-            event.preventDefault(); // Остановить стандартное поведение формы
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
-            fetch('{{ url_for('users.register') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username: username, password: password })
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '{{ url_for('users.login') }}';
-                } else if (response.status === 409) {
-                    alert('Пользователь уже зарегистирован!');
-                } else {
-                    alert('Неудачная регистрация!');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred');
-            });
-        });
-    </script>
 {% endblock %}

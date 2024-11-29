@@ -6,7 +6,6 @@ from constants import (
     LENGHT_STRING,
     MAX_LENGHT_USERNAME,
     MAX_LENGHT_PASSWORD,
-    LENGHT_TOKEN,
     LENGHT_JTI
 )
 

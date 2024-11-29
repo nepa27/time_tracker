@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import jsonify, render_template, redirect, url_for
+from flask import flash, jsonify, render_template, redirect, url_for
 from flask.views import MethodView
 from flask_jwt_extended import (
     get_jwt,
@@ -14,6 +14,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from config import db, logger
+from forms import RegistrationForm
 from models import BlocklistJwt, UserModel
 from schemas import UserSchema
 
@@ -26,25 +27,37 @@ blp = Blueprint(
 
 @blp.route('/register', endpoint='register')
 class UserRegister(MethodView):
-    @blp.arguments(UserSchema)
-    def post(self, user_data):
-        if UserModel.query.filter(
-                UserModel.username == user_data['username']
-        ).first():
-            abort(409, message='Пользователь уже зарегистирован!')
+    # TODO: Почему не работает?!
+    #@blp.arguments(UserSchema)
+    def post(self):
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            if UserModel.query.filter(
+                    UserModel.username == form.username.data
+            ).first():
+                flash(
+                    'Пользователь с таким именем уже существует!',
+                    category='error'
+                )
+                return redirect(url_for('users.register'))
 
-        user = UserModel(
-            username=user_data['username'],
-            password=generate_password_hash(user_data['password'])
-        )
-        db.session.add(user)
-        db.session.commit()
-        logger.info(f'Пользователь {user_data["username"]} зарегистирован!')
-        return redirect(url_for('users.login'))
+            user = UserModel(
+                username=form.username.data,
+                password=generate_password_hash(form.password.data)
+            )
+            db.session.add(user)
+            db.session.commit()
+            logger.info(f'Пользователь {form.username.data} зарегистирован!')
+            return redirect(url_for('users.login'))
+        # TODO: Если невалидна, то нужен ответ
+        self.get()
 
     def get(self):
-        return render_template('auth/register.html')
-
+        form = RegistrationForm()
+        return render_template(
+            'auth/register.html',
+            form=form
+        )
 
 @blp.route('/login', endpoint='login')
 class UserLogin(MethodView):
