@@ -115,21 +115,24 @@ class Button extends Component {
 }
 
 class TimerItem extends Component {
-  constructor({ title = "", time = 0 }) {
+  static itemsCollection = [];
+
+  constructor({ title = "", time = "00:00:00" }) {
     super();
     this.title = title;
     this.time = time;
+    this.element = this.createElement(this.createElementTemplate());
   }
 
   createElementTemplate() {
     return `
-        <div class="task-item">
-          <p>Название дела: <span class="nameWork">${this.title}</span></p>
-          <p>Время: <span class="time">${this.time}</span></p>
-          <button class="table-button" onclick="location.href='#'">Изменить</button>
-          <button class="table-button btn-delete">Удалить</button>
-        </div>
-      `;
+          <div class="task-item">
+            <p>Название дела: <span data-name-work="${this.title}" class="nameWork">${this.title}</span></p>
+            <p>Время: <span class="time">${this.time}</span></p>
+            <button class="table-button" onclick="location.href='#'">Изменить</button>
+            <button class="table-button btn-delete">Удалить</button>
+          </div>
+        `;
   }
 
   formattedDate() {
@@ -140,6 +143,68 @@ class TimerItem extends Component {
     return `${day}.${month}.${year}`;
   }
 
+  timeToSeconds(time) {
+    const parts = time.split(":");
+    const hours = parseInt(parts[0]) || 0;
+    const minutes = parseInt(parts[1]) || 0;
+    const seconds = parseInt(parts[2]) || 0;
+    return hours * 3600 + minutes * 60 + seconds;
+  }
+
+  secondsToTime(totalSeconds) {
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    // Format to HH:MM:SS
+    return [
+      String(hours).padStart(2, "0"),
+      String(minutes).padStart(2, "0"),
+      String(seconds).padStart(2, "0"),
+    ].join(":");
+  }
+
+  addTimeStrings(time1, time2) {
+    const totalSeconds1 = this.timeToSeconds(time1);
+    const totalSeconds2 = this.timeToSeconds(time2);
+
+    // Add the total seconds
+    const totalSeconds = totalSeconds1 + totalSeconds2;
+
+    // Convert back to HH:MM:SS format
+    return this.secondsToTime(totalSeconds);
+  }
+
+renderIn(container) {
+    const existingItemIndex = TimerItem.itemsCollection.findIndex(
+      (item) => item.title === this.title
+    );
+
+    if (existingItemIndex !== -1) {
+      // If the item already exists, update the time
+      const existingItem = TimerItem.itemsCollection[existingItemIndex];
+      const newTime = this.addTimeStrings(existingItem.time, this.time);
+      
+      // Update the time in the collection and instance
+      existingItem.time = newTime;
+      this.time = newTime;
+
+      // Update the displayed time in the element
+      this.element.querySelector(".time").textContent = this.time;
+    } else {
+      // If it does not exist, add it to the collection
+      TimerItem.itemsCollection.push({ title: this.title, time: this.time });
+      super.renderIn(container); // Render the new element in the container
+      return; // Exit early since we are adding a new item
+    }
+
+    // If the item was updated, find the existing element and update it
+    const lastElement = container.querySelector(`[data-name-work="${this.title}"]`);
+    if (lastElement) {
+      lastElement.closest('.task-item').replaceWith(this.element);
+    }
+}
+
   update({ title = this.title, time = this.time } = {}) {
     this.title = title;
     this.time = time;
@@ -147,6 +212,7 @@ class TimerItem extends Component {
     this.element.querySelector(".nameWork").textContent = this.title;
     this.element.querySelector(".time").textContent = this.time;
 
+    // Update delete button functionality
     this.btnDelete = this.element.querySelector(".btn-delete");
     this.btnDelete.addEventListener("click", () => this.destroy());
   }
@@ -174,7 +240,7 @@ class Timer extends Component {
   createTimer() {
     this.intervalId = setInterval(
       () => this.rerenderTimer(),
-      Component.TIMEOUT
+      Component.TIMEOUT //1_000
     );
   }
 
@@ -191,6 +257,7 @@ class Timer extends Component {
     this.text = `${hrs.toString().padStart(2, "0")}:${mins
       .toString()
       .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    this.updateTotalTime();
   }
 
   updateTotalTime() {
@@ -265,10 +332,49 @@ const workingTimer = () => {
 
     const container = document.querySelector(".date-item");
     taskItem.renderIn(container);
+
+    const nameWorkAll = document.querySelectorAll(".nameWork");
+
+    // TimerItem.findSameNameWork(nameWorkAll)
+
+    let isExist = false;
+
+    nameWorkAll.forEach((elem) => {
+      const existingItem = elem.closest(".task-item");
+      console.log(elem.textContent);
+
+      // const existingDate = date.textContent;
+      if (elem.textContent === input.value) {
+        console.log(existingItem);
+      }
+
+      // if (elem.textContent === input.value && existingDate === nowDate) {
+      //     isExist = true;
+
+      //     const time = existingItem.querySelector('.time');
+      //     const timeString = time.textContent;
+      //     const [hoursWork, minutesWork, secondsWork] = timeString.split(':').map(Number);
+      //     const sec = (hoursWork * 3600) + (minutesWork * 60) + secondsWork;
+
+      //     seconds += sec;
+      //     const hrs = Math.floor(seconds / 3600);
+      //     const mins = Math.floor((seconds % 3600) / 60);
+      //     const secs = seconds % 60;
+
+      //     time.textContent = `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+      // }
+    });
   }
 };
 
 startButton.addEventListener("click", workingTimer);
+
+// const objInf = {
+//     name_of_work: `${input.value}`,
+//     time: `${time.textContent}`,
+//     date: `${date.textContent}`
+// };
+
 // startButton.removeEventListener("click", workingTimer);
 
 // const startButton = document.getElementById("startButton");
