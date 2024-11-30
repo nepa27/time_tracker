@@ -16,11 +16,6 @@ class Component {
     this.element.addEventListener("click", func); //!!!
   }
 
-  //   createTimer(fn) {
-  //     this.intervalId = setInterval(() => {
-  //       fn;
-  //     }, Component.TIMEOUT);
-  //   }
 
   createElement(template) {
     const element = document.createElement("div");
@@ -70,8 +65,7 @@ class Button extends Component {
     this.title = title;
     this.element = this.createElement(this.createElementTemplate());
     this.eventListeners = {};
-    //   this.buttonElement = buttonElement;
-    //   this.buttonElement.addEventListener("click", this.onClick.bind(this));
+
   }
 
   createElementTemplate() {
@@ -96,11 +90,6 @@ class Button extends Component {
     }
   }
 
-  //     update({ title = "" }) {
-  //       this.title = title;
-  //       this.element.innerHTML = this.createElementTemplate(); // Update button content
-  //     }
-
   createEventListenersClick(event) {
     console.log(event);
 
@@ -110,7 +99,6 @@ class Button extends Component {
   update({ title = "" }) {
     this.title = title;
     this.element.textContent = title;
-    // this.element = this.createElement(this.createElementTemplate());
   }
 }
 
@@ -167,11 +155,8 @@ class TimerItem extends Component {
   addTimeStrings(time1, time2) {
     const totalSeconds1 = this.timeToSeconds(time1);
     const totalSeconds2 = this.timeToSeconds(time2);
-
-    // Add the total seconds
     const totalSeconds = totalSeconds1 + totalSeconds2;
 
-    // Convert back to HH:MM:SS format
     return this.secondsToTime(totalSeconds);
   }
 
@@ -333,74 +318,22 @@ const workingTimer = () => {
     const container = document.querySelector(".date-item");
     taskItem.renderIn(container);
 
-    const nameWorkAll = document.querySelectorAll(".nameWork");
 
-    // TimerItem.findSameNameWork(nameWorkAll)
+    // const objInf = {
+    //     name_of_work: `${input.value}`,
+    //     time: `${timer.textContent}`,
+    //     date: `${date.textContent}`
+    // };
 
-    let isExist = false;
+    // fetch(`/`, {
+    //     method: "POST",
+    //     headers: {
+    //         "Content-Type": "application/json;charset=utf-8",
+    //     },
+    //     body: JSON.stringify(objInf),
+    // });
 
-    nameWorkAll.forEach((elem) => {
-      const existingItem = elem.closest(".task-item");
-      console.log(elem.textContent);
-
-      // const existingDate = date.textContent;
-      if (elem.textContent === input.value) {
-        console.log(existingItem);
-      }
-
-      // if (elem.textContent === input.value && existingDate === nowDate) {
-      //     isExist = true;
-
-      //     const time = existingItem.querySelector('.time');
-      //     const timeString = time.textContent;
-      //     const [hoursWork, minutesWork, secondsWork] = timeString.split(':').map(Number);
-      //     const sec = (hoursWork * 3600) + (minutesWork * 60) + secondsWork;
-
-      //     seconds += sec;
-      //     const hrs = Math.floor(seconds / 3600);
-      //     const mins = Math.floor((seconds % 3600) / 60);
-      //     const secs = seconds % 60;
-
-      //     time.textContent = `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-      // }
-    });
   }
 };
 
 startButton.addEventListener("click", workingTimer);
-
-// const objInf = {
-//     name_of_work: `${input.value}`,
-//     time: `${time.textContent}`,
-//     date: `${date.textContent}`
-// };
-
-// startButton.removeEventListener("click", workingTimer);
-
-// const startButton = document.getElementById("startButton");
-
-// startButton.addEventListener("click", () => {
-//     if (startButton.textContent === "Пуск") {
-//       startButton.textContent = "Стоп";
-//       timer.createTimer();
-//       totalTimer.createTimer();
-//     } else {
-//       const taskItem = new TimerItem({
-//         title: input.value,
-//       });
-
-//       taskItem.update({ time: timer.text });
-//       timer.destroyTimer();
-//       totalTimer.destroyTimerTotal();
-
-//       console.log(taskItem);
-
-//       startButton.textContent = "Пуск";
-//       input.value = "";
-//       // stopTimer();
-
-//       const container = document.querySelector(".date-item");
-
-//       taskItem.renderIn(container);
-//     }
-//   });
