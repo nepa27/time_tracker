@@ -148,3 +148,86 @@ function deleteTable(idWork, event) {
         });
     }
 }
+
+
+
+
+// class TimerItem extends Component {
+//     static itemsCollection = [];
+//     static dateCollection = [];
+  
+//     constructor({ title = "", time = "00:00:00" }) {
+//       super();
+//       this.title = title;
+//       this.time = time;
+//       this.date = this.formattedDate();
+//       this.element = this.createElement(this.createContainerTemplate());
+//     }
+  
+//     createContainerTemplate() {
+//       return `
+//         <div class="date-item" data-date="${this.date}">
+//           <strong class="strongDate">Дата: 
+//               <span class="date">${this.date}</span>
+//           </strong>
+//           <div class="task-list"></div>
+//         </div>
+//       `;
+//     }
+  
+//     createElementTemplate() {
+//       return `
+//         <div class="task-item">
+//           <p>Название дела: <span data-name-work="${this.title}" class="nameWork">${this.title}</span></p>
+//           <p>Время: <span class="time">${this.time}</span></p>
+//           <button class="table-button" onclick="location.href='#'">Изменить</button>
+//           <button class="table-button btn-delete">Удалить</button>
+//         </div>
+//       `;
+//     }
+  
+//     formattedDate() {
+//       const now = new Date();
+//       const day = String(now.getDate()).padStart(2, "0");
+//       const month = String(now.getMonth() + 1).padStart(2, "0");
+//       const year = now.getFullYear();
+//       return `${day}.${month}.${year}`;
+//     }
+  
+    renderIn(container) {
+      const existingDateIndex = TimerItem.dateCollection.findIndex(
+        (date) => date === this.date
+      );
+  
+      if (existingDateIndex !== -1) {
+        // If the date already exists, find the corresponding container
+        const existingDateContainer = container.querySelector(`[data-date="${this.date}"]`);
+        const taskList = existingDateContainer.querySelector('.task-list');
+  
+        // Create the task element and append it to the task list
+        const taskElement = this.createElement(this.createElementTemplate());
+        taskList.appendChild(taskElement);
+      } else {
+        // If the date does not exist, add it to the date collection
+        TimerItem.dateCollection.push(this.date);
+        super.renderIn(container); // Render the new date container
+        const taskList = this.element.querySelector('.task-list');
+  
+        // Create the task element and append it to the task list
+        const taskElement = this.createElement(this.createElementTemplate());
+        taskList.appendChild(taskElement);
+      }
+    }
+  
+//     update({ title = this.title, time = this.time } = {}) {
+//       this.title = title;
+//       this.time = time;
+  
+//       this.element.querySelector(".nameWork").textContent = this.title;
+//       this.element.querySelector(".time").textContent = this.time;
+  
+//       // Update delete button functionality
+//       this.btnDelete = this.element.querySelector(".btn-delete");
+//       this.btnDelete.addEventListener("click", () => this.destroy());
+//     }
+//   }

@@ -1,0 +1,23 @@
+2024-11-30 11:04:02,569 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-11-30 11:04:02,572 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-11-30 11:04:03,146 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-11-30 11:04:03,160 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-11-30 11:04:08,376 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:04:21,749 - [INFO] -  config - (user.py).post(42) - Пользователь qwerty зарегистирован!
+2024-11-30 11:04:27,038 - [INFO] -  config - (user.py).post(69) - Пользователь qwerty вошел в систему!
+2024-11-30 11:04:27,061 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:04:37,374 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:04:38,862 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:04:42,369 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:04:43,864 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:04:44,409 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:04:44,614 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:04:45,500 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:04:53,286 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:06:09,816 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-11-30 11:06:09,816 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-11-30 11:06:10,376 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-11-30 11:06:10,376 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-11-30 11:06:14,462 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:06:22,502 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
+2024-11-30 11:06:57,733 - [INFO] -  config - (endpoints.py).get(53) - Анонимный пользователь зашел на страницу
