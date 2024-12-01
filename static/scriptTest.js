@@ -108,7 +108,7 @@ class TimerItem extends Component {
     this.title = title;
     this.time = time;
     this.date = this.formattedDate();
-    this.element = this.createElement(this.createContainerTemplate());
+    // this.element = this.createElement(this.createContainerTemplate());
   }
 
   createContainerTemplate() {
@@ -124,13 +124,37 @@ class TimerItem extends Component {
 
   createElementTemplate() {
     return `
-          <div class="task-item" data-name-work="${this.title}">
+        <div class="task-item" data-name-work="${this.title}">
             <p>Название дела: <span class="nameWork">${this.title}</span></p>
             <p>Время: <span class="time">${this.time}</span></p>
             <button class="table-button" onclick="location.href='#'">Изменить</button>
-            <button class="table-button btn-delete">Удалить</button>
-          </div>
-        `;
+            <button class="table-button btn-delete">Удалить</button> 
+        </div>
+    `;
+  }
+
+  attachEventListeners() {
+    if (this.element.classList.contains("date-item")) {
+      this.element = this.element.querySelector(".task-item");
+    }
+    this.btnDelete = this.element.querySelector(".btn-delete");
+
+    if (this.btnDelete) {
+      this.btnDelete.addEventListener("click", (evt) => {
+        delete TimerItem.collection.get(this.date)[this.title];
+
+        if (Object.keys(TimerItem.collection.get(this.date)).length === 0) {
+          TimerItem.collection.delete(this.date);
+        }
+
+        if (evt.target.closest(".date-item").childElementCount === 2) {
+          evt.target.closest(".date-item").remove();
+          TimerItem.collection.delete(this.date);
+        }
+
+        this.destroy();
+      });
+    }
   }
 
   formattedDate() {
@@ -138,8 +162,8 @@ class TimerItem extends Component {
     // const now = new Date(Date.now()* (Math.random()/5));
     const day = String(now.getDate()).padStart(2, "0");
     const month = String(now.getMonth() + 1).padStart(2, "0");
-    // const year = now.getFullYear();
-    const year = new Date(Date.now()* (Math.random()/5)).getFullYear();
+    const year = now.getFullYear();
+    // const year = new Date(Date.now() * (Math.random() / 5)).getFullYear();
     return `${day}.${month}.${year}`;
   }
 
@@ -183,9 +207,8 @@ class TimerItem extends Component {
       //+
       const newTime = this.addTimeStrings(existingItem, this.time);
 
-  
       this.time = newTime;
-      this.updateCollection()
+      this.updateCollection();
 
       // Update the displayed time in the element
       const dataContainer = document.querySelector(
@@ -196,10 +219,10 @@ class TimerItem extends Component {
       );
 
       taskItem.querySelector(".time").textContent = this.time;
+      this.attachEventListeners();
     }
     if (isExistingDate && !existingItem) {
-
-      this.updateCollection()
+      this.updateCollection();
 
       const containerDate = document.querySelector(
         `[data-date="${this.date}"]`
@@ -207,15 +230,16 @@ class TimerItem extends Component {
 
       this.element = this.createElement(this.createElementTemplate());
       containerDate.append(this.element);
+      this.attachEventListeners();
     }
 
     if (!isExistingDate) {
-
-      this.updateCollection()
+      this.updateCollection();
 
       this.element = this.createElement(this.createContainerTemplate());
-
       super.renderIn(container);
+      this.attachEventListeners();
+      // this.element = this.createElement(this.createElementTemplate)
     }
   }
 
@@ -226,18 +250,15 @@ class TimerItem extends Component {
     this.element.querySelector(".nameWork").textContent = this.title;
     this.element.querySelector(".time").textContent = this.time;
 
-    // Update delete button functionality
-    this.btnDelete = this.element.querySelector(".btn-delete");
-    this.btnDelete.addEventListener("click", () => this.destroy());
+    this.attachEventListeners();
   }
 
-  updateCollection(){
+  updateCollection() {
     TimerItem.collection.set(this.date, {
       ...TimerItem.collection.get(this.date),
       [this.title]: this.time,
     });
   }
-
 }
 
 class Timer extends Component {
