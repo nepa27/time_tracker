@@ -23,8 +23,8 @@
                             <div class="task-item">
                                 <p>Название дела: <span class="nameWork">{{ item[1] }}</span></p>
                                 <p>Время: <span class="time">{{ item[2] }}</span></p>
-                                <button class="table-button" onclick="location.href='{{ url_for('timer.edit', work_id=item[0]) }}'">Изменить</button>
-                                <button class="table-button" onclick="deleteTable(['{{ user }}', '{{ item[1] }}', '{{ date }}'], event)">Удалить</button>
+                                <button class="table-button" onclick="location.href='{{ url_for('timer.edit', username=user, date=date, name_of_work=item[1]) }}'">Изменить</button>
+                                <button class="table-button" onclick="deleteTable(['{{ user }}', '{{ date }}', '{{ item[1] }}'], event)">Удалить</button>
                             </div>
                         {% endfor %}
                     </div>

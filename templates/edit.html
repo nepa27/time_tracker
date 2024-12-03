@@ -6,7 +6,7 @@
   <div class="flash {{ cat }}">{{ msg }}</div>
 {% endfor %}
 
-<form id="myForm" action="{{ url_for('timer.edit' , work_id=data.id) }}" method="POST">
+<form id="myForm" action="{{ url_for('timer.edit', username=user, name_of_work=data.name_of_work, date=data.date) }}" method="POST">
   <div class="task-item">
       <strong>Дата: <input class="form-control" type="date" id="date" name="date" value="{{ data.date }}" required></strong>
       <p>Название дела:<input class="form-control" type="text" id="name_of_work" name="name_of_work" value="{{ data.name_of_work }}" required></p>

@@ -96,11 +96,16 @@ class HomePage(MethodView):
         return {'message': 'Data add in BD'}, 201
 
 
-@blp.route('/edit/<int:work_id>', endpoint='edit')
+@blp.route('/edit/<username>/<date>/<name_of_work>', endpoint='edit')
 class EditData(MethodView):
     @jwt_required()
-    def get(self, work_id):
-        data = TimeTrackerModel.query.get(work_id)
+    def get(self, username, name_of_work, date):
+        date = datetime.date(datetime.strptime(date, '%d.%m.%Y'))
+        data = TimeTrackerModel.query.filter(
+            TimeTrackerModel.name_of_work == name_of_work,
+            TimeTrackerModel.date == date,
+            TimeTrackerModel.username == get_jwt_identity()
+        ).first()
         if data:
             if data.username == get_jwt_identity():
                 return render_template(
@@ -112,20 +117,23 @@ class EditData(MethodView):
         return {'message': 'Page doesn`t exist'}, 404
 
     @jwt_required()
-    def post(self, work_id):
+    def post(self, username, name_of_work, date):
+        date = datetime.date(datetime.strptime(date, '%Y-%m-%d'))
         work_data = TimeTrackerModel.query.filter(
-            TimeTrackerModel.id == work_id
-        )
+            TimeTrackerModel.name_of_work == name_of_work,
+            TimeTrackerModel.date == date,
+            TimeTrackerModel.username == get_jwt_identity()
+        ).first()
         form_data = request.form.to_dict()
 
         time_obj = datetime.strptime(form_data['time'], '%H:%M:%S').time()
         date_obj = datetime.strptime(form_data['date'], '%Y-%m-%d').date()
 
         try:
-            old_name = work_data[0].name_of_work
-            work_data[0].name_of_work = form_data['name_of_work']
-            work_data[0].date = date_obj
-            work_data[0].time = time_obj
+            old_name = work_data.name_of_work
+            work_data.name_of_work = form_data['name_of_work']
+            work_data.date = date_obj
+            work_data.time = time_obj
             db.session.commit()
         except sqlalchemy.exc.IntegrityError:
             error_message = ('Нельзя создать два одинаковых '
@@ -136,18 +144,23 @@ class EditData(MethodView):
                 error_message,
                 category='error'
             )
-            return redirect(url_for('timer.edit', work_id=work_id))
+            return redirect(url_for(
+                'timer.edit',
+                username=get_jwt_identity(),
+                name_of_work=name_of_work,
+                date=date
+            ))
         else:
             logger.info(f'Измененны данные по задаче {old_name}.'
-                        f' Название: {work_data[0].name_of_work},'
-                        f' Время: {work_data[0].time},'
-                        f' Дата: {work_data[0].date}.')
+                        f' Название: {work_data.name_of_work},'
+                        f' Время: {work_data.time},'
+                        f' Дата: {work_data.date}.')
             return redirect(url_for('timer.home'))
 
 
-@blp.route('/delete/<username>/<name_of_work>/<date>', methods=['DELETE'], endpoint='delete')
+@blp.route('/delete/<username>/<date>/<name_of_work>', methods=['DELETE'], endpoint='delete')
 @jwt_required()
-def delete_item(username, name_of_work, date):
+def delete_item(username, date, name_of_work):
     date = datetime.date(datetime.strptime(date, '%d.%m.%Y'))
     TimeTrackerModel.query.filter(
         TimeTrackerModel.name_of_work == name_of_work,
