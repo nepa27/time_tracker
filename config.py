@@ -13,6 +13,7 @@ from flask_jwt_extended import (
     set_access_cookies,
     verify_jwt_in_request
 )
+from flask_wtf.csrf import CSRFProtect
 
 from constants import (
     TIME_JWT,
@@ -61,6 +62,7 @@ app.config['JWT_TOKEN_LOCATION'] = ['cookies', 'headers']
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=TIME_JWT)
 app.config['JWT_COOKIE_CSRF_PROTECT'] = False
 
+csrf = CSRFProtect(app)
 db.init_app(app)
 jwt = JWTManager(app)
 

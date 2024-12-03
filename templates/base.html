@@ -13,7 +13,6 @@
             <a href="{{ url_for('timer.home') }}">Главная</a>
           {% if user %}
             <a href="#">Статистика</a>
-            <a href="#">Профиль</a>
             <span>| Пользователь: <b>{{ user }}</b> |</span>
             <a href="{{ url_for('users.logout') }}">Выйти</a>
           {% else %}

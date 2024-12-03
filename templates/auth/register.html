@@ -7,18 +7,18 @@
   <div class="flash {{ cat }}">{{ msg }}</div>
 {% endfor %}
 {% if 'register' in request.url %}
-    <form id="register-form" action="{{ url_for('users.register') }}" method="POST">
+    <form id="register-form" action="{{ url_for('users.register') }}" method="POST" novalidate>
         {{ form.hidden_tag() }}
         <div class="task-item">
             <h2>Регистрация</h2>
 {% else %}
-    <form id="login-form" action="{{ url_for('users.login') }}" method="POST">
+    <form id="login-form" action="{{ url_for('users.login') }}" method="POST" novalidate>
         {{ form.hidden_tag() }}
         <div class="task-item">
             <h2>Вход в аккаунт</h2>
 {% endif %}
-            <p>{{ form.username.label }} {{ form.username(size=32, class="form-control") }}</p>
-            <p>{{ form.password.label }} {{ form.password(size=32, class="form-control") }}</p>
+            <p>{{ form.username.label }} {{ form.username(size=32, class="form-control", id="username") }}</p>
+            <p>{{ form.password.label }} {{ form.password(size=32, class="form-control", id="password") }}</p>
             {% if 'register' in request.url %}
               <button type="submit" class="table-button">Зарегистрироваться</button>
             {% else %}
@@ -26,4 +26,31 @@
             {% endif %}
         </div>
     </form>
+{% if 'login' in request.url %}
+  <script>
+  document.getElementById('login-form').addEventListener('submit', function(event) {
+
+  event.preventDefault();
+  var form = event.target;
+  var data = new FormData(form);
+        fetch('{{ url_for('users.login') }}', {
+              method: 'POST',
+              body: data
+              })
+              .then(response => response.json())
+              .then(data => {
+
+  if (data.message === 'success login') {
+                  window.location.href = '/';
+              } else {
+                  alert('Неверное имя пользователя или пароль!');
+              }
+          })
+          .catch(error => {
+              alert('Произошла ошибка при попытке входа!');
+              console.error('Error: ', error);
+          });
+  });
+  </script>
+{% endif %}
 {% endblock %}

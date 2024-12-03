@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Length
 
 from constants import (
@@ -10,7 +10,7 @@ from constants import (
 )
 
 
-class RegistrationForm(FlaskForm):
+class AuthForm(FlaskForm):
     username = StringField('Имя пользователя',
                            validators=[
                                DataRequired(),
@@ -35,4 +35,3 @@ class RegistrationForm(FlaskForm):
                                              f' символов'
                                  )
                              ])
-    submit = SubmitField(('Зарегистрироваться', 'Войти'))

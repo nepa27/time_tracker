@@ -9,14 +9,17 @@ from flask_jwt_extended import (
     unset_access_cookies
 )
 from flask_jwt_extended import jwt_required, create_access_token
-from flask_smorest import Blueprint, abort
+from flask_smorest import Blueprint
 from sqlalchemy.exc import SQLAlchemyError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from config import db, logger
-from forms import RegistrationForm
+from constants import (
+    MIN_LENGHT_USERNAME,
+    MIN_LENGHT_PASSWORD,
+)
+from forms import AuthForm
 from models import BlocklistJwt, UserModel
-from schemas import UserSchema
 
 blp = Blueprint(
     'users',
@@ -27,10 +30,9 @@ blp = Blueprint(
 
 @blp.route('/register', endpoint='register')
 class UserRegister(MethodView):
-    # TODO: Почему не работает?!
-    #@blp.arguments(UserSchema)
+    # @blp.arguments(UserSchema)
     def post(self):
-        form = RegistrationForm()
+        form = AuthForm()
         if form.validate_on_submit():
             if UserModel.query.filter(
                     UserModel.username == form.username.data
@@ -49,41 +51,65 @@ class UserRegister(MethodView):
             db.session.commit()
             logger.info(f'Пользователь {form.username.data} зарегистирован!')
             return redirect(url_for('users.login'))
-        # TODO: Если невалидна, то нужен ответ
-        self.get()
+
+        logger.error('Неудачная регистрация!')
+        if MIN_LENGHT_USERNAME > len(form.username.data):
+            flash(
+                f'Имя должно быть больше {MIN_LENGHT_USERNAME} символов!',
+                category='error'
+            )
+        if MIN_LENGHT_PASSWORD > len(form.password.data):
+            flash(
+                f'Пароль должно быть больше {MIN_LENGHT_PASSWORD} символов!',
+                category='error'
+            )
+        return redirect(url_for('users.register'))
 
     def get(self):
-        form = RegistrationForm()
+        form = AuthForm()
         return render_template(
             'auth/register.html',
             form=form
         )
 
+
 @blp.route('/login', endpoint='login')
 class UserLogin(MethodView):
-    @blp.arguments(UserSchema)
-    def post(self, user_data):
-        user = UserModel.query.filter(
-            UserModel.username == user_data['username']
-        ).first()
-        if not user or not check_password_hash(
-                user.password,
-                user_data['password']
-        ):
-            abort(400, message='Неверное имя пользователя или пароль!')
+    # @blp.arguments(UserSchema)
+    def post(self):
+        form = AuthForm()
+        if form.validate_on_submit():
+            user = UserModel.query.filter(
+                UserModel.username == form.username.data
+            ).first()
+            if not user or not check_password_hash(
+                    user.password,
+                    form.password.data
+            ):
+                return jsonify(
+                    {'message': 'Неправильное имя пользователя или пароль!'}
+                ), 401
 
-        access_token = create_access_token(
-            identity=user.username,
-            fresh=True
-        )
+            access_token = create_access_token(
+                identity=user.username,
+                fresh=True
+            )
 
-        resp = jsonify({'message': 'success login'})
-        set_access_cookies(resp, access_token)
-        logger.info(f'Пользователь {user.username} вошел в систему!')
-        return resp, 200
+            resp = jsonify({'message': 'success login'})
+            set_access_cookies(resp, access_token)
+            logger.info(f'Пользователь {form.username.data} вошел в систему!')
+            return resp, 200
+        logger.error('Неудачная аутентификация!')
+        return jsonify(
+            {'message': 'Неправильное имя пользователя или пароль!'}
+        ), 401
 
     def get(self):
-        return render_template('auth/login.html')
+        form = AuthForm()
+        return render_template(
+            'auth/register.html',
+            form=form
+        )
 
 
 @blp.route('/logout', endpoint='logout')
@@ -101,5 +127,5 @@ class UserLogout(MethodView):
             logger.info(f'Пользователь {user} вышел из системы!')
             return redirect(url_for('timer.home'))
         except SQLAlchemyError as e:
-            print(f'error: {e}')
+            logger.error(f'Ошибка при удалении {str(e)[:15]}')
             return resp
