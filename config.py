@@ -19,7 +19,8 @@ from constants import (
     TIME_JWT,
     FILE_SIZE_BYTE,
     SIZE_TO_MB,
-    FILES_COUNT
+    FILES_COUNT,
+    MAX_CONTENT_LENGTH
 )
 from db import db
 from models import BlocklistJwt
@@ -52,7 +53,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
     'sqlite:///data.db'
 )
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
 app.config['WTF_CSRF_ENABLED'] = False
 app.config['DEBUG'] = True
 app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY') or 'My-secret-key'
@@ -78,7 +79,7 @@ def load_logged_in_user():
             g.user = None
     except BaseException as e:
         g.user = None
-        print(f'Error in load_logged_in_user: {e}')
+        logger.error(f'Error in load_logged_in_user: {e}')
 
 
 @app.context_processor
@@ -106,7 +107,7 @@ def refresh_expiring_jwts(response):
         return response
 
     except (RuntimeError, KeyError) as e:
-        print(f'Error: {e}')
+        logger.error(f'Error: {e}')
         return response
 
 
