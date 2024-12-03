@@ -36,10 +36,10 @@ def data_to_template(data) -> dict:
 
     for value in data:
         date = value.date
-        temp = []
+        temp = {}
         for el in data:
             if el.date == date:
-                temp.append((el.id, el.name_of_work, el.time))
+                temp[el.name_of_work] = el.time
         date = date.strftime('%d.%m.%Y')
         result_data[date] = temp
     return result_data

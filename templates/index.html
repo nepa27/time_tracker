@@ -19,12 +19,12 @@
                 {% for date, items in data.items() %}
                     <strong class="strongDate">Дата: <span class="date">{{ date }}</span></strong>
                     <div class="date-item">
-                        {% for item in items %}
+                        {% for name, time in items.items() %}
                             <div class="task-item">
-                                <p>Название дела: <span class="nameWork">{{ item[1] }}</span></p>
-                                <p>Время: <span class="time">{{ item[2] }}</span></p>
-                                <button class="table-button" onclick="location.href='{{ url_for('timer.edit', username=user, date=date, name_of_work=item[1]) }}'">Изменить</button>
-                                <button class="table-button" onclick="deleteTable(['{{ user }}', '{{ date }}', '{{ item[1] }}'], event)">Удалить</button>
+                                <p>Название дела: <span class="nameWork">{{ name }}</span></p>
+                                <p>Время: <span class="time">{{ time }}</span></p>
+                                <button class="table-button" onclick="location.href='{{ url_for('timer.edit', username=user, date=date, name_of_work=name) }}'">Изменить</button>
+                                <button class="table-button" onclick="deleteTable(['{{ user }}', '{{ date }}', '{{ name }}'], event)">Удалить</button>
                             </div>
                         {% endfor %}
                     </div>
