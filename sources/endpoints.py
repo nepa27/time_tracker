@@ -1,3 +1,4 @@
+import time
 from datetime import datetime
 
 from flask import flash, redirect, render_template, request, url_for
@@ -144,13 +145,16 @@ class EditData(MethodView):
             return redirect(url_for('timer.home'))
 
 
-@blp.route('/delete/<int:work_id>', methods=['DELETE'], endpoint='delete')
+@blp.route('/delete/<username>/<name_of_work>/<date>', methods=['DELETE'], endpoint='delete')
 @jwt_required()
-def delete_item(work_id):
+def delete_item(username, name_of_work, date):
+    date = datetime.date(datetime.strptime(date, '%d.%m.%Y'))
     TimeTrackerModel.query.filter(
-        TimeTrackerModel.id == work_id,
+        TimeTrackerModel.name_of_work == name_of_work,
+        TimeTrackerModel.date == date,
         TimeTrackerModel.username == get_jwt_identity()
     ).delete()
     db.session.commit()
-    logger.info(f'Удалена задаче с id = {work_id}')
+    logger.info(f'Удалена задача: name = {name_of_work}'
+                f', date = {date}')
     return {'message': 'Task has delete'}, 204
