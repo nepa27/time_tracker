@@ -1,19 +1,19 @@
 from datetime import datetime
 
+import sqlalchemy
 from flask import flash, redirect, render_template, request, url_for
-from flask_smorest import Blueprint
+from flask.views import MethodView
 from flask_jwt_extended import (
     get_jwt_identity,
     jwt_required,
     verify_jwt_in_request
 )
-from flask.views import MethodView
-import sqlalchemy
+from flask_smorest import Blueprint
 
 from config import db, logger
 from models import TimeTrackerModel
-from utils.utils import data_to_template, parse_date, sum_time
 from schemas import TimeTrackerSchema
+from utils.utils import data_to_template, parse_date, sum_time
 
 blp = Blueprint(
     'timer',
@@ -45,7 +45,7 @@ class HomePage(MethodView):
 
             return render_template(
                 'index.html',
-                data=data_to_template(data),
+                data=data_to_template(data_paginate.items),
                 total_time=total_time,
                 pagination=data_paginate
             )
