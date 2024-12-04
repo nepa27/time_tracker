@@ -134,10 +134,10 @@ startButton.addEventListener("click", () => {
     }
 });
 
-function deleteTable(idWork, event) {
+function deleteTable(data, event) {
     event.stopPropagation();
     if (confirm('Вы уверены, что хотите удалить эту запись?')) {
-        fetch(`/delete/${idWork}`, {
+        fetch(`/delete/${data[0]}/${data[1]}`, {
             method: 'DELETE'
         }).then(response => {
             if (response.ok) {

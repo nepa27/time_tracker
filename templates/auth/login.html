@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+
+    <form id="login-form">
+        <div class="task-item">
+            <h2>Вход в аккаунт</h2>
+            <p>Имя пользователя:<input type="text" class="form-control" id="username" name="username" required></p>
+            <p>Пароль:<input type="password" class="form-control" id="password" name="password" required></p>
+        <button type="submit" class="table-button">Войти</button>
+        </div>
+    </form>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            fetch('{{ url_for('users.login') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, password: password })
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/';
+                } else if (response.status === 400) {
+                    alert('Неверное имя пользователя или пароль!');
+                } else {
+                    alert('Неудачная регистрация!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred');
+});
+        });
+    </script>
+{% endblock %}
+{% endblock %}

@@ -1,4 +1,4 @@
-from datetime import time, timedelta
+from datetime import time, timedelta, datetime
 
 from constants import TO_HOUR, TO_MINUTE, TO_SEC
 
@@ -36,11 +36,21 @@ def data_to_template(data) -> dict:
 
     for value in data:
         date = value.date
-        temp = []
+        temp = {}
         for el in data:
             if el.date == date:
-                temp.append((el.id, el.name_of_work, el.time))
-        date = date.strftime("%d.%m.%Y")
+                temp[el.name_of_work] = el.time
+        date = date.strftime('%d.%m.%Y')
         result_data[date] = temp
-
     return result_data
+
+
+def parse_date(date_str):
+    """ Функция преобразует строку в дату в зависимости от формата. """
+    formats = ('%d.%m.%Y', '%Y-%m-%d')
+    for fmt in formats:
+        try:
+            return datetime.strptime(date_str, fmt).date()
+        except ValueError:
+            continue
+    raise ValueError(f'Дата \'{date_str}\' некорректного формата.')

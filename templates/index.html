@@ -1,78 +1,86 @@
 {% extends 'base.html' %}
 {% block title %}Учет рабочего времени{% endblock %}
 {% block content %}
-<div class="container">
-    <div class="task-input">
-        <input type="text" id="taskName" placeholder="Название дела" list="taskNames" />
-        <datalist id="taskNames"></datalist>
-        <button id="startButton">Пуск</button>
-        <div class="timer" id="timer">00:00:00</div>
-    </div>
-    <div class="total-time-container">
-        <strong>Всего за день:</strong>
-        <p class="timer" id="total_timer">{{ total_time }}</p>
-    </div>
-    <h3>Список дел</h3>
-    <div class="task-list" id="work-container">
-        {% if data %}
-            {% for date, items in data.items() %}
-                <strong class="strongDate">Дата: <span class="date">{{ date }}</span></strong>
-                <div class="date-item">
-                    {% for item in items %}
-                        <div class="task-item">
-                            <p>Название дела: <span class="nameWork">{{ item[1] }}</span></p>
-                            <p>Время: <span class="time">{{ item[2] }}</span></p>
-                            <button class="table-button" onclick="location.href='{{ url_for('timer.edit', work_id=item[0]) }}'">Изменить</button>
-                            <button class="table-button" onclick="deleteTable('{{ (item[0]) }}', event)">Удалить</button>
-                        </div>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        {% else %}
-            <strong class="strongDate"><span class="date"></span></strong>
-            <div class="date-item"></div>
-            <h4 class="hello-message" style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">Ты пока ничего не сделал :)</h4>
-        {% endif %}
-        <template id="template__task-item">
-            <div class="task-item">
-                <p>Название дела: <span class="nameWork">Название</span></p>
-                <p>Время: <span class="time">02:20:10</span></p>
-                <button class="table-button" onclick="location.href='#'">Изменить</button>
-                <button class="table-button" onclick="location.href='#'">Удалить</button>
-            </div>
-        </template>
-    </div>
-</div>
-
-{% if pagination.total > 0 %}
-    <div class="pagination" style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">
-        {% if pagination.page > 1 %}
-            <a class="table-button-page" href="{{ url_for('timer.home', page=1) }}">Первая</a>
-        {% endif %}
-        {% set start_page = pagination.page - 2 %}
-        {% set end_page = pagination.page + 2 %}
-
-        {% if start_page > 1 %}
-            <span>...</span>
-        {% endif %}
-
-        {% for page_num in range(start_page, end_page + 1) %}
-            {% if page_num >= 1 and page_num <= pagination.pages %}
-                {% if page_num == pagination.page %}
-                    <span class="current-page">{{ page_num }}</span>
-                {% else %}
-                    <a class="table-button-page" href="{{ url_for('timer.home', page=page_num) }}">{{ page_num }}</a>
-                {% endif %}
+{% if user %}
+    <div class="container">
+        <div class="task-input">
+            <input type="text" id="taskName" placeholder="Название дела" list="taskNames" />
+            <datalist id="taskNames"></datalist>
+            <button id="startButton">Пуск</button>
+            <div class="timer" id="timer">00:00:00</div>
+        </div>
+        <div class="total-time-container">
+            <strong>Всего за день:</strong>
+            <p class="timer" id="total_timer">{{ total_time }}</p>
+        </div>
+        <h3>Список дел</h3>
+        <div class="task-list" id="work-container">
+            {% if data %}
+                {% for date, items in data.items() %}
+                    <strong class="strongDate">Дата: <span class="date">{{ date }}</span></strong>
+                    <div class="date-item">
+                        {% for name, time in items.items() %}
+                            <div class="task-item">
+                                <p>Название дела: <span class="nameWork">{{ name }}</span></p>
+                                <p>Время: <span class="time">{{ time }}</span></p>
+                                <button class="table-button" onclick="location.href='{{ url_for('timer.edit', date=date, name_of_work=name) }}'">Изменить</button>
+                                <button class="table-button" onclick="deleteTable(['{{ date }}', '{{ name }}'], event)">Удалить</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            {% else %}
+                <strong class="strongDate"><span class="date"></span></strong>
+                <div class="date-item"></div>
+                <h4 class="hello-message" style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">Ты пока ничего не сделал :)</h4>
             {% endif %}
-        {% endfor %}
-
-        {% if end_page < pagination.pages %}
-            <span>...</span>
-        {% endif %}
-        {% if pagination.page < pagination.pages %}
-            <a class="table-button-page" href="{{ url_for('timer.home', page=pagination.pages) }}">Последняя</a>
-        {% endif %}
+            <template id="template__task-item">
+                <div class="task-item">
+                    <p>Название дела: <span class="nameWork">Название</span></p>
+                    <p>Время: <span class="time">02:20:10</span></p>
+                    <button class="table-button" onclick="location.href='#'">Изменить</button>
+                    <button class="table-button" onclick="location.href='#'">Удалить</button>
+                </div>
+            </template>
+        </div>
     </div>
+
+    {% if pagination.total > 0 %}
+        <div class="pagination" style="margin-top: 20px; display: flex; justify-content: center; align-items: center;">
+            {% if pagination.page > 1 %}
+                <a class="table-button-page" href="{{ url_for('timer.home', page=1) }}">Первая</a>
+            {% endif %}
+            {% set start_page = pagination.page - 2 %}
+            {% set end_page = pagination.page + 2 %}
+
+            {% if start_page > 1 %}
+                <span>...</span>
+            {% endif %}
+
+            {% for page_num in range(start_page, end_page + 1) %}
+                {% if page_num >= 1 and page_num <= pagination.pages %}
+                    {% if page_num == pagination.page %}
+                        <span class="current-page">{{ page_num }}</span>
+                    {% else %}
+                        <a class="table-button-page" href="{{ url_for('timer.home', page=page_num) }}">{{ page_num }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            {% if end_page < pagination.pages %}
+                <span>...</span>
+            {% endif %}
+            {% if pagination.page < pagination.pages %}
+                <a class="table-button-page" href="{{ url_for('timer.home', page=pagination.pages) }}">Последняя</a>
+            {% endif %}
+        </div>
+    {% endif %}
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+{% else %}
+      <div class="hello-message">
+          <h1 class="display-4">Учет рабочего времени</h1>
+          <hr class="my-4">
+          <p>Используйте навигационную панель для доступа к вашему профилю</p>
+      </div>
 {% endif %}
-<script src="{{ url_for('static', filename='script.js') }}"></script>
 {% endblock %}
