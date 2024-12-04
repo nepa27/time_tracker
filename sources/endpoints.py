@@ -95,10 +95,10 @@ class HomePage(MethodView):
         return {'message': 'Data add in BD'}, 201
 
 
-@blp.route('/edit/<username>/<date>/<name_of_work>', endpoint='edit')
+@blp.route('/edit/<date>/<name_of_work>', endpoint='edit')
 class EditData(MethodView):
     @jwt_required()
-    def get(self, username, name_of_work, date):
+    def get(self, name_of_work, date):
         try:
             date = parse_date(date)
         except ValueError as e:
@@ -121,7 +121,7 @@ class EditData(MethodView):
         return {'message': 'Page doesn`t exist'}, 404
 
     @jwt_required()
-    def post(self, username, name_of_work, date):
+    def post(self, name_of_work, date):
         date = parse_date(date)
         work_data = TimeTrackerModel.query.filter(
             TimeTrackerModel.name_of_work == name_of_work,
@@ -147,6 +147,12 @@ class EditData(MethodView):
                 error_message,
                 category='error'
             )
+            return redirect(url_for(
+                'timer.edit',
+                username=get_jwt_identity(),
+                name_of_work=name_of_work,
+                date=date
+            ))
         except ValueError as e:
             logger.error(e)
             db.session.rollback()
@@ -154,29 +160,29 @@ class EditData(MethodView):
                 'Ошибка при сохранении даты или времени!',
                 category='error'
             )
-        else:
-            logger.info(f'Измененны данные по задаче {old_name}.'
-                        f' Название: {work_data.name_of_work},'
-                        f' Время: {work_data.time},'
-                        f' Дата: {work_data.date}.')
-            return redirect(url_for('timer.home'))
-        finally:
             return redirect(url_for(
                 'timer.edit',
                 username=get_jwt_identity(),
                 name_of_work=name_of_work,
                 date=date
             ))
+        else:
+            logger.info(f'Измененны данные по задаче {old_name}.'
+                        f' Название: {work_data.name_of_work},'
+                        f' Время: {work_data.time},'
+                        f' Дата: {work_data.date}.')
+            return redirect(url_for('timer.home'))
 
 
 @blp.route(
-    '/delete/<username>/<date>/<name_of_work>',
+    '/delete/<date>/<name_of_work>',
     methods=('DELETE',),
     endpoint='delete'
 )
 @jwt_required()
-def delete_item(username, date, name_of_work):
+def delete_item(date, name_of_work):
     date = parse_date(date)
+    # TODO: сделать try except
     TimeTrackerModel.query.filter(
         TimeTrackerModel.name_of_work == name_of_work,
         TimeTrackerModel.date == date,
