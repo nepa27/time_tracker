@@ -21,6 +21,7 @@ from constants import (
 from forms import AuthForm
 from models import BlocklistJwt, UserModel
 
+
 blp = Blueprint(
     'users',
     __name__,
@@ -30,7 +31,6 @@ blp = Blueprint(
 
 @blp.route('/register', endpoint='register')
 class UserRegister(MethodView):
-    # @blp.arguments(UserSchema)
     def post(self):
         form = AuthForm()
         if form.validate_on_submit():
@@ -75,7 +75,6 @@ class UserRegister(MethodView):
 
 @blp.route('/login', endpoint='login')
 class UserLogin(MethodView):
-    # @blp.arguments(UserSchema)
     def post(self):
         form = AuthForm()
         if form.validate_on_submit():
