@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Статистика{% endblock %}
+{% block content %}
+{% if user %}
+{% else %}
+      <div class="hello-message">
+          <h1 class="display-4">Учет рабочего времени</h1>
+          <hr class="my-4">
+          <p>Используйте навигационную панель для доступа к вашему профилю</p>
+      </div>
+{% endif %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    fetch('/api/statistics')
+        .then(response => response.json())
+        .then(data => {
+            if (data.data) {
+                console.log(data);
+            } else {
+                console.log('Нет данных для отображения');
+            }
+        })
+        .catch(error => console.error('Ошибка:', error));
+});
+</script>
+{% endblock %}

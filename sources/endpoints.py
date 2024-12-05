@@ -13,48 +13,13 @@ from flask_smorest import Blueprint
 from config import db, logger
 from models import TimeTrackerModel
 from schemas import TimeTrackerSchema
-from utils.utils import data_to_template, parse_date, sum_time
+from utils.utils import data_to_statistic, data_to_json, parse_date, sum_time
 
 blp = Blueprint(
     'timer',
     __name__,
     description='Timer work time'
 )
-
-
-@blp.route('/api/', endpoint='api_data')
-@jwt_required()
-def api_data():
-    try:
-        verify_jwt_in_request(optional=True)
-        page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('per_page', 5, type=int)
-
-        now_date = datetime.now().date()
-
-        data = TimeTrackerModel.query.filter(
-            TimeTrackerModel.username == get_jwt_identity()
-        ).order_by(
-            TimeTrackerModel.date.desc(),
-            TimeTrackerModel.id.desc()
-        )
-
-        data_paginate = data.paginate(page=page, per_page=per_page)
-        data_total_time = data.filter(TimeTrackerModel.date == now_date)
-        total_time = sum_time(data_total_time.all()).strftime('%H:%M:%S')
-
-        return {
-            'data': data_to_template(data_paginate.items),
-            'total_time': total_time,
-            'pagination': {
-                'total': data_paginate.total,
-                'page': data_paginate.page,
-                'pages': data_paginate.pages,
-            }
-        }, 200
-    except BaseException:
-        logger.info('Ошибка при получении данных')
-        return {'data': None, 'total_time': None, 'pagination': None}, 500
 
 
 @blp.route('/', endpoint='home')
@@ -196,3 +161,62 @@ def delete_item(date, name_of_work):
     logger.info(f'Удалена задача: name = {name_of_work}'
                 f', date = {date}')
     return {'message': 'Task has delete'}, 204
+
+
+@blp.route(
+    '/statistics/',
+    methods=('GET',),
+    endpoint='statistics'
+)
+@jwt_required()
+def get_statistics():
+    return render_template('statistics.html')
+
+
+@blp.route('/api/', endpoint='api_data')
+@jwt_required()
+def api_data():
+    try:
+        verify_jwt_in_request(optional=True)
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 5, type=int)
+
+        now_date = datetime.now().date()
+
+        data = TimeTrackerModel.query.filter(
+            TimeTrackerModel.username == get_jwt_identity()
+        ).order_by(
+            TimeTrackerModel.date.desc(),
+            TimeTrackerModel.id.desc()
+        )
+
+        data_paginate = data.paginate(page=page, per_page=per_page)
+        data_total_time = data.filter(TimeTrackerModel.date == now_date)
+        total_time = sum_time(data_total_time.all()).strftime('%H:%M:%S')
+
+        return {
+            'data': data_to_json(data_paginate.items),
+            'total_time': total_time,
+            'pagination': {
+                'total': data_paginate.total,
+                'page': data_paginate.page,
+                'pages': data_paginate.pages,
+            }
+        }, 200
+    except BaseException:
+        logger.info('Ошибка при получении данных')
+        return {'data': None, 'total_time': None, 'pagination': None}, 500
+
+
+@blp.route('/api/statistics', endpoint='api_statistics')
+@jwt_required()
+def api_statistics():
+    try:
+        verify_jwt_in_request(optional=True)
+        data = TimeTrackerModel.query.all()
+        return {
+            'data': data_to_statistic(data),
+        }, 200
+    except BaseException:
+        logger.info('Ошибка при получении данных')
+        return {'data': None}, 500

@@ -12,7 +12,7 @@
         <div class="nav-links">
             <a href="{{ url_for('timer.home') }}">Главная</a>
           {% if user %}
-            <a href="#">Статистика</a>
+            <a href="{{ url_for('timer.statistics') }}">Статистика</a>
             <span>| Пользователь: <b>{{ user }}</b> |</span>
             <a href="{{ url_for('users.logout') }}">Выйти</a>
           {% else %}
