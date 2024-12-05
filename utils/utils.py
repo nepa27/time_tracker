@@ -39,7 +39,7 @@ def data_to_template(data) -> dict:
         temp = {}
         for el in data:
             if el.date == date:
-                temp[el.name_of_work] = el.time
+                temp[el.name_of_work] = el.time.strftime('%H:%M:%S')
         date = date.strftime('%d.%m.%Y')
         result_data[date] = temp
     return result_data
@@ -53,4 +53,4 @@ def parse_date(date_str):
             return datetime.strptime(date_str, fmt).date()
         except ValueError:
             continue
-    raise ValueError(f'Дата \'{date_str}\' некорректного формата.')
+    raise ValueError(f'Дата {date_str} некорректного формата.')
