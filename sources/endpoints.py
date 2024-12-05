@@ -202,13 +202,15 @@ class EditData(MethodView):
 @jwt_required()
 def delete_item(date, name_of_work):
     date = parse_date(date)
-    # TODO: сделать try except
-    TimeTrackerModel.query.filter(
-        TimeTrackerModel.name_of_work == name_of_work,
+    if TimeTrackerModel.query.filter(
+        TimeTrackerModel.name_of_work == 'name_of_work',
         TimeTrackerModel.date == date,
         TimeTrackerModel.username == get_jwt_identity()
-    ).delete()
-    db.session.commit()
-    logger.info(f'Удалена задача: name = {name_of_work}'
-                f', date = {date}')
-    return {'message': 'Task has delete'}, 204
+    ).delete():
+        db.session.commit()
+        logger.info(f'Удалена задача: name = {name_of_work}'
+                    f', date = {date}')
+        return {'message': 'Task has delete'}, 204
+    logger.error(f'Ошибка при удалении задачи: name = {name_of_work}'
+                 f', date = {date}')
+    return {'message': 'Task has not delete'}, 400
