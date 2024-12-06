@@ -37,7 +37,7 @@
 {% endif %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/?page=1&per_page=5')
+    fetch('/api/data/?page=1&per_page=5')
         .then(response => response.json())
         .then(data => {
             if (data.data) {

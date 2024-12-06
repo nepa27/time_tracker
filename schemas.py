@@ -13,7 +13,9 @@ class TimeTrackerSchema(BaseModel):
     @validator('name_of_work')
     def validate_name_of_work(cls, name):
         if len(name) > LENGHT_NAME or not re.match("^[a-zA-Z0-9]*$", name):
-            raise ValueError('Название проекта может содержать только буквы'
-                             ' и цифры, а также не превышать '
-                             f'{LENGHT_NAME} символов')
+            raise ValueError(
+                'Название проекта может содержать только буквы'
+                ' и цифры, а также не превышать '
+                f'{LENGHT_NAME} символов'
+            )
         return name

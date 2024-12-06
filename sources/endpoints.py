@@ -6,9 +6,8 @@ from flask.views import MethodView
 from flask_jwt_extended import (
     get_jwt_identity,
     jwt_required,
-    verify_jwt_in_request
+    verify_jwt_in_request,
 )
-from flask_smorest import Blueprint
 from pydantic import ValidationError
 
 from config import db, logger
@@ -16,14 +15,7 @@ from models import TimeTrackerModel
 from schemas import TimeTrackerSchema
 from utils.utils import data_to_statistic, data_to_json, parse_date, sum_time
 
-blp = Blueprint(
-    'timer',
-    __name__,
-    description='Timer work time'
-)
 
-
-@blp.route('/', endpoint='home')
 class HomePage(MethodView):
     def get(self):
         return render_template('index.html')
@@ -41,7 +33,7 @@ class HomePage(MethodView):
         now_date = datetime.now().date()
         values = TimeTrackerModel.query.filter(
             TimeTrackerModel.date == now_date,
-            TimeTrackerModel.username == get_jwt_identity()
+            TimeTrackerModel.username == get_jwt_identity(),
         )
         name_of_work = data['name_of_work']
         for value in values:
@@ -60,7 +52,7 @@ class HomePage(MethodView):
             name_of_work=name_of_work,
             date=date_obj,
             time=time_obj,
-            username=get_jwt_identity()
+            username=get_jwt_identity(),
         )
         db.session.add(work)
         db.session.commit()
@@ -69,7 +61,6 @@ class HomePage(MethodView):
         return {'message': 'Data add in BD'}, 201
 
 
-@blp.route('/edit/<date>/<name_of_work>', endpoint='edit')
 class EditData(MethodView):
     @jwt_required()
     def get(self, name_of_work, date):
@@ -82,14 +73,11 @@ class EditData(MethodView):
         data = TimeTrackerModel.query.filter(
             TimeTrackerModel.name_of_work == name_of_work,
             TimeTrackerModel.date == date,
-            TimeTrackerModel.username == get_jwt_identity()
+            TimeTrackerModel.username == get_jwt_identity(),
         ).first()
         if data:
             if data.username == get_jwt_identity():
-                return render_template(
-                    'edit.html',
-                    data=data
-                )
+                return render_template('edit.html', data=data)
             else:
                 return {'message': 'You don`t have permission'}, 403
         return {'message': 'Page doesn`t exist'}, 404
@@ -102,21 +90,20 @@ class EditData(MethodView):
             errors = [str(err['msg']) for err in err.errors()]
             error = errors[0].split('error,')[1]
             logger.error(error)
-            flash(
-                error,
-                category='error'
+            flash(error, category='error')
+            return redirect(
+                url_for(
+                    'timer.edit',
+                    username=get_jwt_identity(),
+                    name_of_work=name_of_work,
+                    date=date,
+                )
             )
-            return redirect(url_for(
-                'timer.edit',
-                username=get_jwt_identity(),
-                name_of_work=name_of_work,
-                date=date
-            ))
         date = parse_date(date)
         work_data = TimeTrackerModel.query.filter(
             TimeTrackerModel.name_of_work == name_of_work,
             TimeTrackerModel.date == date,
-            TimeTrackerModel.username == get_jwt_identity()
+            TimeTrackerModel.username == get_jwt_identity(),
         ).first()
         try:
             time_obj = datetime.strptime(form_data['time'], '%H:%M:%S').time()
@@ -128,74 +115,66 @@ class EditData(MethodView):
             work_data.time = time_obj
             db.session.commit()
         except sqlalchemy.exc.IntegrityError:
-            error_message = ('Нельзя создать два одинаковых '
-                             'объекта для одной даты')
+            error_message = (
+                'Нельзя создать два одинаковых ' 'объекта для одной даты'
+            )
             logger.error(error_message)
             db.session.rollback()
-            flash(
-                error_message,
-                category='error'
+            flash(error_message, category='error')
+            return redirect(
+                url_for(
+                    'timer.edit',
+                    username=get_jwt_identity(),
+                    name_of_work=name_of_work,
+                    date=date,
+                )
             )
-            return redirect(url_for(
-                'timer.edit',
-                username=get_jwt_identity(),
-                name_of_work=name_of_work,
-                date=date
-            ))
         except ValueError as e:
             logger.error(e)
             db.session.rollback()
-            flash(
-                'Ошибка при сохранении даты или времени!',
-                category='error'
+            flash('Ошибка при сохранении даты или времени!', category='error')
+            return redirect(
+                url_for(
+                    'timer.edit',
+                    username=get_jwt_identity(),
+                    name_of_work=name_of_work,
+                    date=date,
+                )
             )
-            return redirect(url_for(
-                'timer.edit',
-                username=get_jwt_identity(),
-                name_of_work=name_of_work,
-                date=date
-            ))
         else:
-            logger.info(f'Измененны данные по задаче {old_name}.'
-                        f' Название: {work_data.name_of_work},'
-                        f' Время: {work_data.time},'
-                        f' Дата: {work_data.date}.')
+            logger.info(
+                f'Измененны данные по задаче {old_name}.'
+                f' Название: {work_data.name_of_work},'
+                f' Время: {work_data.time},'
+                f' Дата: {work_data.date}.'
+            )
             return redirect(url_for('timer.home'))
 
 
-@blp.route(
-    '/delete/<date>/<name_of_work>',
-    methods=('DELETE',),
-    endpoint='delete'
-)
 @jwt_required()
 def delete_item(date, name_of_work):
     date = parse_date(date)
     if TimeTrackerModel.query.filter(
         TimeTrackerModel.name_of_work == 'name_of_work',
         TimeTrackerModel.date == date,
-        TimeTrackerModel.username == get_jwt_identity()
+        TimeTrackerModel.username == get_jwt_identity(),
     ).delete():
         db.session.commit()
-        logger.info(f'Удалена задача: name = {name_of_work}'
-                    f', date = {date}')
+        logger.info(
+            f'Удалена задача: name = {name_of_work}' f', date = {date}'
+        )
         return {'message': 'Task has delete'}, 204
-    logger.error(f'Ошибка при удалении задачи: name = {name_of_work}'
-                 f', date = {date}')
+    logger.error(
+        f'Ошибка при удалении задачи: name = {name_of_work}' f', date = {date}'
+    )
     return {'message': 'Task has not delete'}, 400
 
 
-@blp.route(
-    '/statistics/',
-    methods=('GET',),
-    endpoint='statistics'
-)
 @jwt_required()
 def get_statistics():
     return render_template('statistics.html')
 
 
-@blp.route('/api/', endpoint='api_data')
 @jwt_required()
 def api_data():
     try:
@@ -207,10 +186,7 @@ def api_data():
 
         data = TimeTrackerModel.query.filter(
             TimeTrackerModel.username == get_jwt_identity()
-        ).order_by(
-            TimeTrackerModel.date.desc(),
-            TimeTrackerModel.id.desc()
-        )
+        ).order_by(TimeTrackerModel.date.desc(), TimeTrackerModel.id.desc())
 
         data_paginate = data.paginate(page=page, per_page=per_page)
         data_total_time = data.filter(TimeTrackerModel.date == now_date)
@@ -223,14 +199,13 @@ def api_data():
                 'total': data_paginate.total,
                 'page': data_paginate.page,
                 'pages': data_paginate.pages,
-            }
+            },
         }, 200
     except BaseException:
         logger.info('Ошибка при получении данных')
         return {'data': None, 'total_time': None, 'pagination': None}, 500
 
 
-@blp.route('/api/statistics', endpoint='api_statistics')
 @jwt_required()
 def api_statistics():
     try:

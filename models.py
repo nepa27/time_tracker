@@ -7,7 +7,7 @@ from constants import (
     LENGHT_STRING,
     LENGHT_JTI,
     MAX_LENGHT_USERNAME,
-    MAX_LENGHT_PASSWORD
+    MAX_LENGHT_PASSWORD,
 )
 
 
