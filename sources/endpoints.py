@@ -9,6 +9,7 @@ from flask_jwt_extended import (
     verify_jwt_in_request
 )
 from flask_smorest import Blueprint
+from pydantic import ValidationError
 
 from config import db, logger
 from models import TimeTrackerModel
@@ -27,9 +28,13 @@ class HomePage(MethodView):
     def get(self):
         return render_template('index.html')
 
-    @blp.arguments(TimeTrackerSchema)
     @jwt_required()
-    def post(self, data):
+    def post(self):
+        try:
+            data = TimeTrackerSchema(**request.get_json()).dict()
+        except ValidationError as err:
+            logger.error(err)
+            return {'message': 'Don`t validate data'}, 400
         time_obj = datetime.strptime(data['time'], '%H:%M:%S').time()
         date_obj = parse_date(data['date'])
 
@@ -91,13 +96,28 @@ class EditData(MethodView):
 
     @jwt_required()
     def post(self, name_of_work, date):
+        try:
+            form_data = TimeTrackerSchema(**request.form.to_dict()).dict()
+        except ValidationError as err:
+            errors = [str(err['msg']) for err in err.errors()]
+            error = errors[0].split('error,')[1]
+            logger.error(error)
+            flash(
+                error,
+                category='error'
+            )
+            return redirect(url_for(
+                'timer.edit',
+                username=get_jwt_identity(),
+                name_of_work=name_of_work,
+                date=date
+            ))
         date = parse_date(date)
         work_data = TimeTrackerModel.query.filter(
             TimeTrackerModel.name_of_work == name_of_work,
             TimeTrackerModel.date == date,
             TimeTrackerModel.username == get_jwt_identity()
         ).first()
-        form_data = request.form.to_dict()
         try:
             time_obj = datetime.strptime(form_data['time'], '%H:%M:%S').time()
             date_obj = parse_date(form_data['date'])
@@ -151,16 +171,18 @@ class EditData(MethodView):
 @jwt_required()
 def delete_item(date, name_of_work):
     date = parse_date(date)
-    # TODO: сделать try except
-    TimeTrackerModel.query.filter(
-        TimeTrackerModel.name_of_work == name_of_work,
+    if TimeTrackerModel.query.filter(
+        TimeTrackerModel.name_of_work == 'name_of_work',
         TimeTrackerModel.date == date,
         TimeTrackerModel.username == get_jwt_identity()
-    ).delete()
-    db.session.commit()
-    logger.info(f'Удалена задача: name = {name_of_work}'
-                f', date = {date}')
-    return {'message': 'Task has delete'}, 204
+    ).delete():
+        db.session.commit()
+        logger.info(f'Удалена задача: name = {name_of_work}'
+                    f', date = {date}')
+        return {'message': 'Task has delete'}, 204
+    logger.error(f'Ошибка при удалении задачи: name = {name_of_work}'
+                 f', date = {date}')
+    return {'message': 'Task has not delete'}, 400
 
 
 @blp.route(

@@ -3,10 +3,11 @@ from datetime import date
 from config import db
 
 from constants import (
+    LENGHT_NAME,
     LENGHT_STRING,
+    LENGHT_JTI,
     MAX_LENGHT_USERNAME,
-    MAX_LENGHT_PASSWORD,
-    LENGHT_JTI
+    MAX_LENGHT_PASSWORD
 )
 
 
@@ -18,7 +19,7 @@ class TimeTrackerModel(db.Model):
         primary_key=True
     )
     name_of_work = db.Column(
-        db.String,
+        db.String(LENGHT_NAME),
         nullable=False
     )
     date = db.Column(

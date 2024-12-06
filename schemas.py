@@ -1,12 +1,19 @@
-from marshmallow import fields, Schema
+import re
+
+from pydantic import BaseModel, validator
+
+from constants import LENGHT_NAME
 
 
-class TimeTrackerSchema(Schema):
-    name_of_work = fields.Str(required=True)
-    time = fields.Str(required=True)
-    date = fields.Str(required=True)
+class TimeTrackerSchema(BaseModel):
+    name_of_work: str
+    time: str
+    date: str
 
-
-class UserSchema(Schema):
-    username = fields.Str(load_only=True, required=True)
-    password = fields.Str(load_only=True, required=True)
+    @validator('name_of_work')
+    def validate_name_of_work(cls, name):
+        if len(name) > LENGHT_NAME or not re.match("^[a-zA-Z0-9]*$", name):
+            raise ValueError('Название проекта может содержать только буквы'
+                             ' и цифры, а также не превышать '
+                             f'{LENGHT_NAME} символов')
+        return name
