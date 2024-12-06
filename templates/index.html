@@ -27,7 +27,7 @@
     </div>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/data/?page=1&per_page=5')
+    fetch('/api/data/')
         .then(response => response.json())
         .then(data => {
             if (data.data) {
