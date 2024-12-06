@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 import os
 import sys
 
-from flask import Flask, g, jsonify
+from flask import Flask, g, jsonify, render_template
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,
@@ -54,7 +54,9 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
 app.config['WTF_CSRF_ENABLED'] = False
+# TODO: Исправить перед деплоем
 app.config['DEBUG'] = True
+app.config['PROPAGATE_EXCEPTIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY') or 'My-secret-key'
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or 'My-secret-key'
 app.config['JWT_COOKIE_SECURE'] = False
@@ -104,6 +106,31 @@ def refresh_expiring_jwts(response):
     except (RuntimeError, KeyError) as e:
         logger.error(f'Error: {e}')
         return response
+
+
+@app.errorhandler(400)
+def page_not_found(error):
+    return render_template('errors/400.html'), 400
+
+
+@app.errorhandler(403)
+def page_not_found(error):
+    return render_template('errors/403.html'), 403
+
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('errors/404.html'), 404
+
+
+@app.errorhandler(405)
+def page_not_found(error):
+    return render_template('errors/405.html'), 405
+
+
+@app.errorhandler(500)
+def page_not_found(error):
+    return render_template('errors/500.html'), 500
 
 
 @jwt.expired_token_loader

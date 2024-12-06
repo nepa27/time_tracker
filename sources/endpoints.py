@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import sqlalchemy
-from flask import flash, redirect, render_template, request, url_for
+from flask import abort, flash, redirect, render_template, request, url_for
 from flask.views import MethodView
 from flask_jwt_extended import (
     get_jwt_identity,
@@ -26,7 +26,7 @@ class HomePage(MethodView):
             data = TimeTrackerSchema(**request.get_json()).dict()
         except ValidationError as err:
             logger.error(err)
-            return {'message': 'Don`t validate data'}, 400
+            abort(400)
         time_obj = datetime.strptime(data['time'], '%H:%M:%S').time()
         date_obj = parse_date(data['date'])
 
@@ -68,19 +68,18 @@ class EditData(MethodView):
             date = parse_date(date)
         except ValueError as e:
             logger.error(e)
-            return {'message': 'Invalid date format'}, 400
+            abort(400)
 
         data = TimeTrackerModel.query.filter(
             TimeTrackerModel.name_of_work == name_of_work,
             TimeTrackerModel.date == date,
-            TimeTrackerModel.username == get_jwt_identity(),
         ).first()
         if data:
             if data.username == get_jwt_identity():
                 return render_template('edit.html', data=data)
             else:
-                return {'message': 'You don`t have permission'}, 403
-        return {'message': 'Page doesn`t exist'}, 404
+                return abort(403)
+        return abort(404)
 
     @jwt_required()
     def post(self, name_of_work, date):
@@ -167,7 +166,7 @@ def delete_item(date, name_of_work):
     logger.error(
         f'Ошибка при удалении задачи: name = {name_of_work}' f', date = {date}'
     )
-    return {'message': 'Task has not delete'}, 400
+    abort(400)
 
 
 @jwt_required()
@@ -203,7 +202,7 @@ def api_data():
         }, 200
     except BaseException:
         logger.info('Ошибка при получении данных')
-        return {'data': None, 'total_time': None, 'pagination': None}, 500
+        abort(500)
 
 
 @jwt_required()
@@ -216,4 +215,4 @@ def api_statistics():
         }, 200
     except BaseException:
         logger.info('Ошибка при получении данных')
-        return {'data': None}, 500
+        abort(500)
