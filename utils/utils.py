@@ -30,8 +30,8 @@ def sum_time(*args) -> time:
     return result_time
 
 
-def data_to_template(data) -> dict:
-    """ Функция преобразует данные из БД в словарь. """
+def data_to_json(data) -> dict:
+    """ Функция преобразует данные из БД в JSON. """
     result_data = {}
 
     for value in data:
@@ -39,9 +39,26 @@ def data_to_template(data) -> dict:
         temp = {}
         for el in data:
             if el.date == date:
-                temp[el.name_of_work] = el.time
+                temp[el.name_of_work] = el.time.strftime('%H:%M:%S')
         date = date.strftime('%d.%m.%Y')
         result_data[date] = temp
+    return result_data
+
+
+def data_to_statistic(data) -> dict:
+    """ Функция преобразует данные из БД в JSON для статистики. """
+    result_data = {}
+
+    for value in data:
+        name = value.name_of_work
+
+        temp = []
+        for el in data:
+            if el.name_of_work == name:
+                temp.append({
+                    el.date.strftime('%d.%m.%Y'): el.time.strftime('%H:%M:%S')
+                })
+        result_data[name] = temp
     return result_data
 
 
@@ -53,4 +70,4 @@ def parse_date(date_str):
             return datetime.strptime(date_str, fmt).date()
         except ValueError:
             continue
-    raise ValueError(f'Дата \'{date_str}\' некорректного формата.')
+    raise ValueError(f'Дата {date_str} некорректного формата.')
