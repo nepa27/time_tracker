@@ -31,7 +31,20 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             if (data.data) {
+                // Получаем массив пар [дата, значения]
+                const entries = Object.entries(data.data);
+
+                // Сортируем массив по датам в обратном порядке
+                entries.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+
+                // Преобразуем отсортированный массив обратно в объект
+                const sortedData = Object.fromEntries(entries);
+
+                // Обновляем объект данных
+                data.data = sortedData;
+
                 console.log(data.data);
+                console.log(sortedData);
             } else {
                 console.log('Нет данных для отображения');
             }

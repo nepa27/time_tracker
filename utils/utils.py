@@ -37,13 +37,13 @@ def data_to_json(data) -> dict:
     result_data = {}
 
     for value in data:
-        date = value.date
-        temp = {}
-        for el in data:
-            if el.date == date:
-                temp[el.name_of_work] = el.time.strftime('%H:%M:%S')
-        date = date.strftime('%d.%m.%Y')
-        result_data[date] = temp
+        date = value.date.strftime('%d.%m.%Y')
+        time = value.time.strftime('%H:%M:%S')
+        if date in result_data:
+            result_data[date][value.name_of_work] = time
+        else:
+            result_data[date] = {value.name_of_work: time}
+
     return result_data
 
 
@@ -53,18 +53,13 @@ def data_to_statistic(data) -> dict:
 
     for value in data:
         name = value.name_of_work
+        date = value.date.strftime('%d.%m.%Y')
+        time = value.time.strftime('%H:%M:%S')
 
-        temp = []
-        for el in data:
-            if el.name_of_work == name:
-                temp.append(
-                    {
-                        el.date.strftime('%d.%m.%Y'): el.time.strftime(
-                            '%H:%M:%S'
-                        )
-                    }
-                )
-        result_data[name] = temp
+        if name not in result_data:
+            result_data[name] = []
+
+        result_data[name].append({date: time})
     return result_data
 
 

@@ -182,7 +182,7 @@ def api_data():
 
         data = TimeTrackerModel.query.filter(
             TimeTrackerModel.username == get_jwt_identity()
-        ).order_by(TimeTrackerModel.date.desc(), TimeTrackerModel.id.desc())
+        )
 
         data_total_time = data.filter(TimeTrackerModel.date == now_date)
         total_time = sum_time(data_total_time.all()).strftime('%H:%M:%S')
