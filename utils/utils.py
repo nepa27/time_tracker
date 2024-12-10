@@ -38,11 +38,11 @@ def data_to_json(data) -> dict:
 
     for value in data:
         date = value.date.strftime('%d.%m.%Y')
-        time = value.time.strftime('%H:%M:%S')
+        time_data = value.time.strftime('%H:%M:%S')
         if date in result_data:
-            result_data[date][value.name_of_work] = time
+            result_data[date][value.name_of_work] = time_data
         else:
-            result_data[date] = {value.name_of_work: time}
+            result_data[date] = {value.name_of_work: time_data}
 
     return result_data
 
@@ -54,12 +54,12 @@ def data_to_statistic(data) -> dict:
     for value in data:
         name = value.name_of_work
         date = value.date.strftime('%d.%m.%Y')
-        time = value.time.strftime('%H:%M:%S')
+        time_data = value.time.strftime('%H:%M:%S')
 
         if name not in result_data:
             result_data[name] = []
 
-        result_data[name].append({date: time})
+        result_data[name].append({date: time_data})
     return result_data
 
 
