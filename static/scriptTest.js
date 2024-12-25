@@ -141,6 +141,7 @@ class TimerItem extends Component {
 
     if (this.btnDelete) {
       this.btnDelete.addEventListener("click", (evt) => {
+        // this.deleteItemInBD(idWork,evt)
         delete TimerItem.collection.get(this.date)[this.title];
 
         if (Object.keys(TimerItem.collection.get(this.date)).length === 0) {
@@ -162,8 +163,8 @@ class TimerItem extends Component {
     // const now = new Date(Date.now()* (Math.random()/5));
     const day = String(now.getDate()).padStart(2, "0");
     const month = String(now.getMonth() + 1).padStart(2, "0");
-    const year = now.getFullYear();
-    // const year = new Date(Date.now() * (Math.random() / 5)).getFullYear();
+    // const year = now.getFullYear();
+    const year = new Date(Date.now() * (Math.random() / 10)).getFullYear();
     return `${day}.${month}.${year}`;
   }
 
@@ -259,6 +260,37 @@ class TimerItem extends Component {
       [this.title]: this.time,
     });
   }
+
+  updateBD() {
+    const objInf = {
+      name_of_work: `${this.title}`,
+      time: `${this.time}`,
+      date: `${this.date}`,
+    };
+
+    fetch(`/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json;charset=utf-8",
+      },
+      body: JSON.stringify(objInf),
+    });
+  }
+
+  deleteItemInBD(idWork, event) {
+    event.stopPropagation();
+    if (confirm("Вы уверены, что хотите удалить эту запись?")) {
+      fetch(`/delete/${idWork}`, {
+        method: "DELETE",
+      }).then((response) => {
+        if (response.ok) {
+          location.reload();
+        } else {
+          alert("Ошибка при удалении записей");
+        }
+      });
+    }
+  }
 }
 
 class Timer extends Component {
@@ -342,6 +374,7 @@ class Timer extends Component {
 //================================================================
 
 const input = document.querySelector("#taskName");
+// const workContainer = document.getElementById("work-container");
 const timer = new Timer({ id: "timer" });
 const totalTimer = new Timer({ id: "total_timer" });
 const inputBox = document.querySelector(".task-input");
@@ -361,16 +394,11 @@ const workingTimer = () => {
 
     totalTimer.createTimer();
   } else if (startButton.title === "Стоп") {
-    // const taskItem = new TimerItem({
-    //   title: input.value,
-    // });
-
-    // taskItem.update({ time: timer.text });
-
     const taskItem = new TimerItem({
       title: input.value,
       time: timer.text,
     });
+    // const date = document.querySelector(".date");
 
     timer.destroyTimer();
     totalTimer.destroyTimerTotal();
@@ -381,20 +409,22 @@ const workingTimer = () => {
     const container = document.querySelector(".task-list");
     taskItem.renderIn(container);
 
-    // const objInf = {
-    //     name_of_work: `${input.value}`,
-    //     time: `${timer.textContent}`,
-    //     date: `${date.textContent}`
-    // };
-
-    // fetch(`/`, {
-    //     method: "POST",
-    //     headers: {
-    //         "Content-Type": "application/json;charset=utf-8",
-    //     },
-    //     body: JSON.stringify(objInf),
-    // });
+    taskItem.updateBD();
   }
 };
 
 startButton.addEventListener("click", workingTimer);
+
+// let obj = {
+//     '01.12.2024': {
+//         'дело1': "01:02:10",
+//         'homework': "00:13:16",
+//         'nameWork3': "00:02:18",
+//     },
+//     '02.12.2024': {
+//         'дело1': "00:02:16",
+//         'homework': "00:22:16",
+//         'дело2': "00:02:16",
+//     },
+
+// }

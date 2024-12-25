@@ -8,7 +8,7 @@
       placeholder="Название дела"
       list="taskNames"
     />
-    <datalist id="taskNames"></datalist>
+    <!-- <datalist id="taskNames"></datalist> -->
   </div>
   <div class="total-time-container">
     <strong>Всего за день:</strong>
@@ -19,6 +19,7 @@
     <strong class="strongDate"
       >Дата: <span class="date">{{ date }}</span></strong
     >
+    <!-- ЗАМЕНИТЬ  на JS render -->
     <div class="date-item">
       {% for item in items %}
       <div class="task-item">
@@ -42,20 +43,8 @@
     {% endfor %} {% else %}
     <strong class="strongDate"><span class="date"></span></strong>
     <!-- <div class="date-item"></div> -->
-    <h4 class="hello-message">Ты пока ничего не сделал :)</h4>
+    <!-- <h4 class="hello-message">Ты пока ничего не сделал :)</h4> -->
     {% endif %}
-    <template id="template__task-item">
-      <div class="task-item">
-        <p>Название дела: <span class="nameWork">Название</span></p>
-        <p>Время: <span class="time">02:20:10</span></p>
-        <button class="table-button" onclick="location.href='#'">
-          Изменить
-        </button>
-        <button class="table-button" onclick="location.href='#'">
-          Удалить
-        </button>
-      </div>
-    </template>
   </div>
 </div>
 
