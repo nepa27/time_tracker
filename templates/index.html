@@ -1,6 +1,28 @@
 {% extends 'base.html' %} {% block title %}Учет рабочего времени{% endblock %}
-{% block content %}
+{% block content %} {% if user %}
 <div class="container">
+  <div class="task-input">
+    <div class="task-input__inner">
+      <input
+        type="text"
+        id="taskName"
+        placeholder="Название дела"
+        list="taskNames"
+        required
+        minlength="1"
+      />
+      <div class="block-error"></div>
+    </div>
+
+  </div>
+  <div class="total-time-container">
+    <strong>Всего за день:</strong>
+  </div>
+  <h3>Список дел</h3>
+  <div class="task-list" id="work-container"></div>
+</div>
+
+<!-- <div class="container">
   <div class="task-input">
     <input
       type="text"
@@ -8,75 +30,65 @@
       placeholder="Название дела"
       list="taskNames"
     />
-    <!-- <datalist id="taskNames"></datalist> -->
+    <datalist id="taskNames"></datalist>
+    <button id="startButton">Пуск</button>
+    <div class="timer" id="timer">00:00:00</div>
   </div>
   <div class="total-time-container">
     <strong>Всего за день:</strong>
+    <p class="timer" id="total_timer">{{ total_time }}</p>
   </div>
   <h3>Список дел</h3>
   <div class="task-list" id="work-container">
-    {% if data %} {% for date, items in data.items() %}
-    <strong class="strongDate"
-      >Дата: <span class="date">{{ date }}</span></strong
-    >
-    <!-- ЗАМЕНИТЬ  на JS render -->
-    <div class="date-item">
-      {% for item in items %}
+    <template id="template__task-item">
       <div class="task-item">
-        <p>Название дела: <span class="nameWork">{{ item[1] }}</span></p>
-        <p>Время: <span class="time">{{ item[2] }}</span></p>
-        <button
-          class="table-button"
-          onclick="location.href='{{ url_for('timer.edit', work_id=item[0]) }}'"
-        >
+        <p>Название дела: <span class="nameWork">Название</span></p>
+        <p>Время: <span class="time">02:20:10</span></p>
+        <button class="table-button" onclick="location.href='#'">
           Изменить
         </button>
-        <button
-          class="table-button"
-          onclick="deleteTable('{{ (item[0]) }}', event)"
-        >
+        <button class="table-button" onclick="location.href='#'">
           Удалить
         </button>
       </div>
-      {% endfor %}
-    </div>
-    {% endfor %} {% else %}
-    <strong class="strongDate"><span class="date"></span></strong>
-    <!-- <div class="date-item"></div> -->
-    <!-- <h4 class="hello-message">Ты пока ничего не сделал :)</h4> -->
-    {% endif %}
+    </template>
   </div>
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("/api/data/")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.data) {
+          // Получаем массив пар [дата, значения]
+          const entries = Object.entries(data.data);
 
-{% if pagination.total > 0 %}
-<div class="pagination">
-  {% if pagination.page > 1 %}
-  <a class="table-button-page" href="{{ url_for('timer.home', page=1) }}"
-    >Первая</a
-  >
-  {% endif %} {% set start_page = pagination.page - 2 %} {% set end_page =
-  pagination.page + 2 %} {% if start_page > 1 %}
-  <span>...</span>
-  {% endif %} {% for page_num in range(start_page, end_page + 1) %} {% if
-  page_num >= 1 and page_num <= pagination.pages %} {% if page_num ==
-  pagination.page %}
-  <span class="current-page">{{ page_num }}</span>
-  {% else %}
-  <a class="table-button-page" href="{{ url_for('timer.home', page=page_num) }}"
-    >{{ page_num }}</a
-  >
-  {% endif %} {% endif %} {% endfor %} {% if end_page < pagination.pages %}
-  <span>...</span>
-  {% endif %} {% if pagination.page < pagination.pages %}
-  <a
-    class="table-button-page"
-    href="{{ url_for('timer.home', page=pagination.pages) }}"
-    >Последняя</a
-  >
-  {% endif %}
-</div>
-{% endif %}
+          // Сортируем массив по датам в обратном порядке
+          entries.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+
+          // Преобразуем отсортированный массив обратно в объект
+          const sortedData = Object.fromEntries(entries);
+
+          // Обновляем объект данных
+          data.data = sortedData;
+
+          console.log(data.data);
+          console.log(sortedData);
+        } else {
+          console.log("Нет данных для отображения");
+        }
+      })
+      .catch((error) => console.error("Ошибка:", error));
+  });
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script> -->
 
 <script src="{{ url_for('static', filename='scriptTest.js') }}"></script>
-<!-- <script src="{{ url_for('static', filename='script.js') }}"></script> -->
-{% endblock %}
+
+{% else %}
+<div class="hello-message">
+  <h1 class="display-4">Учет рабочего времени</h1>
+  <hr class="my-4" />
+  <p>Используйте навигационную панель для доступа к вашему профилю</p>
+</div>
+{% endif %} {% endblock %}

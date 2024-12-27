@@ -1,9 +1,14 @@
-from sqlalchemy import ForeignKey, UniqueConstraint
-from sqlalchemy.orm import relationship
+from datetime import date
 
 from config import db
 
-from constants import LENGHT_STRING
+from constants import (
+    LENGHT_NAME,
+    LENGHT_STRING,
+    LENGHT_JTI,
+    MAX_LENGHT_USERNAME,
+    MAX_LENGHT_PASSWORD,
+)
 
 
 class TimeTrackerModel(db.Model):
@@ -14,7 +19,7 @@ class TimeTrackerModel(db.Model):
         primary_key=True
     )
     name_of_work = db.Column(
-        db.String,
+        db.String(LENGHT_NAME),
         nullable=False
     )
     date = db.Column(
@@ -29,38 +34,62 @@ class TimeTrackerModel(db.Model):
         db.String(LENGHT_STRING),
         nullable=True
     )
-    proj_id = db.Column(
+    username = db.Column(
         db.Integer,
-        ForeignKey('projects.id'),
-        nullable=True
+        db.ForeignKey('users.username')
     )
 
     __table_args__ = (
-        UniqueConstraint(
+        db.UniqueConstraint(
             'name_of_work',
             'date',
-            name='un_name_date'
+            'username',
+            name='un_name_date_user'
         ),
     )
-    project = relationship(
-        'ProjectsModel',
-        back_populates='time_trackers'
+
+    user = db.relationship(
+        'UserModel',
+        back_populates='time_tracker'
     )
 
 
-class ProjectsModel(db.Model):
-    __tablename__ = 'projects'
+class UserModel(db.Model):
+    __tablename__ = 'users'
 
     id = db.Column(
         db.Integer,
         primary_key=True
     )
-    name_of_proj = db.Column(
-        db.String,
+    username = db.Column(
+        db.String(MAX_LENGHT_USERNAME),
+        nullable=False,
+        unique=True
+    )
+    password = db.Column(
+        db.String(MAX_LENGHT_PASSWORD),
         nullable=False
     )
-
-    time_trackers = relationship(
+    time_tracker = db.relationship(
         'TimeTrackerModel',
-        back_populates='project'
+        back_populates='user'
+    )
+
+
+class BlocklistJwt(db.Model):
+    __tablename__ = 'blocklistjwt'
+
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
+    jti = db.Column(
+        db.String(LENGHT_JTI),
+        nullable=False,
+        index=True
+    )
+    created_at = db.Column(
+        db.Date,
+        default=date.today,
+        nullable=False
     )

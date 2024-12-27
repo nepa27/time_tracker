@@ -1,44 +1,74 @@
-from datetime import time, timedelta
+from datetime import time, timedelta, datetime
+
+from constants import TO_HOUR, TO_MINUTE, TO_SEC
 
 
 def sum_time(*args) -> time:
-    """ Функция складывает время. """
+    """Функция складывает время."""
     total_seconds = 0
     for arg in args:
         if isinstance(arg, list):
             for value in arg:
-                total_seconds += int(timedelta(
-                    hours=value.time.hour,
-                    minutes=value.time.minute,
-                    seconds=value.time.second
-                ).total_seconds())
+                total_seconds += int(
+                    timedelta(
+                        hours=value.time.hour,
+                        minutes=value.time.minute,
+                        seconds=value.time.second,
+                    ).total_seconds()
+                )
         else:
-            total_seconds += int(timedelta(
-                hours=arg.hour,
-                minutes=arg.minute,
-                seconds=arg.second
-            ).total_seconds())
+            total_seconds += int(
+                timedelta(
+                    hours=arg.hour, minutes=arg.minute, seconds=arg.second
+                ).total_seconds()
+            )
 
     result_time = time(
-        total_seconds // 3600,
-        (total_seconds % 3600) // 60,
-        total_seconds % 60
+        total_seconds // TO_HOUR,
+        (total_seconds % TO_HOUR) // TO_MINUTE,
+        total_seconds % TO_SEC,
     )
 
     return result_time
 
 
-def data_to_template(data) -> dict:
-    """ Функция преобразует данные из БД в словарь. """
+def data_to_json(data) -> dict:
+    """Функция преобразует данные из БД в JSON."""
     result_data = {}
 
     for value in data:
-        date = value.date
-        temp = []
-        for el in data:
-            if el.date == date:
-                temp.append((el.id, el.name_of_work, el.time))
-        date = date.strftime("%d.%m.%Y")
-        result_data[date] = temp
+        date = value.date.strftime('%d.%m.%Y')
+        time_data = value.time.strftime('%H:%M:%S')
+        if date in result_data:
+            result_data[date][value.name_of_work] = time_data
+        else:
+            result_data[date] = {value.name_of_work: time_data}
 
     return result_data
+
+
+def data_to_statistic(data) -> dict:
+    """Функция преобразует данные из БД в JSON для статистики."""
+    result_data = {}
+
+    for value in data:
+        name = value.name_of_work
+        date = value.date.strftime('%d.%m.%Y')
+        time_data = value.time.strftime('%H:%M:%S')
+
+        if name not in result_data:
+            result_data[name] = []
+
+        result_data[name].append({date: time_data})
+    return result_data
+
+
+def parse_date(date_str):
+    """Функция преобразует строку в дату в зависимости от формата."""
+    formats = ('%d.%m.%Y', '%Y-%m-%d')
+    for fmt in formats:
+        try:
+            return datetime.strptime(date_str, fmt).date()
+        except ValueError:
+            continue
+    raise ValueError(f'Дата {date_str} некорректного формата.')

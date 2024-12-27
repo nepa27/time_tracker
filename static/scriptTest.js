@@ -2,7 +2,7 @@
 //   import TimerItem from "../static/scriptTest.js"; */}
 
 class Component {
-  TIMEOUT = 1_000;
+  static TIMEOUT = 1_000;
 
   constructor({ title = "" } = {}) {
     this.title = title;
@@ -88,11 +88,11 @@ class Button extends Component {
     }
   }
 
-  createEventListenersClick(event) {
-    console.log(event);
+  // createEventListenersClick(event) {
+  //   // console.log(event);
 
-    this.element.addEventListener("click", event);
-  }
+  //   this.element.addEventListener("click", event);
+  // }
 
   update({ title = "" }) {
     this.title = title;
@@ -103,14 +103,25 @@ class Button extends Component {
 class TimerItem extends Component {
   static collection = new Map();
 
-  constructor({ title = "", time = "00:00:00" }) {
+  constructor({ title = "", time = "00:00:00", date = null }) {
     super();
     this.title = title;
     this.time = time;
-    this.date = this.formattedDate();
-    // this.element = this.createElement(this.createContainerTemplate());
+    this.date = date || this.formattedDate();
+    // this.element = super.createContainerTemplate(this.createElement(this.createTemplate()));
+    this.element = this.createElement(this.createContainerTemplate());
   }
 
+  createElementTemplate() {
+    return `
+        <div class="task-item" data-name-work="${this.title}">
+            <p>Название дела: <span class="nameWork">${this.title}</span></p>
+            <p>Время: <span class="time">${this.time}</span></p>
+            <button class="table-button" onclick="location.href='/edit/${this.date}/${this.title}'">Изменить</button> 
+            <button class="table-button btn-delete">Удалить</button> 
+        </div>
+    `;
+  }
   createContainerTemplate() {
     return `
      <div class="date-item" data-date="${this.date}">
@@ -122,17 +133,6 @@ class TimerItem extends Component {
     `;
   }
 
-  createElementTemplate() {
-    return `
-        <div class="task-item" data-name-work="${this.title}">
-            <p>Название дела: <span class="nameWork">${this.title}</span></p>
-            <p>Время: <span class="time">${this.time}</span></p>
-            <button class="table-button" onclick="location.href='#'">Изменить</button>
-            <button class="table-button btn-delete">Удалить</button> 
-        </div>
-    `;
-  }
-
   attachEventListeners() {
     if (this.element.classList.contains("date-item")) {
       this.element = this.element.querySelector(".task-item");
@@ -141,7 +141,7 @@ class TimerItem extends Component {
 
     if (this.btnDelete) {
       this.btnDelete.addEventListener("click", (evt) => {
-        // this.deleteItemInBD(idWork,evt)
+        this.deleteItemInBD();
         delete TimerItem.collection.get(this.date)[this.title];
 
         if (Object.keys(TimerItem.collection.get(this.date)).length === 0) {
@@ -158,17 +158,26 @@ class TimerItem extends Component {
     }
   }
 
+  // removeTimeFromTotalTimer() {
+  //     const totalTimer = document.querySelector("#totalTimer"); // replace 'totalTimer' with the id of your total timer element
+  //     if (totalTimer) {
+  //         const totalSecondsToRemove = TimerItem.timeToSeconds(this.time);
+  //         totalTimer.totalSeconds -= totalSecondsToRemove;
+  //         totalTimer.rerenderTotalTime();
+  //     }
+  // }
+
   formattedDate() {
     const now = new Date();
     // const now = new Date(Date.now()* (Math.random()/5));
     const day = String(now.getDate()).padStart(2, "0");
     const month = String(now.getMonth() + 1).padStart(2, "0");
-    // const year = now.getFullYear();
-    const year = new Date(Date.now() * (Math.random() / 10)).getFullYear();
+    const year = now.getFullYear();
+    // const year = new Date(Date.now() * (Math.random() / 10)).getFullYear();
     return `${day}.${month}.${year}`;
   }
 
-  timeToSeconds(time) {
+  static timeToSeconds(time) {
     const parts = time.split(":");
     const hours = parseInt(parts[0]) || 0;
     const minutes = parseInt(parts[1]) || 0;
@@ -190,8 +199,8 @@ class TimerItem extends Component {
   }
 
   addTimeStrings(time1, time2) {
-    const totalSeconds1 = this.timeToSeconds(time1);
-    const totalSeconds2 = this.timeToSeconds(time2);
+    const totalSeconds1 = TimerItem.timeToSeconds(time1);
+    const totalSeconds2 = TimerItem.timeToSeconds(time2);
     const totalSeconds = totalSeconds1 + totalSeconds2;
 
     return this.secondsToTime(totalSeconds);
@@ -277,14 +286,25 @@ class TimerItem extends Component {
     });
   }
 
-  deleteItemInBD(idWork, event) {
-    event.stopPropagation();
+  deleteItemInBD() {
+
+    function convertDateFormat(dateString) {
+      // Split the input date string by the dot separator
+      const [day, month, year] = dateString.split('.');
+  
+      // Return the date in the format YYYY-MM-DD
+      return `${year}-${month}-${day}`;
+  }
+  const date = convertDateFormat(this.date);
+
+    // event.stopPropagation();
     if (confirm("Вы уверены, что хотите удалить эту запись?")) {
-      fetch(`/delete/${idWork}`, {
+      fetch(`/delete/${date}/${this.title}`, {
+        // 2024-12-05
         method: "DELETE",
       }).then((response) => {
         if (response.ok) {
-          location.reload();
+          // location.reload();
         } else {
           alert("Ошибка при удалении записей");
         }
@@ -293,19 +313,23 @@ class TimerItem extends Component {
   }
 }
 
-class Timer extends Component {
+class TotalTimer extends Component {
+  // static totalSeconds =
+
   constructor({
     id = "",
     text = "00:00:00",
-    seconds = 0,
+    // seconds = 0,
     totalSeconds = 0,
   } = {}) {
     super();
     this.id = id;
     this.text = text;
-    this.seconds = seconds;
     this.totalSeconds = totalSeconds;
-    this.element = this.createElement(this.createElementTemplate());
+
+    this.element = super.createElement(this.createElementTemplate());
+
+    // this.startUpdateInterval();
   }
 
   createElementTemplate() {
@@ -320,30 +344,61 @@ class Timer extends Component {
   }
 
   rerenderTimer() {
+    this.totalSeconds++;
+    this.element.textContent = TotalTimer.updateSecondsToString(this.totalSeconds);
+  }
+
+ static updateSecondsToString(seconds) {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+    return `${hrs.toString().padStart(2, "0")}:${mins
+      .toString()
+      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  }
+
+  destroyTotalTimer() {
+    super.destroyTimer();
+    // this.totalSeconds += seconds;
+    // this.updateTotalTime()
+  }
+  // Rest of your code
+}
+
+class Timer extends TotalTimer {
+  constructor({ id = "", text = "00:00:00", seconds = 0 } = {}) {
+    super();
+    this.id = id;
+    this.text = text;
+    this.seconds = seconds;
+
+    this.element = this.createElement(this.createElementTemplate());
+    // this.startUpdateInterval();
+  }
+
+  // createTimer() {
+  //   this.intervalId = setInterval(
+  //     () => this.rerenderTimer(),
+  //     Component.TIMEOUT //1_000
+  //   );
+  // }
+
+  rerenderTimer() {
     this.seconds++;
-    this.updateText();
+    // this.updateText();
+    this.text = TotalTimer.updateSecondsToString(this.seconds)
+
     this.element.innerHTML = this.text;
   }
 
-  updateText() {
-    const hrs = Math.floor(this.seconds / 3600);
-    const mins = Math.floor((this.seconds % 3600) / 60);
-    const secs = this.seconds % 60;
-    this.text = `${hrs.toString().padStart(2, "0")}:${mins
-      .toString()
-      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-    this.updateTotalTime();
-  }
-
-  updateTotalTime() {
-    //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    const hrs = Math.floor(this.totalSeconds / 3600);
-    const mins = Math.floor((this.totalSeconds % 3600) / 60);
-    const secs = this.totalSeconds % 60;
-    this.element.textContent = `${hrs.toString().padStart(2, "0")}:${mins
-      .toString()
-      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  }
+  // updateText() {
+  //   const hrs = Math.floor(this.seconds / 3600);
+  //   const mins = Math.floor((this.seconds % 3600) / 60);
+  //   const secs = this.seconds % 60;
+  //   this.text = `${hrs.toString().padStart(2, "0")}:${mins
+  //     .toString()
+  //     .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+  // }
 
   resetTimer() {
     this.seconds = 0;
@@ -353,45 +408,120 @@ class Timer extends Component {
   destroyTimer() {
     clearInterval(this.intervalId);
     this.resetTimer();
-  }
-
-  destroyTimerTotal() {
-    super.destroyTimer();
-    this.totalSeconds += this.seconds;
+    // super.destroyTotalTimer(this.seconds)
   }
 }
 
-//============================================================================
-
-// document.addEventListener("DOMContentLoaded", () => {
-
-// const totalTimeString = totalTimerElement.textContent;
-// totalSeconds = timeStringToSeconds(totalTimeString);
-// updateTotalTime();
-// populateDatalist();
-// });
+class ReloadPage {}
 
 //================================================================
+// const totalTimeBox = document.querySelector(".total-time-container");
 
 const input = document.querySelector("#taskName");
 // const workContainer = document.getElementById("work-container");
 const timer = new Timer({ id: "timer" });
-const totalTimer = new Timer({ id: "total_timer" });
+let totalTimer = null;
 const inputBox = document.querySelector(".task-input");
 const totalTimeBox = document.querySelector(".total-time-container");
 const startButton = new Button({ id: "startButton", title: "Пуск" });
 
+//===============================================================
+
+function setError(element, msg) {
+  console.log(element);
+
+  element.style.border = "1px solid rgb(218, 0, 0)";
+  element.nextElementSibling.classList.add("error");
+  element.nextElementSibling.textContent = msg;
+}
+
+function setSuccess(element) {
+  element.nextElementSibling.textContent = "";
+}
+
+
+function inputCheck(e){
+  if (input.value === "") {
+    setError(input, "Поле обязательно!");
+    e.preventDefault();
+  } else {
+    if (input.value.length < 3) {
+      e.preventDefault();
+      setError(input, "Название дела слишком короткое - минимум 3 символа");
+    } else {
+      setSuccess(input);
+    }
+  }
+}
+
+input.addEventListener("blur", (e) => {
+  inputCheck(e)
+});
+
+//================================================================
+
+document.addEventListener("DOMContentLoaded", async function () {
+  let data = null;
+  try {
+    const response = await fetch("/api/data/"); 
+    // console.log(response)   
+    data = await response.json();
+  } catch (err) {
+    // перехватит любую ошибку в блоке try: и в fetch, и в response.json
+    alert(err);
+  }
+
+  const { data: dataItems = {}, total_time: totalTime = "00:00:00" } =
+    data || {};
+
+  totalTimer = new TotalTimer({
+    id: "total_timer",
+    text: totalTime,
+    totalSeconds: TimerItem.timeToSeconds(totalTime),
+  });
+  totalTimer.renderIn(totalTimeBox);
+
+
+  // if (!dataItems) return;
+
+  for (const [date, namesTimes] of Object.entries(dataItems).reverse()) {
+    let time = "";
+    let title = "";
+
+    Object.entries(namesTimes).forEach((item) => {
+      [title, time] = item;
+
+      const taskItem = new TimerItem({
+        title: title,
+        time: time,
+        date: date,
+      });
+
+      taskItem.renderIn(document.querySelector("#work-container"));
+    });
+  }
+
+  TimerItem.collection = new Map(Object.entries(dataItems));
+});
+
 startButton.renderIn(inputBox);
+
 timer.renderIn(inputBox);
-totalTimer.renderIn(totalTimeBox);
+
+// totalTimer.renderIn(totalTimeBox);
 // totalTimer.updateTotalTime()
 
-const workingTimer = () => {
+const workingTimer = (e) => {
+
+  if (input.nextElementSibling.textContent === ""){
+    inputCheck(e)
+    return
+  };
+
   if (startButton.title === "Пуск") {
     startButton.update({ title: "Стоп" });
 
     timer.createTimer();
-
     totalTimer.createTimer();
   } else if (startButton.title === "Стоп") {
     const taskItem = new TimerItem({
@@ -401,7 +531,7 @@ const workingTimer = () => {
     // const date = document.querySelector(".date");
 
     timer.destroyTimer();
-    totalTimer.destroyTimerTotal();
+    totalTimer.destroyTotalTimer();
 
     startButton.update({ title: "Пуск" });
     input.value = "";
@@ -414,6 +544,40 @@ const workingTimer = () => {
 };
 
 startButton.addEventListener("click", workingTimer);
+
+//===============================================================
+
+// function setError(element, msg) {
+//   element.classList.add("error");
+//   element.placeholder = msg
+//   // element.nextElementSibling.classList.add("error");
+//   // element.nextElementSibling.textContent = msg;
+//   // element.parentElement.querySelector('.error').classList.add("error")
+//   // element.parentElement.querySelector('.error').textContent = msg
+// }
+
+// function setSuccess(element) {
+//   // element.nextElementSibling.textContent = ""
+//   element.nextElementSibling.textContent = "";
+// }
+
+// input.addEventListener("blur", (e) => {
+
+//     if (input.value === "") {
+//       setError(this, "Поле обязательно!");
+//       e.preventDefault();
+//     } else {
+//       // setSuccess(input)
+//       if (input.value.length < 3) {
+//         e.preventDefault();
+//         setError(this, "Пароль слишком короткий - минимум 3 символа");
+//       } else {
+//         setSuccess(input);
+//       }
+//     }
+// });
+
+//================================================================
 
 // let obj = {
 //     '01.12.2024': {
