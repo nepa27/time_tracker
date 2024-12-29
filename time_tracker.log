@@ -662,3 +662,405 @@ WHERE time_tracker.username = ? AND time_tracker.date = ?]
 2024-12-27 11:49:32,002 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
 2024-12-27 11:49:32,695 - [INFO] -  config - (app.py).create_app(9) - Создана БД
 2024-12-27 11:49:32,695 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 14:17:56,449 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 14:17:56,449 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 14:17:57,237 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 14:17:57,237 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 14:18:26,722 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-28 14:18:26,826 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-28 14:18:32,088 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-28 14:18:32,147 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-28 14:18:38,185 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-28 14:18:38,269 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2024-12-28 14:18:59,290 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче  добавлены в БД
+2024-12-28 14:20:43,277 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:00:13
+2024-12-28 14:21:11,445 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:00:28
+2024-12-28 14:21:19,065 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:00:48
+2024-12-28 14:21:35,686 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:01:37
+2024-12-28 14:22:38,167 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче r добавлены в БД
+2024-12-28 14:24:42,964 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче sss добавлены в БД
+2024-12-28 14:25:42,441 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче ddd добавлены в БД
+2024-12-28 14:28:02,279 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:03:16
+2024-12-28 14:29:02,395 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:06:35
+2024-12-28 14:30:34,380 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:13:11
+2024-12-28 14:31:00,381 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:26:30
+2024-12-28 14:31:09,606 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:39:55
+2024-12-28 14:31:16,357 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 00:53:24
+2024-12-28 14:31:23,116 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче . Время: 01:06:55
+2024-12-28 14:32:56,951 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче sss. Время: 00:00:12
+2024-12-28 14:33:10,355 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче eee добавлены в БД
+2024-12-28 16:18:43,563 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='Это дело всей...х продуктов.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:19:27,405 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='Это дело всей...х продуктов.', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:19:38,922 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='Это дело всей моей жизни. ', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:22:40,750 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='дело норм', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:23:04,843 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='norm delo', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:24:09,497 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче dddddddddddddddd добавлены в БД
+2024-12-28 16:24:21,067 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='ddd d', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:27:03,353 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче eeeeeeeeeeeeeeeeee добавлены в БД
+2024-12-28 16:27:28,679 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче trtrttttttttttteeeuuuu добавлены в БД
+2024-12-28 16:34:10,595 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:34:10,598 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:34:11,770 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:34:11,773 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:36:03,776 - [ERROR] -  config - (app.py).log_exception(838) - Exception on / [POST]
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 110, in view
+    return current_app.ensure_sync(self.dispatch_request)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 191, in dispatch_request
+    return current_app.ensure_sync(meth)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\sources\endpoints.py", line 26, in post
+    data = TimeTrackerSchema(**request.get_json()).dict()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\_internal\_decorators_v1.py", line 103, in wrapper2
+    return val2(value)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\schemas.py", line 15, in validate_name_of_work
+    if len(name) > LENGHT_NAME or not re.match("^[a-zA-Z0-9\s\p{Emoji}]*$/u", name):
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 190, in match
+    return _compile(pattern, flags).match(string)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 303, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_compile.py", line 788, in compile
+    p = sre_parse.parse(p, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 955, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 444, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 555, in _parse
+    code1 = _class_escape(source, this)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 350, in _class_escape
+    raise source.error('bad escape %s' % escape, len(escape))
+re.error: bad escape \p at position 13
+2024-12-28 16:36:25,782 - [ERROR] -  config - (app.py).log_exception(838) - Exception on / [POST]
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 110, in view
+    return current_app.ensure_sync(self.dispatch_request)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 191, in dispatch_request
+    return current_app.ensure_sync(meth)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\sources\endpoints.py", line 26, in post
+    data = TimeTrackerSchema(**request.get_json()).dict()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\_internal\_decorators_v1.py", line 103, in wrapper2
+    return val2(value)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\schemas.py", line 15, in validate_name_of_work
+    if len(name) > LENGHT_NAME or not re.match("^[a-zA-Z0-9\s\p{Emoji}]*$/u", name):
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 190, in match
+    return _compile(pattern, flags).match(string)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 303, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_compile.py", line 788, in compile
+    p = sre_parse.parse(p, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 955, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 444, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 555, in _parse
+    code1 = _class_escape(source, this)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 350, in _class_escape
+    raise source.error('bad escape %s' % escape, len(escape))
+re.error: bad escape \p at position 13
+2024-12-28 16:37:04,582 - [ERROR] -  config - (app.py).log_exception(838) - Exception on / [POST]
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 110, in view
+    return current_app.ensure_sync(self.dispatch_request)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 191, in dispatch_request
+    return current_app.ensure_sync(meth)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\sources\endpoints.py", line 26, in post
+    data = TimeTrackerSchema(**request.get_json()).dict()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\_internal\_decorators_v1.py", line 103, in wrapper2
+    return val2(value)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\schemas.py", line 15, in validate_name_of_work
+    if len(name) > LENGHT_NAME or not re.match("^[a-zA-Z0-9\s\p{Emoji}]*$/u", name):
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 190, in match
+    return _compile(pattern, flags).match(string)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 303, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_compile.py", line 788, in compile
+    p = sre_parse.parse(p, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 955, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 444, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 555, in _parse
+    code1 = _class_escape(source, this)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 350, in _class_escape
+    raise source.error('bad escape %s' % escape, len(escape))
+re.error: bad escape \p at position 13
+2024-12-28 16:41:50,584 - [ERROR] -  config - (app.py).log_exception(838) - Exception on / [POST]
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 110, in view
+    return current_app.ensure_sync(self.dispatch_request)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 191, in dispatch_request
+    return current_app.ensure_sync(meth)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\sources\endpoints.py", line 26, in post
+    data = TimeTrackerSchema(**request.get_json()).dict()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\_internal\_decorators_v1.py", line 103, in wrapper2
+    return val2(value)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\schemas.py", line 15, in validate_name_of_work
+    if len(name) > LENGHT_NAME or not re.match("^[a-zA-Z0-9\s\p{Emoji}]*$/u", name):
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 190, in match
+    return _compile(pattern, flags).match(string)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 303, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_compile.py", line 788, in compile
+    p = sre_parse.parse(p, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 955, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 444, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 555, in _parse
+    code1 = _class_escape(source, this)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 350, in _class_escape
+    raise source.error('bad escape %s' % escape, len(escape))
+re.error: bad escape \p at position 13
+2024-12-28 16:42:55,808 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:42:55,808 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:42:59,751 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:42:59,751 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:43:03,617 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:43:03,617 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:43:22,149 - [ERROR] -  config - (app.py).log_exception(838) - Exception on / [POST]
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 110, in view
+    return current_app.ensure_sync(self.dispatch_request)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 191, in dispatch_request
+    return current_app.ensure_sync(meth)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\sources\endpoints.py", line 26, in post
+    data = TimeTrackerSchema(**request.get_json()).dict()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\_internal\_decorators_v1.py", line 103, in wrapper2
+    return val2(value)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\schemas.py", line 15, in validate_name_of_work
+    if len(name) > LENGHT_NAME or not re.match("^[a-zA-Z0-9\s\p{Emoji}]*$/u", name):
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 190, in match
+    return _compile(pattern, flags).match(string)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 303, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_compile.py", line 788, in compile
+    p = sre_parse.parse(p, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 955, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 444, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 555, in _parse
+    code1 = _class_escape(source, this)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 350, in _class_escape
+    raise source.error('bad escape %s' % escape, len(escape))
+re.error: bad escape \p at position 13
+2024-12-28 16:43:46,625 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:43:46,625 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:43:47,310 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:43:47,313 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:44:02,852 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='ккк ккк', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:45:16,738 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:45:16,738 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:45:25,807 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='ddd ee ', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:45:32,799 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='ввв', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:45:52,138 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:45:52,141 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:45:54,105 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:45:54,105 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:45:57,162 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='ввв', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:46:06,111 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:46:06,111 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:46:06,805 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:46:06,805 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:46:13,599 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='ввв', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:46:20,973 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:46:20,973 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:46:47,352 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='ввв', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:47:04,213 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче ddd. Время: 00:00:07
+2024-12-28 16:50:49,949 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:50:49,965 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:51:04,698 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче ааа ааа добавлены в БД
+2024-12-28 16:51:25,263 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='Дело всей моей жизни!!!', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:51:46,256 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче Дело всей моей жизни добавлены в БД
+2024-12-28 16:52:11,033 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче My work добавлены в БД
+2024-12-28 16:55:26,739 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:55:26,739 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:56:29,345 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='Таймер дело в...жизни 😊😊😊', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:56:40,585 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='Таймер дело в...й моей жизни ', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:57:21,897 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='Таймер дело в... моей жизни =)', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 16:58:11,054 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:58:11,054 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:58:11,954 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:58:11,954 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 16:58:49,821 - [ERROR] -  config - (app.py).log_exception(838) - Exception on / [POST]
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 110, in view
+    return current_app.ensure_sync(self.dispatch_request)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 191, in dispatch_request
+    return current_app.ensure_sync(meth)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\sources\endpoints.py", line 26, in post
+    data = TimeTrackerSchema(**request.get_json()).dict()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\main.py", line 214, in __init__
+    validated_self = self.__pydantic_validator__.validate_python(data, self_instance=self)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\pydantic\_internal\_decorators_v1.py", line 103, in wrapper2
+    return val2(value)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\schemas.py", line 15, in validate_name_of_work
+    if len(name) > LENGHT_NAME or not re.match("^[a-zA-Z0-9\sА-Яа-яЁё\p{Emoji}]*$", name):
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 190, in match
+    return _compile(pattern, flags).match(string)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\re.py", line 303, in _compile
+    p = sre_compile.compile(pattern, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_compile.py", line 788, in compile
+    p = sre_parse.parse(p, flags)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 955, in parse
+    p = _parse_sub(source, state, flags & SRE_FLAG_VERBOSE, 0)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 444, in _parse_sub
+    itemsappend(_parse(source, state, verbose, nested + 1,
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 555, in _parse
+    code1 = _class_escape(source, this)
+  File "C:\Users\Всеволод\AppData\Local\Programs\Python\Python310\lib\sre_parse.py", line 350, in _class_escape
+    raise source.error('bad escape %s' % escape, len(escape))
+re.error: bad escape \p at position 21
+2024-12-28 16:59:46,540 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 16:59:46,540 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 17:00:11,417 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 17:00:11,434 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 17:00:12,351 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 17:00:12,354 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 17:00:43,080 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче Лучшее дело в Мире World добавлены в БД
+2024-12-28 17:00:58,499 - [ERROR] -  config - (endpoints.py).post(28) - 1 validation error for TimeTrackerSchema
+name_of_work
+  Value error, Название проекта может содержать только буквы и цифры, а также не превышать 25 символов [type=value_error, input_value='!!!', input_type=str]
+    For further information visit https://errors.pydantic.dev/2.10/v/value_error
+2024-12-28 17:01:25,387 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 17:01:25,407 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 17:01:26,110 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2024-12-28 17:01:26,110 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2024-12-28 17:18:45,962 - [INFO] -  config - (endpoints.py).post(144) - Измененны данные по задаче My work. Название: My work, Время: 01:00:02, Дата: 2024-12-28.
+2024-12-28 17:19:06,829 - [INFO] -  config - (endpoints.py).post(144) - Измененны данные по задаче Дело всей моей жизни. Название: Дело всей моей жизни, Время: 00:45:02, Дата: 2024-12-28.
+2024-12-28 17:19:46,715 - [INFO] -  config - (endpoints.py).post(144) - Измененны данные по задаче Лучшее дело в Мире World. Название: Лучшее дело в Мире World, Время: 02:00:03, Дата: 2024-12-28.
+2024-12-28 17:21:22,593 - [INFO] -  config - (endpoints.py).post(144) - Измененны данные по задаче r. Название: r, Время: 00:25:05, Дата: 2024-12-28.
+2024-12-28 17:26:06,579 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче Это дело состоит из 25смв добавлены в БД
+2024-12-29 10:40:59,288 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-29 10:41:02,763 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-29 10:41:07,080 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-29 10:41:07,105 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-29 10:41:13,537 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-29 10:41:13,680 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-29 10:41:19,358 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2024-12-29 10:41:19,466 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2024-12-29 15:11:59,820 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче My work добавлены в БД
+2024-12-29 15:12:13,074 - [INFO] -  config - (endpoints.py).post(144) - Измененны данные по задаче My work. Название: My work, Время: 01:00:04, Дата: 2024-12-29.
+2024-12-29 15:13:08,330 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче Лучшее дело в Мире World добавлены в БД
+2024-12-29 15:13:42,244 - [INFO] -  config - (endpoints.py).post(144) - Измененны данные по задаче Лучшее дело в Мире World. Название: Лучшее дело в Мире World, Время: 00:01:03, Дата: 2024-12-27.
+2024-12-29 15:16:21,885 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче ddd добавлены в БД
+2024-12-29 15:16:36,847 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = ddd, date = 2024-12-29
+2024-12-29 15:17:32,622 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче ddd добавлены в БД
+2024-12-29 15:17:38,396 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = ddd, date = 2024-12-29

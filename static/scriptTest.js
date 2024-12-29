@@ -287,15 +287,14 @@ class TimerItem extends Component {
   }
 
   deleteItemInBD() {
-
     function convertDateFormat(dateString) {
       // Split the input date string by the dot separator
-      const [day, month, year] = dateString.split('.');
-  
+      const [day, month, year] = dateString.split(".");
+
       // Return the date in the format YYYY-MM-DD
       return `${year}-${month}-${day}`;
-  }
-  const date = convertDateFormat(this.date);
+    }
+    const date = convertDateFormat(this.date);
 
     // event.stopPropagation();
     if (confirm("Вы уверены, что хотите удалить эту запись?")) {
@@ -345,10 +344,12 @@ class TotalTimer extends Component {
 
   rerenderTimer() {
     this.totalSeconds++;
-    this.element.textContent = TotalTimer.updateSecondsToString(this.totalSeconds);
+    this.element.textContent = TotalTimer.updateSecondsToString(
+      this.totalSeconds
+    );
   }
 
- static updateSecondsToString(seconds) {
+  static updateSecondsToString(seconds) {
     const hrs = Math.floor(seconds / 3600);
     const mins = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
@@ -386,7 +387,7 @@ class Timer extends TotalTimer {
   rerenderTimer() {
     this.seconds++;
     // this.updateText();
-    this.text = TotalTimer.updateSecondsToString(this.seconds)
+    this.text = TotalTimer.updateSecondsToString(this.seconds);
 
     this.element.innerHTML = this.text;
   }
@@ -428,7 +429,6 @@ const startButton = new Button({ id: "startButton", title: "Пуск" });
 //===============================================================
 
 function setError(element, msg) {
-  console.log(element);
 
   element.style.border = "1px solid rgb(218, 0, 0)";
   element.nextElementSibling.classList.add("error");
@@ -437,10 +437,10 @@ function setError(element, msg) {
 
 function setSuccess(element) {
   element.nextElementSibling.textContent = "";
+  input.style = "";
 }
 
-
-function inputCheck(e){
+function inputCheck(e) {
   if (input.value === "") {
     setError(input, "Поле обязательно!");
     e.preventDefault();
@@ -454,8 +454,9 @@ function inputCheck(e){
   }
 }
 
-input.addEventListener("blur", (e) => {
-  inputCheck(e)
+input.addEventListener("input", (e) => {
+  inputCheck(e);
+  
 });
 
 //================================================================
@@ -463,8 +464,8 @@ input.addEventListener("blur", (e) => {
 document.addEventListener("DOMContentLoaded", async function () {
   let data = null;
   try {
-    const response = await fetch("/api/data/"); 
-    // console.log(response)   
+    const response = await fetch("/api/data/");
+    
     data = await response.json();
   } catch (err) {
     // перехватит любую ошибку в блоке try: и в fetch, и в response.json
@@ -480,7 +481,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     totalSeconds: TimerItem.timeToSeconds(totalTime),
   });
   totalTimer.renderIn(totalTimeBox);
-
 
   // if (!dataItems) return;
 
@@ -512,13 +512,13 @@ timer.renderIn(inputBox);
 // totalTimer.updateTotalTime()
 
 const workingTimer = (e) => {
-
-  if (input.nextElementSibling.textContent === ""){
-    inputCheck(e)
-    return
-  };
+  if (input.value === "" || input.value.length < 3) {
+    inputCheck(e);
+    return;
+  }
 
   if (startButton.title === "Пуск") {
+    
     startButton.update({ title: "Стоп" });
 
     timer.createTimer();

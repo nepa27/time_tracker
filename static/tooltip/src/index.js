@@ -75,7 +75,7 @@ export default class Tooltip {
 
   updatePosition(clientX, clientY) {
     this.element.style.transform = `translate(${clientX + 10}px, ${
-      clientY - 10
+      clientY -280
     }px)`;
   }
 
