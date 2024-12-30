@@ -1,5 +1,7 @@
 //  <script type="module">
 //   import TimerItem from "../static/scriptTest.js"; */}
+import NotificationMessage from "./notification/src/index.js";
+import ConfirmMessage from "./confirm/src/index.js";
 
 class Component {
   static TIMEOUT = 1_000;
@@ -140,8 +142,11 @@ class TimerItem extends Component {
     this.btnDelete = this.element.querySelector(".btn-delete");
 
     if (this.btnDelete) {
-      this.btnDelete.addEventListener("click", (evt) => {
-        this.deleteItemInBD();
+      this.btnDelete.addEventListener("pointerdown", async (evt) => {
+        const isDeleted = await this.deleteItemInBD();
+
+        if (!isDeleted) return;
+
         delete TimerItem.collection.get(this.date)[this.title];
 
         if (Object.keys(TimerItem.collection.get(this.date)).length === 0) {
@@ -247,7 +252,8 @@ class TimerItem extends Component {
       this.updateCollection();
 
       this.element = this.createElement(this.createContainerTemplate());
-      super.renderIn(container);
+      // super.renderIn(container);
+      container.prepend(this.element);
       this.attachEventListeners();
       // this.element = this.createElement(this.createElementTemplate)
     }
@@ -286,29 +292,36 @@ class TimerItem extends Component {
     });
   }
 
-  deleteItemInBD() {
+  async deleteItemInBD() {
     function convertDateFormat(dateString) {
-      // Split the input date string by the dot separator
       const [day, month, year] = dateString.split(".");
-
-      // Return the date in the format YYYY-MM-DD
       return `${year}-${month}-${day}`;
     }
     const date = convertDateFormat(this.date);
 
-    // event.stopPropagation();
-    if (confirm("Вы уверены, что хотите удалить эту запись?")) {
-      fetch(`/delete/${date}/${this.title}`, {
-        // 2024-12-05
+    const result = await ConfirmMessage.show(
+      "Вы уверены, что хотите удалить эту запись?"
+    );
+    if (result) {
+      const response = await fetch(`/delete/${date}/${this.title}`, {
         method: "DELETE",
-      }).then((response) => {
-        if (response.ok) {
-          // location.reload();
-        } else {
-          alert("Ошибка при удалении записей");
-        }
       });
+
+      if (response.ok) {
+        return true; // Успешное удаление
+      } else {
+        const notification = new NotificationMessage(
+          "Ошибка при удалении записей",
+          {
+            duration: 3000,
+            type: "error",
+          }
+        );
+        notification.show();
+        return false; // Ошибка при удалении
+      }
     }
+    return false; // Пользователь отменил удаление
   }
 }
 
@@ -429,7 +442,6 @@ const startButton = new Button({ id: "startButton", title: "Пуск" });
 //===============================================================
 
 function setError(element, msg) {
-
   element.style.border = "1px solid rgb(218, 0, 0)";
   element.nextElementSibling.classList.add("error");
   element.nextElementSibling.textContent = msg;
@@ -456,7 +468,6 @@ function inputCheck(e) {
 
 input.addEventListener("input", (e) => {
   inputCheck(e);
-  
 });
 
 //================================================================
@@ -465,11 +476,16 @@ document.addEventListener("DOMContentLoaded", async function () {
   let data = null;
   try {
     const response = await fetch("/api/data/");
-    
+
     data = await response.json();
   } catch (err) {
     // перехватит любую ошибку в блоке try: и в fetch, и в response.json
-    alert(err);
+    const notification = new NotificationMessage(`${err}`, {
+      duration: 3000,
+      type: "error",
+    });
+
+    notification.show();
   }
 
   const { data: dataItems = {}, total_time: totalTime = "00:00:00" } =
@@ -484,7 +500,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // if (!dataItems) return;
 
-  for (const [date, namesTimes] of Object.entries(dataItems).reverse()) {
+  for (const [date, namesTimes] of Object.entries(dataItems)) {
     let time = "";
     let title = "";
 
@@ -518,7 +534,6 @@ const workingTimer = (e) => {
   }
 
   if (startButton.title === "Пуск") {
-    
     startButton.update({ title: "Стоп" });
 
     timer.createTimer();

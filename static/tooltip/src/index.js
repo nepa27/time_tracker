@@ -29,12 +29,8 @@ export default class Tooltip {
       return;
     }
 
-    const { clientX, clientY } = e;
-
     this.dataset = target.dataset.tooltip;
     this.element.innerHTML = this.dataset;
-
-    this.updatePosition(clientX, clientY);
 
     this.render();
   };
@@ -45,7 +41,11 @@ export default class Tooltip {
     }
 
     const { clientX, clientY } = e;
-    this.updatePosition(clientX, clientY);
+
+    if (this.element) {
+      this.updatePosition(clientX, clientY);
+    }
+
   };
 
   handleTooltipMouseOut = (e) => {
@@ -74,9 +74,10 @@ export default class Tooltip {
   }
 
   updatePosition(clientX, clientY) {
-    this.element.style.transform = `translate(${clientX + 10}px, ${
-      clientY -280
-    }px)`;
+    if (this.element) {
+      this.element.style.top = clientY + 15 + "px";
+      this.element.style.left = clientX + 15 + "px";
+    }
   }
 
   remove() {

@@ -13,7 +13,6 @@
       />
       <div class="block-error"></div>
     </div>
-
   </div>
   <div class="total-time-container">
     <strong>Всего за день:</strong>
@@ -83,7 +82,10 @@
 </script>
 <script src="{{ url_for('static', filename='script.js') }}"></script> -->
 
-<script src="{{ url_for('static', filename='scriptTest.js') }}"></script>
+<script
+  type="module"
+  src="{{ url_for('static', filename='scriptTest.js') }}"
+></script>
 
 {% else %}
 <div class="hello-message">
