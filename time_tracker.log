@@ -1400,3 +1400,22 @@ sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed
 2025-01-04 00:00:41,050 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче test добавлены в БД
 2025-01-03 23:59:59,106 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче del добавлены в БД
 2025-01-04 00:00:30,427 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче del. Время: 00:01:09
+2025-01-03 22:16:58,882 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 22:16:58,882 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 22:16:59,657 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 22:16:59,657 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 22:17:03,108 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 22:17:03,215 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 22:17:04,703 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 22:17:04,776 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 22:17:10,293 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 22:17:10,386 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-03 22:20:19,653 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 22:20:19,653 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 22:20:20,330 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 22:20:20,330 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 22:23:07,899 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 22:23:07,911 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 22:23:11,399 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 22:23:11,410 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-04 00:00:35,334 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче ggg добавлены в БД

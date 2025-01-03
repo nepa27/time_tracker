@@ -540,6 +540,11 @@ input.addEventListener("input", (e) => {
 
 //================================================================
 
+function parseDate(dateString) {
+  const [day, month, year] = dateString.split(".").map(Number);
+  return new Date(year, month - 1, day); // Месяцы в JavaScript начинаются с 0
+}
+
 document.addEventListener("DOMContentLoaded", async function () {
   let data = null;
   try {
@@ -567,8 +572,10 @@ document.addEventListener("DOMContentLoaded", async function () {
   totalTimer.renderIn(totalTimeBox);
 
   // if (!dataItems) return;
+  const dates = Object.entries(dataItems);
+  const sortedDates = dates.sort((a, b) => parseDate(a[0]) - parseDate(b[0]));
 
-  for (const [date, namesTimes] of Object.entries(dataItems)) {
+  for (const [date, namesTimes] of sortedDates) {
     let time = "";
     let title = "";
 
