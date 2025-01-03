@@ -1105,3 +1105,298 @@ name_of_work
 2024-12-30 22:57:57,399 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
 2024-12-30 22:58:04,056 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = eeeeeeeeeeeeeeeeee, date = 2024-12-28
 2024-12-30 22:58:40,033 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = trtrttttttttttteeeuuuu, date = 2024-12-28
+2025-01-02 17:39:36,934 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-02 17:39:36,934 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-02 17:39:37,680 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-02 17:39:37,680 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-02 17:39:53,682 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 17:39:53,810 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 17:39:55,214 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 17:39:55,296 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 17:40:01,510 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 17:40:01,610 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-02 17:40:32,162 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче new year добавлены в БД
+2025-01-02 17:51:04,566 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче пуск1 добавлены в БД
+2025-01-02 17:57:52,225 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче fff добавлены в БД
+2025-01-02 17:58:20,694 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче rrr добавлены в БД
+2025-01-02 18:39:40,374 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче fff. Время: 00:00:12
+2025-01-02 18:40:41,905 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче fff. Время: 00:00:26
+2025-01-02 19:46:11,478 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче fff. Время: 00:00:53
+2025-01-03 00:00:17,587 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 21:10:34,381 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-02 21:10:34,381 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-02 21:10:35,081 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-02 21:10:35,081 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-02 23:58:17,308 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 23:58:17,335 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 23:58:20,048 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 23:58:20,089 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 23:58:27,088 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-02 23:58:27,165 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-03 00:00:04,920 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче test добавлены в БД
+2025-01-03 00:00:09,614 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = test, date = 2025-01-03
+2025-01-03 00:00:07,960 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo добавлены в БД
+2025-01-03 00:00:11,289 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo, date = 2025-01-03
+2025-01-03 00:00:31,041 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче click добавлены в БД
+2025-01-03 00:00:34,505 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = click, date = 2025-01-03
+2025-01-03 00:21:35,097 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 00:21:35,097 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 00:21:35,960 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 00:21:35,966 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 00:00:00,127 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче fff добавлены в БД
+2025-01-03 00:00:16,344 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = fff, date = 2025-01-03
+2025-01-03 00:00:34,929 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче sss добавлены в БД
+2025-01-03 00:00:37,524 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = sss, date = 2025-01-03
+2025-01-03 00:00:05,536 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче fff добавлены в БД
+2025-01-03 00:00:07,973 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = fff, date = 2025-01-03
+2025-01-02 23:59:59,377 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче sss добавлены в БД
+2025-01-03 23:58:50,901 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:50,936 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:52,908 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:53,033 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:59,186 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:59,294 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-04 00:00:14,591 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче workTest добавлены в БД
+2025-01-03 23:58:43,526 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:43,549 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:45,188 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:45,214 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:47,213 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:47,235 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:55,574 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:55,651 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-03 23:59:59,118 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo1 добавлены в БД
+2025-01-04 00:00:22,433 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo1 добавлены в БД
+2025-01-04 00:00:37,727 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = workTest, date = 2025-01-04
+2025-01-04 00:00:40,093 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo1, date = 2025-01-04
+2025-01-04 00:00:56,302 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo1, date = 2025-01-03
+2025-01-03 23:58:48,144 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:48,163 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:49,587 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:49,593 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:54,863 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:54,949 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-04 00:00:04,428 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo1 добавлены в БД
+2025-01-03 23:58:25,270 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:25,293 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:28,052 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:28,071 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:34,677 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:34,761 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-03 23:58:55,676 - [ERROR] -  config - (app.py).log_exception(838) - Exception on / [POST]
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.IntegrityError: UNIQUE constraint failed: time_tracker.name_of_work, time_tracker.date, time_tracker.username
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 110, in view
+    return current_app.ensure_sync(self.dispatch_request)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 191, in dispatch_request
+    return current_app.ensure_sync(meth)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\sources\endpoints.py", line 58, in post
+    db.session.commit()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\scoping.py", line 597, in commit
+    return self._proxied.commit()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2028, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1313, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1288, in _prepare_impl
+    self.session.flush()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 4352, in flush
+    self._flush(objects)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 4487, in _flush
+    with util.safe_reraise():
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 4448, in _flush
+    flush_context.execute()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 1233, in _emit_insert_statements
+    result = connection.execute(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1418, in execute
+    return meth(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: time_tracker.name_of_work, time_tracker.date, time_tracker.username
+[SQL: INSERT INTO time_tracker (name_of_work, date, time, description, username) VALUES (?, ?, ?, ?, ?)]
+[parameters: ('delo1', '2025-01-04', '00:01:10.000000', None, 'wwww')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-01-03 10:58:41,394 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 10:58:41,398 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 10:58:42,121 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 10:58:42,121 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 10:58:44,182 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 10:59:15,862 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 10:59:15,878 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 10:59:16,548 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-03 10:59:16,548 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-03 10:59:22,151 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 10:59:22,193 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 10:59:24,402 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 10:59:24,485 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 10:59:32,403 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 10:59:32,486 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-03 11:00:49,585 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo1 добавлены в БД
+2025-01-03 11:00:59,440 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче delo1. Время: 00:02:25
+2025-01-03 11:03:03,884 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo1, date = 2025-01-03
+2025-01-03 11:03:55,002 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo2 добавлены в БД
+2025-01-03 11:04:55,541 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo2, date = 2025-01-03
+2025-01-03 11:05:57,688 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo2 добавлены в БД
+2025-01-03 11:07:06,793 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче delo2. Время: 00:03:24
+2025-01-03 11:08:24,058 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo1 добавлены в БД
+2025-01-03 11:09:33,785 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче delo1. Время: 00:03:24
+2025-01-03 11:16:14,793 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче delo1. Время: 00:06:48
+2025-01-03 11:17:41,116 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo3 добавлены в БД
+2025-01-03 11:17:52,844 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче delo3. Время: 00:02:27
+2025-01-03 11:18:03,686 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo3, date = 2025-01-03
+2025-01-03 11:23:49,391 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче дело добавлены в БД
+2025-01-03 11:24:05,235 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = дело, date = 2025-01-03
+2025-01-03 11:24:07,786 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче дело добавлены в БД
+2025-01-03 11:24:11,992 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = дело, date = 2025-01-03
+2025-01-03 11:24:13,487 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo2, date = 2025-01-03
+2025-01-03 11:24:14,688 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo1, date = 2025-01-03
+2025-01-03 13:23:29,659 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче delo добавлены в БД
+2025-01-03 13:24:33,645 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo, date = 2025-01-03
+2025-01-03 13:25:33,364 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче del добавлены в БД
+2025-01-03 13:25:45,858 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче del. Время: 00:02:28
+2025-01-03 13:25:58,711 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = del, date = 2025-01-03
+2025-01-03 23:58:11,914 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:11,933 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:13,623 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:13,652 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:19,825 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-03 23:58:19,908 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-04 00:00:02,550 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче delo1. Время: 00:03:27
+2025-01-04 00:00:27,994 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче delo1. Время: 00:06:20
+2025-01-04 00:01:10,609 - [INFO] -  config - (endpoints.py).delete_item(162) - Удалена задача: name = delo1, date = 2025-01-04
+2025-01-03 23:58:45,540 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче ddd добавлены в БД
+2025-01-03 23:58:51,301 - [ERROR] -  config - (app.py).log_exception(838) - Exception on / [POST]
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlite3.IntegrityError: UNIQUE constraint failed: time_tracker.name_of_work, time_tracker.date, time_tracker.username
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 1473, in wsgi_app
+    response = self.full_dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 882, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 880, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\app.py", line 865, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 110, in view
+    return current_app.ensure_sync(self.dispatch_request)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask\views.py", line 191, in dispatch_request
+    return current_app.ensure_sync(meth)(**kwargs)  # type: ignore[no-any-return]
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\flask_jwt_extended\view_decorators.py", line 170, in decorator
+    return current_app.ensure_sync(fn)(*args, **kwargs)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\sources\endpoints.py", line 58, in post
+    db.session.commit()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\scoping.py", line 597, in commit
+    return self._proxied.commit()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 2028, in commit
+    trans.commit(_to_root=True)
+  File "<string>", line 2, in commit
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1313, in commit
+    self._prepare_impl()
+  File "<string>", line 2, in _prepare_impl
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\state_changes.py", line 139, in _go
+    ret_value = fn(self, *arg, **kw)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 1288, in _prepare_impl
+    self.session.flush()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 4352, in flush
+    self._flush(objects)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 4487, in _flush
+    with util.safe_reraise():
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\util\langhelpers.py", line 146, in __exit__
+    raise exc_value.with_traceback(exc_tb)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\session.py", line 4448, in _flush
+    flush_context.execute()
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 466, in execute
+    rec.execute(self)
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\unitofwork.py", line 642, in execute
+    util.preloaded.orm_persistence.save_obj(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 93, in save_obj
+    _emit_insert_statements(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\orm\persistence.py", line 1233, in _emit_insert_statements
+    result = connection.execute(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1418, in execute
+    return meth(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\sql\elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1640, in _execute_clauseelement
+    ret = self._execute_context(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1846, in _execute_context
+    return self._exec_single_context(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1986, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 2355, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\base.py", line 1967, in _exec_single_context
+    self.dialect.do_execute(
+  File "W:\WEB_WORK\Homework\NAA\time_tracker-last\venv\lib\site-packages\sqlalchemy\engine\default.py", line 941, in do_execute
+    cursor.execute(statement, parameters)
+sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed: time_tracker.name_of_work, time_tracker.date, time_tracker.username
+[SQL: INSERT INTO time_tracker (name_of_work, date, time, description, username) VALUES (?, ?, ?, ?, ?)]
+[parameters: ('ddd', '2025-01-04', '00:00:06.000000', None, 'wwww')]
+(Background on this error at: https://sqlalche.me/e/20/gkpj)
+2025-01-03 23:59:52,094 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче ddd добавлены в БД
+2025-01-03 23:59:59,399 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче ddd. Время: 00:00:06
+2025-01-04 00:00:06,184 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче ddd. Время: 00:00:16
+2025-01-03 23:59:19,639 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче del добавлены в БД
+2025-01-03 23:59:28,774 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче ddd. Время: 00:00:15
+2025-01-03 23:59:33,454 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче ddd. Время: 00:00:26
+2025-01-04 00:01:03,556 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче ddd. Время: 00:00:35
+2025-01-03 23:58:17,217 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:17,232 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: The token is not yet valid (iat)
+2025-01-03 23:58:25,073 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!
+2025-01-03 23:59:59,574 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче test добавлены в БД
+2025-01-04 00:00:41,050 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче test добавлены в БД
+2025-01-03 23:59:59,106 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче del добавлены в БД
+2025-01-04 00:00:30,427 - [INFO] -  config - (endpoints.py).post(44) - Обновлены данные по задаче del. Время: 00:01:09

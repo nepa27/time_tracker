@@ -69,7 +69,7 @@ class Button extends Component {
   }
 
   createElementTemplate() {
-    return `<button class="table-button">${this.title}</button>`;
+    return `<button id="${this.id}" class="table-button">${this.title}</button>`;
   }
 
   addEventListener(eventType, callback) {
@@ -326,7 +326,7 @@ class TimerItem extends Component {
 }
 
 class TotalTimer extends Component {
-  // static totalSeconds =
+  static totalSeconds;
 
   constructor({
     id = "",
@@ -337,7 +337,7 @@ class TotalTimer extends Component {
     super();
     this.id = id;
     this.text = text;
-    this.totalSeconds = totalSeconds;
+    TotalTimer.totalSeconds = totalSeconds;
 
     this.element = super.createElement(this.createElementTemplate());
 
@@ -345,7 +345,7 @@ class TotalTimer extends Component {
   }
 
   createElementTemplate() {
-    return `<div class="timer" id="${this.id}">${this.text}</div>`;
+    return `<div id="${this.id}" class="timer" >${this.text}</div>`;
   }
 
   createTimer() {
@@ -356,11 +356,19 @@ class TotalTimer extends Component {
   }
 
   rerenderTimer() {
-    this.totalSeconds++;
+    TotalTimer.totalSeconds++;
     this.element.textContent = TotalTimer.updateSecondsToString(
-      this.totalSeconds
+      TotalTimer.totalSeconds
     );
   }
+
+  resetTotalTimer = () => {
+    TotalTimer.totalSeconds = 0;
+    this.text = "00:00:00";
+    // console.log( this.element);
+
+    this.element.innerHTML = this.text;
+  };
 
   static updateSecondsToString(seconds) {
     const hrs = Math.floor(seconds / 3600);
@@ -386,33 +394,93 @@ class Timer extends TotalTimer {
     this.text = text;
     this.seconds = seconds;
 
+    // this.totalSeconds = totalSeconds
+    // console.log(this.totalSeconds);
+
+    this.resetTotalTimer();
+
     this.element = this.createElement(this.createElementTemplate());
     // this.startUpdateInterval();
   }
 
-  // createTimer() {
-  //   this.intervalId = setInterval(
-  //     () => this.rerenderTimer(),
-  //     Component.TIMEOUT //1_000
-  //   );
-  // }
+  createTimer() {
+    //  !!!!!!!!!!!
+    const timeStart = this.getCurrentTime();
+    // console.log('timeStart =', timeStart);
+
+    const timeStartTimestamp = this.getTimestampWithTime(timeStart);
+
+    const timeEnd = "23:59:59";
+    const timeEndTimestamp = this.getTimestampWithTime(timeEnd);
+
+    this.differenceTime = timeEndTimestamp - timeStartTimestamp;
+    console.log(this.differenceTime);
+    // console.log('timeStartTimestamp',timeStartTimestamp);
+    // console.log('timeEndTimestamp',timeEndTimestamp);
+
+    this.intervalId = setInterval(
+      () => this.rerenderTimer(),
+      Component.TIMEOUT //1_000
+    );
+  }
+
+  getCurrentTime() {
+    const now = new Date(); // Получаем текущее время
+    const hours = String(now.getHours()).padStart(2, "0"); // Получаем часы и добавляем ведущий ноль
+    const minutes = String(now.getMinutes()).padStart(2, "0"); // Получаем минуты и добавляем ведущий ноль
+    const seconds = String(now.getSeconds()).padStart(2, "0"); // Получаем секунды и добавляем ведущий ноль
+
+    // return `23:58:50`; // Форматируем строку
+    return `${hours}:${minutes}:${seconds}`; // Форматируем строку
+  }
+
+  getTimestampWithTime(timeString) {
+    // Получаем текущую дату
+    const now = new Date();
+
+    // Разбиваем строку времени на часы, минуты и секунды
+    const [hours, minutes, seconds] = timeString.split(":").map(Number);
+
+    // Устанавливаем часы, минуты и секунды в текущую дату
+    now.setHours(hours, minutes, seconds, 0); // Устанавливаем часы, минуты, секунды и миллисекунды
+
+    // Получаем timestamp в секундах
+    const timestamp = Math.floor(now.getTime() / 1000);
+    return timestamp; // Возвращаем timestamp
+  }
 
   rerenderTimer() {
     this.seconds++;
     // this.updateText();
+    if (this.differenceTime === this.seconds) {
+      // document.querySelector("[data-element='btn-start-stop']").click();
+      const input = document.querySelector("#taskName");
+      const taskName = input.value;
+
+      const elem = document.querySelector(".table-button");
+      // elem.click();
+      elem.dispatchEvent(new Event("pointerdown"));
+
+      // super.resetTotalTimer();
+      TotalTimer.totalSeconds = 0;
+      const textTotalTimer = "00:00:00";
+      const totalTimer = document.getElementById("total_timer");
+      totalTimer.innerHTML = textTotalTimer;
+
+      this.resetTimer();
+
+      input.value = taskName;
+
+      // elem.click();
+      elem.dispatchEvent(new Event("pointerdown"));
+
+      console.log("tut");
+    }
+
     this.text = TotalTimer.updateSecondsToString(this.seconds);
 
     this.element.innerHTML = this.text;
   }
-
-  // updateText() {
-  //   const hrs = Math.floor(this.seconds / 3600);
-  //   const mins = Math.floor((this.seconds % 3600) / 60);
-  //   const secs = this.seconds % 60;
-  //   this.text = `${hrs.toString().padStart(2, "0")}:${mins
-  //     .toString()
-  //     .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  // }
 
   resetTimer() {
     this.seconds = 0;
@@ -537,6 +605,7 @@ const workingTimer = (e) => {
     startButton.update({ title: "Стоп" });
 
     timer.createTimer();
+
     totalTimer.createTimer();
   } else if (startButton.title === "Стоп") {
     const taskItem = new TimerItem({
@@ -558,7 +627,7 @@ const workingTimer = (e) => {
   }
 };
 
-startButton.addEventListener("click", workingTimer);
+startButton.addEventListener("pointerdown", workingTimer);
 
 //===============================================================
 
