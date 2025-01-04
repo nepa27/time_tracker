@@ -1419,3 +1419,13 @@ sqlalchemy.exc.IntegrityError: (sqlite3.IntegrityError) UNIQUE constraint failed
 2025-01-03 22:23:11,399 - [INFO] -  config - (app.py).create_app(9) - Создана БД
 2025-01-03 22:23:11,410 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
 2025-01-04 00:00:35,334 - [INFO] -  config - (endpoints.py).post(59) - Данные по задаче ggg добавлены в БД
+2025-01-04 13:46:22,915 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-04 13:46:22,915 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-04 13:46:23,596 - [INFO] -  config - (app.py).create_app(9) - Создана БД
+2025-01-04 13:46:23,596 - [INFO] -  config - (app.py).create_app(12) - Зарегистрирован (<Blueprint 'timer'>, <Blueprint 'users'>)
+2025-01-04 13:46:30,950 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-04 13:46:30,982 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-04 13:46:32,587 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-04 13:46:32,610 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-04 13:46:39,906 - [ERROR] -  config - (config.py).load_logged_in_user(83) - Error in load_logged_in_user: Signature has expired
+2025-01-04 13:46:40,002 - [INFO] -  config - (user.py).post(89) - Пользователь wwww вошел в систему!

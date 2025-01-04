@@ -2,6 +2,9 @@
 //   import TimerItem from "../static/scriptTest.js"; */}
 import NotificationMessage from "./notification/src/index.js";
 import ConfirmMessage from "./confirm/src/index.js";
+import fetchJson from "./fetch-json.js"
+
+const BACKEND_URL = "http://127.0.0.1:5000/";
 
 class Component {
   static TIMEOUT = 1_000;
@@ -110,6 +113,14 @@ class TimerItem extends Component {
     this.title = title;
     this.time = time;
     this.date = date || this.formattedDate();
+
+    this.rowStart = 0;
+    this.rowEnd = 20;
+    this.isLoading = false;
+    this.container = document.getElementById('work-container')
+
+    // this.createEventListeners();  // !!!!!!!!!!!!!!!!
+
     // this.element = super.createContainerTemplate(this.createElement(this.createTemplate()));
     this.element = this.createElement(this.createContainerTemplate());
   }
@@ -133,6 +144,16 @@ class TimerItem extends Component {
         ${this.createElementTemplate()}
      </div>
     `;
+  }
+
+  createUrl() {
+    const url = new URL("/api/data", BACKEND_URL);
+    // const url = new URL("/api/data/");
+    // url.searchParams.append("_order", `${this.order ?? "asc"}`);
+    url.searchParams.append("_start", `${this.rowStart}`);
+    url.searchParams.append("_end", `${this.rowEnd}`);
+
+    return url.toString();
   }
 
   attachEventListeners() {
@@ -162,6 +183,69 @@ class TimerItem extends Component {
       });
     }
   }
+
+  createEventListeners() {
+    window.addEventListener("scroll", this.handleProductsContainerScroll);
+  }
+
+  handleProductsContainerScroll = async(e) => {
+    const windowBottom =
+      document.documentElement.getBoundingClientRect().bottom;
+    const windowHeight = document.documentElement.clientHeight;
+
+    if (windowBottom < windowHeight * 1.8 && !this.isLoading) {
+      this.isLoading = true;
+      // console.log(windowBottom);
+      // console.log(windowHeight);
+      
+
+      this.rowStart = this.rowEnd;
+      this.rowEnd += 20;
+
+      await fetchJson(this.createUrl()).finally(() => {
+        this.isLoading = false;
+
+        // this.container.insertAdjacentHTML(
+        //   "beforeend",
+        //   this.createTableBodyTemplate()
+        // );
+        // this.element.renderIn(this.container) 
+        this.renderIn(this.container) 
+      });
+    }
+  };
+
+  // async fetchData() {
+  //   try {
+  //     this.renderLoadingLine();
+  //     const data = await fetchJson(this.createUrl());
+
+  //     // if (!this.data.length) {
+  //     //   this.messageError();
+  //     //   return;
+  //     // }
+
+  //     console.log(data);
+      
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // }
+
+  renderLoadingLine() {
+    this.container.insertAdjacentHTML(
+      "beforeend",
+      `
+        <div data-elem="loading" class="loading-line sortable-table__loading-line"></div>
+      `
+    );
+  }
+
+  // selectSubElements() {
+  //   this.element.querySelectorAll("[data-element]").forEach((element) => {
+  //     this.subElements[element.dataset.element] = element;
+  //   });
+  // }
 
   // removeTimeFromTotalTimer() {
   //     const totalTimer = document.querySelector("#totalTimer"); // replace 'totalTimer' with the id of your total timer element
