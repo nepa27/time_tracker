@@ -2,6 +2,14 @@
 {% block title %}Статистика{% endblock %}
 {% block content %}
 {% if user %}
+<section class="content" id="content">
+    <div data-element="chartsRoot" class="dashboard__charts">
+        <div data-element="tasksChart" class="dashboard__chart_tasks"></div>
+        <div data-element="oneTaskChart" class="dashboard__chart_tasks"></div>
+    </div>
+</section>
+
+
 {% else %}
       <div class="hello-message">
           <h1 class="display-4">Учет рабочего времени</h1>
@@ -9,7 +17,7 @@
           <p>Используйте навигационную панель для доступа к вашему профилю</p>
       </div>
 {% endif %}
-<script>
+<!-- <script>
 document.addEventListener('DOMContentLoaded', function() {
     fetch('/api/statistics')
         .then(response => response.json())
@@ -22,5 +30,9 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Ошибка:', error));
 });
-</script>
+</script> -->
+<!-- <script src="{{ url_for('static', filename='scriptStatistics.js') }}"></script> -->
+<!-- <script type="module" src="../static/scriptStatistics.js"></script> -->
+<!-- <script type="module" src="../static/statistic.js"></script> -->
+<script type="module" src="../static/column-chart/src/index.js"></script>
 {% endblock %}
