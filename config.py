@@ -4,7 +4,7 @@ from logging.handlers import RotatingFileHandler
 import os
 import sys
 
-from flask import Flask, g, jsonify, render_template
+from flask import Flask, g, jsonify, render_template, redirect, url_for
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,
@@ -24,7 +24,6 @@ from constants import (
 )
 from db import db
 from models import BlocklistJwt
-
 
 log_format = (
     '%(asctime)s - [%(levelname)s] -  %(name)s - '
@@ -143,25 +142,17 @@ def expired_token_loader(jwt_header, jwt_payload):
 
 @jwt.unauthorized_loader
 def unauthorized_loader_callback(error):
-    return (
-        jsonify(
-            {'Message': 'The token is not found.', 'error': 'missing_token'}
-        ),
-        401,
-    )
+    return redirect(url_for('timer.home'))
 
 
 @jwt.invalid_token_loader
 def invalid_token_callback(error):
-    return (
-        jsonify(
-            {
-                'Message': 'Signature verification failed.',
-                'error': 'invalid_token',
-            }
-        ),
-        401,
-    )
+    return redirect(url_for('timer.home'))
+
+
+@jwt.revoked_token_loader
+def revoked_token_loader(header_jwt, data_jwt):
+    return redirect(url_for('timer.home'))
 
 
 @jwt.token_in_blocklist_loader
