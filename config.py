@@ -134,10 +134,7 @@ def page_not_found(error):
 
 @jwt.expired_token_loader
 def expired_token_loader(jwt_header, jwt_payload):
-    return (
-        jsonify({'Message': 'The token as expired', 'error': 'token_expired'}),
-        401,
-    )
+    return redirect(url_for('timer.home'))
 
 
 @jwt.unauthorized_loader
