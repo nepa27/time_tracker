@@ -1,64 +1,96 @@
-{% extends 'base.html' %}
-{% block title %}Учет рабочего времени{% endblock %}
-{% block content %}
-{% if user %}
-    <div class="container">
-        <div class="task-input">
-            <input type="text" id="taskName" placeholder="Название дела" list="taskNames" />
-            <datalist id="taskNames"></datalist>
-            <button id="startButton">Пуск</button>
-            <div class="timer" id="timer">00:00:00</div>
-        </div>
-        <div class="total-time-container">
-            <strong>Всего за день:</strong>
-            <p class="timer" id="total_timer">{{ total_time }}</p>
-        </div>
-        <h3>Список дел</h3>
-        <div class="task-list" id="work-container">
-            <template id="template__task-item">
-                <div class="task-item">
-                    <p>Название дела: <span class="nameWork">Название</span></p>
-                    <p>Время: <span class="time">02:20:10</span></p>
-                    <button class="table-button" onclick="location.href='#'">Изменить</button>
-                    <button class="table-button" onclick="location.href='#'">Удалить</button>
-                </div>
-            </template>
-        </div>
+{% extends 'base.html' %} {% block title %}Учет рабочего времени{% endblock %}
+{% block content %} {% if user %}
+<div class="container">
+  <div class="task-input">
+    <div class="task-input__inner">
+      <input
+        type="text"
+        id="taskName"
+        placeholder="Название дела"
+        list="taskNames"
+        required
+        minlength="1"
+      />
+      <div class="block-error"></div>
     </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/data/')
-        .then(response => response.json())
-        .then(data => {
-            if (data.data) {
-                // Получаем массив пар [дата, значения]
-                const entries = Object.entries(data.data);
+  </div>
+  <div class="total-time-container">
+    <strong>Всего за день:</strong>
+  </div>
+  <h3>Список дел</h3>
+  <div class="task-list" id="work-container"></div>
+</div>
 
-                // Сортируем массив по датам в обратном порядке
-                entries.sort((a, b) => new Date(b[0]) - new Date(a[0]));
-
-                // Преобразуем отсортированный массив обратно в объект
-                const sortedData = Object.fromEntries(entries);
-
-                // Обновляем объект данных
-                data.data = sortedData;
-
-                console.log(data.data);
-                console.log(sortedData);
-            } else {
-                console.log('Нет данных для отображения');
-            }
-        })
-        .catch(error => console.error('Ошибка:', error));
-});
-</script>
-
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-{% else %}
-      <div class="hello-message">
-          <h1 class="display-4">Учет рабочего времени</h1>
-          <hr class="my-4">
-          <p>Используйте навигационную панель для доступа к вашему профилю</p>
+<!-- <div class="container">
+  <div class="task-input">
+    <input
+      type="text"
+      id="taskName"
+      placeholder="Название дела"
+      list="taskNames"
+    />
+    <datalist id="taskNames"></datalist>
+    <button id="startButton">Пуск</button>
+    <div class="timer" id="timer">00:00:00</div>
+  </div>
+  <div class="total-time-container">
+    <strong>Всего за день:</strong>
+    <p class="timer" id="total_timer">{{ total_time }}</p>
+  </div>
+  <h3>Список дел</h3>
+  <div class="task-list" id="work-container">
+    <template id="template__task-item">
+      <div class="task-item">
+        <p>Название дела: <span class="nameWork">Название</span></p>
+        <p>Время: <span class="time">02:20:10</span></p>
+        <button class="table-button" onclick="location.href='#'">
+          Изменить
+        </button>
+        <button class="table-button" onclick="location.href='#'">
+          Удалить
+        </button>
       </div>
-{% endif %}
-{% endblock %}
+    </template>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("/api/data/")
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.data) {
+          // Получаем массив пар [дата, значения]
+          const entries = Object.entries(data.data);
+
+          // Сортируем массив по датам в обратном порядке
+          entries.sort((a, b) => new Date(b[0]) - new Date(a[0]));
+
+          // Преобразуем отсортированный массив обратно в объект
+          const sortedData = Object.fromEntries(entries);
+
+          // Обновляем объект данных
+          data.data = sortedData;
+
+          console.log(data.data);
+          console.log(sortedData);
+        } else {
+          console.log("Нет данных для отображения");
+        }
+      })
+      .catch((error) => console.error("Ошибка:", error));
+  });
+</script>
+<script src="{{ url_for('static', filename='script.js') }}"></script> -->
+
+<script
+  type="module"
+  src="{{ url_for('static', filename='scriptTest.js') }}"
+></script>
+
+{% else %}
+<div class="hello-message">
+  <h1 class="display-4">Учет рабочего времени</h1>
+  <hr class="my-4" />
+  <p>Используйте навигационную панель для доступа к вашему профилю</p>
+</div>
+{% endif %} {% endblock %}
