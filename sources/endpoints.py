@@ -184,12 +184,19 @@ def api_data():
             TimeTrackerModel.username == get_jwt_identity()
         )
 
+        data_task_names = TimeTrackerModel.query.group_by(
+            'name_of_work'
+        ).filter(TimeTrackerModel.username == get_jwt_identity())
+
+        task_names = [result.name_of_work for result in data_task_names]
+
         data_total_time = data.filter(TimeTrackerModel.date == now_date)
         total_time = sum_time(data_total_time.all()).strftime('%H:%M:%S')
 
         return {
             'data': data_to_json(data),
             'total_time': total_time,
+            'task_names': task_names
         }, 200
     except BaseException:
         logger.info('Ошибка при получении данных')
