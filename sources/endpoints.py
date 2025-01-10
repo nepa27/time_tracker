@@ -175,7 +175,7 @@ def get_statistics():
 
 
 @jwt_required()
-def api_data():
+def api_data(start, end):
     try:
         verify_jwt_in_request(optional=True)
         now_date = datetime.now().date()
@@ -184,13 +184,14 @@ def api_data():
             TimeTrackerModel.username == get_jwt_identity()
         ).order_by(TimeTrackerModel.date.desc(), TimeTrackerModel.id.desc())
 
+        data_total_time = data.filter(TimeTrackerModel.date == now_date)
+
+        data = data.offset(start).limit(end)
         data_task_names = TimeTrackerModel.query.group_by(
             'name_of_work'
         ).filter(TimeTrackerModel.username == get_jwt_identity())
 
         task_names = [result.name_of_work for result in data_task_names]
-
-        data_total_time = data.filter(TimeTrackerModel.date == now_date)
         total_time = sum_time(data_total_time.all()).strftime('%H:%M:%S')
 
         return {
