@@ -199,8 +199,8 @@ def api_data(start, end):
             'total_time': total_time,
             'task_names': task_names
         }, 200
-    except BaseException:
-        logger.info('Ошибка при получении данных')
+    except BaseException as e:
+        logger.info(f'Ошибка при получении данных: {e}')
         abort(500)
 
 
@@ -212,6 +212,6 @@ def api_statistics():
         return {
             'data': data_to_statistic(data),
         }, 200
-    except BaseException:
-        logger.info('Ошибка при получении данных')
+    except BaseException as e:
+        logger.info(f'Ошибка при получении данных: {e}')
         abort(500)
