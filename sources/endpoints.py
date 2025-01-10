@@ -182,7 +182,7 @@ def api_data():
 
         data = TimeTrackerModel.query.filter(
             TimeTrackerModel.username == get_jwt_identity()
-        )
+        ).order_by(TimeTrackerModel.date.desc(), TimeTrackerModel.id.desc())
 
         data_task_names = TimeTrackerModel.query.group_by(
             'name_of_work'
