@@ -37,11 +37,13 @@ timer.add_url_rule(
 )
 timer.add_url_rule(
     '/api/data/',
+    methods=('GET',),
     view_func=api_data,
     endpoint='api_data'
 )
 timer.add_url_rule(
     '/api/statistics/',
+    methods=('GET',),
     view_func=api_statistics,
     endpoint='api_statistics'
 )
