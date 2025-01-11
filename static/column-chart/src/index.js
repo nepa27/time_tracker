@@ -73,8 +73,8 @@ export default class ColumnChart {
     this.subElements.header.textContent = "";
     this.subElements.body.innerHTML = "";
 
-    this.url.searchParams.set("from", from.toISOString());
-    this.url.searchParams.set("to", to.toISOString());
+    this.url.searchParams.set("from", from.toISOString().split("T")[0]);
+    this.url.searchParams.set("to", to.toISOString().split("T")[0]);
 
     const data = await fetchJson(this.url);
     this.data = data.data;
