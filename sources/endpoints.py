@@ -210,8 +210,19 @@ def api_data():
 @jwt_required()
 def api_statistics():
     try:
+        date_from = request.args.get('from', type=str)
+        date_to = request.args.get('to', type=str)
+
+        date_from = parse_date(date_from)
+        date_to = parse_date(date_to)
+
         verify_jwt_in_request(optional=True)
-        data = TimeTrackerModel.query.all()
+        data = TimeTrackerModel.query.filter(
+            TimeTrackerModel.username == get_jwt_identity(),
+            TimeTrackerModel.date >= date_from,
+            TimeTrackerModel.date <= date_to
+        )
+
         return {
             'data': data_to_statistic(data),
         }, 200
