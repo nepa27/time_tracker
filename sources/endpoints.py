@@ -180,17 +180,21 @@ def api_data():
         verify_jwt_in_request(optional=True)
         now_date = datetime.now().date()
 
+        start = request.args.get('_start', type=int)
+        end = request.args.get('_end', type=int)
+
         data = TimeTrackerModel.query.filter(
             TimeTrackerModel.username == get_jwt_identity()
-        )
+        ).order_by(TimeTrackerModel.date.desc(), TimeTrackerModel.id.desc())
 
+        data_total_time = data.filter(TimeTrackerModel.date == now_date)
+
+        data = data.offset(start).limit(end)
         data_task_names = TimeTrackerModel.query.group_by(
             'name_of_work'
         ).filter(TimeTrackerModel.username == get_jwt_identity())
 
         task_names = [result.name_of_work for result in data_task_names]
-
-        data_total_time = data.filter(TimeTrackerModel.date == now_date)
         total_time = sum_time(data_total_time.all()).strftime('%H:%M:%S')
 
         return {
@@ -198,19 +202,30 @@ def api_data():
             'total_time': total_time,
             'task_names': task_names
         }, 200
-    except BaseException:
-        logger.info('Ошибка при получении данных')
+    except BaseException as e:
+        logger.info(f'Ошибка при получении данных: {e}')
         abort(500)
 
 
 @jwt_required()
 def api_statistics():
     try:
+        date_from = request.args.get('from', type=str)
+        date_to = request.args.get('to', type=str)
+
+        date_from = parse_date(date_from)
+        date_to = parse_date(date_to)
+
         verify_jwt_in_request(optional=True)
-        data = TimeTrackerModel.query.all()
+        data = TimeTrackerModel.query.filter(
+            TimeTrackerModel.username == get_jwt_identity(),
+            TimeTrackerModel.date >= date_from,
+            TimeTrackerModel.date <= date_to
+        )
+
         return {
             'data': data_to_statistic(data),
         }, 200
-    except BaseException:
-        logger.info('Ошибка при получении данных')
+    except BaseException as e:
+        logger.info(f'Ошибка при получении данных: {e}')
         abort(500)
