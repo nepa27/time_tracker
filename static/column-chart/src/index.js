@@ -1,6 +1,7 @@
 import fetchJson from "../../fetch-json.js";
 import Tooltip from "../../tooltip/src/index.js";
 
+// const BACKEND_URL = "http://127.0.0.1:5000/statistics/";
 const BACKEND_URL = "http://127.0.0.1:5001/statistics/";
 
 // let res = await fetch('/api/statistics')

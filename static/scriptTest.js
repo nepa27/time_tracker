@@ -2,9 +2,9 @@
 //   import TimerItem from "../static/scriptTest.js"; */}
 import NotificationMessage from "./notification/src/index.js";
 import ConfirmMessage from "./confirm/src/index.js";
-import fetchJson from "./fetch-json.js"
+import fetchJson from "./fetch-json.js";
 
-const BACKEND_URL = "http://127.0.0.1:5000/";
+const BACKEND_URL = "http://127.0.0.1:5001/";
 
 class Component {
   static TIMEOUT = 1_000;
@@ -63,6 +63,8 @@ class InputBox {
 }
 
 class Button extends Component {
+  static isClicked = false;
+
   constructor({ id = "", title = "" }) {
     super();
     this.id = id;
@@ -107,6 +109,8 @@ class Button extends Component {
 
 class TimerItem extends Component {
   static collection = new Map();
+  static isLoading = false; // Флаг загрузки для всех экземпляров
+  static lastRowEnd = 0; // Хранит последний загруженный конец диапазона
 
   constructor({ title = "", time = "00:00:00", date = null }) {
     super();
@@ -114,14 +118,12 @@ class TimerItem extends Component {
     this.time = time;
     this.date = date || this.formattedDate();
 
-    this.rowStart = 0;
-    this.rowEnd = 20;
-    this.isLoading = false;
-    this.container = document.getElementById('work-container')
+    this.stepFetchData = 10;
+    this.rowStart = 0; // Начальный индекс
+    this.rowEnd = this.rowStart + this.stepFetchData; // Конечный индекс
+    this.container = document.getElementById("work-container");
 
-    // this.createEventListeners();  // !!!!!!!!!!!!!!!!
-
-    // this.element = super.createContainerTemplate(this.createElement(this.createTemplate()));
+    this.createEventListeners();
     this.element = this.createElement(this.createContainerTemplate());
   }
 
@@ -188,49 +190,51 @@ class TimerItem extends Component {
     window.addEventListener("scroll", this.handleProductsContainerScroll);
   }
 
-  handleProductsContainerScroll = async(e) => {
+  handleProductsContainerScroll = async (e) => {
     const windowBottom =
       document.documentElement.getBoundingClientRect().bottom;
     const windowHeight = document.documentElement.clientHeight;
 
-    if (windowBottom < windowHeight * 1.8 && !this.isLoading) {
-      this.isLoading = true;
-      // console.log(windowBottom);
-      // console.log(windowHeight);
-      
+    // Проверяем, нужно ли загружать новые данные
+    if (windowBottom < windowHeight * 1.8 && !TimerItem.isLoading) {
+      TimerItem.isLoading = true; // Устанавливаем флаг загрузки
+      this.renderLoadingLine();
 
-      this.rowStart = this.rowEnd;
-      this.rowEnd += 20;
+      // Обновляем начальный и конечный индексы
+      this.rowStart = TimerItem.lastRowEnd;
+      this.rowEnd = this.rowStart + 10;
 
-      await fetchJson(this.createUrl()).finally(() => {
-        this.isLoading = false;
+      const data = await fetchJson(this.createUrl());
+      const { data: dataItems = {} } = data || {};
 
-        // this.container.insertAdjacentHTML(
-        //   "beforeend",
-        //   this.createTableBodyTemplate()
-        // );
-        // this.element.renderIn(this.container) 
-        this.renderIn(this.container) 
-      });
+      const items = Object.values(dataItems).reduce((acc, cur) => {
+        return (acc += Object.values(cur).length);
+      }, 0);
+
+      if (items < this.stepFetchData) return;
+      // if (!Object.keys(dataItems).length) return;
+
+      const dates = Object.entries(dataItems);
+      const sortedDates = dates.sort(
+        (a, b) => parseDate(b[0]) - parseDate(a[0])
+      );
+
+      for (const [date, namesTimes] of sortedDates) {
+        for (const [title, time] of Object.entries(namesTimes)) {
+          const taskItem = new TimerItem({
+            title: title,
+            time: time,
+            date: date,
+          });
+
+          taskItem.renderIn(this.container);
+        }
+      }
+
+      TimerItem.lastRowEnd = this.rowEnd; // Обновляем последний загруженный конец диапазона
+      TimerItem.isLoading = false; // Сбрасываем флаг загрузки
     }
   };
-
-  // async fetchData() {
-  //   try {
-  //     this.renderLoadingLine();
-  //     const data = await fetchJson(this.createUrl());
-
-  //     // if (!this.data.length) {
-  //     //   this.messageError();
-  //     //   return;
-  //     // }
-
-  //     console.log(data);
-      
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // }
 
   renderLoadingLine() {
     this.container.insertAdjacentHTML(
@@ -240,21 +244,6 @@ class TimerItem extends Component {
       `
     );
   }
-
-  // selectSubElements() {
-  //   this.element.querySelectorAll("[data-element]").forEach((element) => {
-  //     this.subElements[element.dataset.element] = element;
-  //   });
-  // }
-
-  // removeTimeFromTotalTimer() {
-  //     const totalTimer = document.querySelector("#totalTimer"); // replace 'totalTimer' with the id of your total timer element
-  //     if (totalTimer) {
-  //         const totalSecondsToRemove = TimerItem.timeToSeconds(this.time);
-  //         totalTimer.totalSeconds -= totalSecondsToRemove;
-  //         totalTimer.rerenderTotalTime();
-  //     }
-  // }
 
   formattedDate() {
     const now = new Date();
@@ -337,11 +326,59 @@ class TimerItem extends Component {
 
       this.element = this.createElement(this.createContainerTemplate());
       // super.renderIn(container);
-      container.prepend(this.element);
+      if (Button.isClicked) {
+        container.prepend(this.element);
+      } else {
+        container.append(this.element);
+      }
+      // container.prepend(this.element);
+
       this.attachEventListeners();
       // this.element = this.createElement(this.createElementTemplate)
     }
   }
+  // renderIn(container) {
+  //   const existingItem = TimerItem.collection.has(this.date)
+  //     ? TimerItem.collection.get(this.date)[this.title]
+  //     : undefined;
+
+  //   const isExistingDate = TimerItem.collection.has(this.date);
+
+  //   if (isExistingDate && existingItem) {
+  //     const newTime = this.addTimeStrings(existingItem, this.time);
+  //     this.time = newTime;
+  //     this.updateCollection();
+
+  //     // Обновляем отображаемое время в элементе
+  //     const dataContainer = document.querySelector(
+  //       `[data-date="${this.date}"]`
+  //     );
+  //     const taskItem = dataContainer.querySelector(
+  //       `[data-name-work="${this.title}"]`
+  //     );
+
+  //     taskItem.querySelector(".time").textContent = this.time;
+  //     this.attachEventListeners();
+  //   } else {
+
+  //     if (isExistingDate) {
+  //       const containerDate = document.querySelector(
+  //         `[data-date="${this.date}"]`
+  //       );
+
+  //       this.element = this.createElement(this.createElementTemplate());
+  //       containerDate.append(this.element);
+  //       this.attachEventListeners();
+  //     } else {
+  //       this.element = this.createElement(this.createContainerTemplate());
+  //       container.append(this.element);
+  //       this.attachEventListeners();
+  //     }
+  //     console.log(TimerItem.collection);
+
+  //     this.updateCollection();
+  //   }
+  // }
 
   update({ title = this.title, time = this.time } = {}) {
     this.title = title;
@@ -498,7 +535,7 @@ class Timer extends TotalTimer {
     const timeEndTimestamp = this.getTimestampWithTime(timeEnd);
 
     this.differenceTime = timeEndTimestamp - timeStartTimestamp;
-    console.log(this.differenceTime);
+    // console.log(this.differenceTime);
     // console.log('timeStartTimestamp',timeStartTimestamp);
     // console.log('timeEndTimestamp',timeEndTimestamp);
 
@@ -629,14 +666,105 @@ function parseDate(dateString) {
   return new Date(year, month - 1, day); // Месяцы в JavaScript начинаются с 0
 }
 
+// document.addEventListener("DOMContentLoaded", async function () {
+//   let data = null;
+//   try {
+//     // const response = await fetch("/api/data/");
+//     // data = await response.json();
+
+//     const response2 = await fetch("/api/data/?_start=0&_end=10");
+//     // console.log(response2);
+//     data = await response2.json();
+//   } catch (err) {
+//     // перехватит любую ошибку в блоке try: и в fetch, и в response.json
+//     const notification = new NotificationMessage(`${err}`, {
+//       duration: 3000,
+//       type: "error",
+//     });
+
+//     notification.show();
+//   }
+
+//   const { data: dataItems = {}, total_time: totalTime = "00:00:00" } =
+//     data || {};
+
+//   totalTimer = new TotalTimer({
+//     id: "total_timer",
+//     text: totalTime,
+//     totalSeconds: TimerItem.timeToSeconds(totalTime),
+//   });
+//   totalTimer.renderIn(totalTimeBox);
+
+//   // if (!dataItems) return;
+//   const dates = Object.entries(dataItems);
+//   const sortedDates = dates.sort((a, b) => parseDate(a[0]) - parseDate(b[0]));
+//   const container = document.querySelector("#work-container");
+
+//   for (const [date, namesTimes] of sortedDates) {
+//     let time = "";
+//     let title = "";
+
+//     Object.entries(namesTimes).forEach((item) => {
+//       [title, time] = item;
+
+//       const taskItem = new TimerItem({
+//         title: title,
+//         time: time,
+//         date: date,
+//       });
+
+//       taskItem.renderIn(container);
+//     });
+//   }
+
+//   // TimerItem.collection = new Map(Object.entries(dataItems));
+// });
+
+// Инициализация данных при загрузке страницы
 document.addEventListener("DOMContentLoaded", async function () {
+  const timerItem = new TimerItem({}); // Создаем экземпляр TimerItem
+  await timerItem.loadInitialData(); // Загружаем начальные данные
+});
+
+// Метод для загрузки начальных данных
+TimerItem.prototype.loadInitialData = async function () {
   let data = null;
   try {
-    const response = await fetch("/api/data/");
-
+    const response = await fetch("/api/data/?_start=0&_end=10");
     data = await response.json();
+
+    const { total_time: totalTime = "00:00:00", data: dataItems = {} } =
+      data || {};
+
+    // Создаем экземпляр TotalTimer только один раз
+    totalTimer = new TotalTimer({
+      id: "total_timer",
+      text: totalTime,
+      totalSeconds: TimerItem.timeToSeconds(totalTime),
+    });
+    totalTimer.renderIn(totalTimeBox); // Отображаем TotalTimer
+
+    // Обработка полученных данных
+    const dates = Object.entries(dataItems);
+    const container = document.querySelector("#work-container");
+
+    const sortedDates = dates.sort((a, b) => parseDate(b[0]) - parseDate(a[0]));
+    // console.log(sortedDates.reverse());
+
+    for (const [date, namesTimes] of sortedDates) {
+      for (const [title, time] of Object.entries(namesTimes)) {
+        const taskItem = new TimerItem({
+          title: title,
+          time: time,
+          date: date,
+        });
+
+        taskItem.renderIn(container);
+      }
+    }
+
+    TimerItem.lastRowEnd = 10; // Устанавливаем последний загруженный индекс
   } catch (err) {
-    // перехватит любую ошибку в блоке try: и в fetch, и в response.json
     const notification = new NotificationMessage(`${err}`, {
       duration: 3000,
       type: "error",
@@ -644,40 +772,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     notification.show();
   }
-
-  const { data: dataItems = {}, total_time: totalTime = "00:00:00" } =
-    data || {};
-
-  totalTimer = new TotalTimer({
-    id: "total_timer",
-    text: totalTime,
-    totalSeconds: TimerItem.timeToSeconds(totalTime),
-  });
-  totalTimer.renderIn(totalTimeBox);
-
-  // if (!dataItems) return;
-  const dates = Object.entries(dataItems);
-  const sortedDates = dates.sort((a, b) => parseDate(a[0]) - parseDate(b[0]));
-
-  for (const [date, namesTimes] of sortedDates) {
-    let time = "";
-    let title = "";
-
-    Object.entries(namesTimes).forEach((item) => {
-      [title, time] = item;
-
-      const taskItem = new TimerItem({
-        title: title,
-        time: time,
-        date: date,
-      });
-
-      taskItem.renderIn(document.querySelector("#work-container"));
-    });
-  }
-
-  TimerItem.collection = new Map(Object.entries(dataItems));
-});
+};
 
 startButton.renderIn(inputBox);
 
@@ -695,10 +790,14 @@ const workingTimer = (e) => {
   if (startButton.title === "Пуск") {
     startButton.update({ title: "Стоп" });
 
+    Button.isClicked = false;
+
     timer.createTimer();
 
     totalTimer.createTimer();
   } else if (startButton.title === "Стоп") {
+    Button.isClicked = true;
+
     const taskItem = new TimerItem({
       title: input.value,
       time: timer.text,

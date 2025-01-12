@@ -5,12 +5,12 @@
 {% block content %}
 
     <form id="login-form">
-        <div class="task-item">
+        <fieldset class="fieldset">
             <h2>Вход в аккаунт</h2>
-            <p>Имя пользователя:<input type="text" class="form-control" id="username" name="username" required></p>
-            <p>Пароль:<input type="password" class="form-control" id="password" name="password" required></p>
+            <label>Имя пользователя:<input type="text" class="form-control" id="username" name="username" required/></label>
+            <label>Пароль:<input type="password" class="form-control" id="password" name="password" required/></label>
         <button type="submit" class="table-button">Войти</button>
-        </div>
+        </fieldset>
     </form>
 
     <script>

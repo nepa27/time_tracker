@@ -149,5 +149,30 @@ function deleteTable(data, event) {
     }
 }
 
+////////////////////////////////////////////////////////////////
 
+const { data: dataItems = {}, total_time: totalTime = "00:00:00" } =
+    data || {};
 
+  // if (!dataItems) return;
+  const dates = Object.entries(dataItems);
+  const sortedDates = dates.sort((a, b) => parseDate(a[0]) - parseDate(b[0]));
+
+  for (const [date, namesTimes] of sortedDates) {
+    let time = "";
+    let title = "";
+
+    Object.entries(namesTimes).forEach((item) => {
+      [title, time] = item;
+
+      const taskItem = new TimerItem({
+        title: title,
+        time: time,
+        date: date,
+      });
+
+      taskItem.renderIn(document.querySelector("#work-container"));
+    });
+  }
+
+  TimerItem.collection = new Map(Object.entries(dataItems));
