@@ -175,10 +175,13 @@ def get_statistics():
 
 
 @jwt_required()
-def api_data(start, end):
+def api_data():
     try:
         verify_jwt_in_request(optional=True)
         now_date = datetime.now().date()
+
+        start = request.args.get('_start', type=int)
+        end = request.args.get('_end', type=int)
 
         data = TimeTrackerModel.query.filter(
             TimeTrackerModel.username == get_jwt_identity()
