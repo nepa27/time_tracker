@@ -632,7 +632,7 @@ function parseDate(dateString) {
 document.addEventListener("DOMContentLoaded", async function () {
   let data = null;
   try {
-    const response = await fetch("/api/data/");
+    const response = await fetch("/api/data");
 
     data = await response.json();
   } catch (err) {
