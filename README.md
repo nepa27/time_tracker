@@ -1,4 +1,4 @@
-# Time tracker
+# Time tracker - таймер учета рабочего времени
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
 [![JavaScript](https://img.shields.io/badge/-JavaScript-464646?style=flat-square&logo=JavaScript)](https://www.javascript.com/)
 [![Flask](https://img.shields.io/badge/-Flask-464646?style=flat-square&logo=Flask)](https://flask.palletsprojects.com/)
@@ -9,7 +9,6 @@
 [![docker](https://img.shields.io/badge/-Docker-464646?style=flat-square&logo=docker)](https://www.docker.com/)
 [![GitHub%20Actions](https://img.shields.io/badge/-GitHub%20Actions-464646?style=flat-square&logo=GitHub%20actions)](https://github.com/features/actions)
 
-Таймер учета рабочего времени
 
 ## Описание
 Добро пожаловать в приложение Time Tracker - ваше универсальное решение для оптимизации работы с рабочим временем!
@@ -21,7 +20,7 @@
 
 ## Основные особенности
 - Возможность отслеживать свои ежедневные задачи в режиме реального времени;
-- Возможность внесения изменений в уже добавленные задачи;
+- Возможность внесения изменений в уже созданные задачи;
 - Отслеживание статистики в удобном графическом виде.
 
 ## Стек использованных технологий
@@ -108,4 +107,4 @@ Press CTRL+C to quit
 
 ## Автор
 + [Александр Непочатых](https://github.com/nepa27)
-+ [Всеволод Могучий](https://github.com/)
++ [Всеволод Могучий](https://github.com/seva123321)
