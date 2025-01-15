@@ -1,6 +1,5 @@
 from config import app, db, logger
-from sources.urls import timer
-from sources.urls import users
+from sources.urls import github_bp, timer,users
 
 
 def create_app():
@@ -9,6 +8,7 @@ def create_app():
         logger.info('Создана БД')
     app.register_blueprint(timer)
     app.register_blueprint(users)
+    app.register_blueprint(github_bp, url_prefix='/login')
     logger.info(f'Зарегистрирован {timer, users}')
 
 
