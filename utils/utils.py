@@ -1,35 +1,42 @@
 from datetime import time, timedelta, datetime
 
+from flask import abort
+
 from constants import TO_HOUR, TO_MINUTE, TO_SEC
+from config import logger
 
 
 def sum_time(*args) -> time:
     """Функция складывает время."""
     total_seconds = 0
-    for arg in args:
-        if isinstance(arg, list):
-            for value in arg:
+    try:
+        for arg in args:
+            if isinstance(arg, list):
+                for value in arg:
+                    total_seconds += int(
+                        timedelta(
+                            hours=value.time.hour,
+                            minutes=value.time.minute,
+                            seconds=value.time.second,
+                        ).total_seconds()
+                    )
+            else:
                 total_seconds += int(
                     timedelta(
-                        hours=value.time.hour,
-                        minutes=value.time.minute,
-                        seconds=value.time.second,
+                        hours=arg.hour, minutes=arg.minute, seconds=arg.second
                     ).total_seconds()
                 )
-        else:
-            total_seconds += int(
-                timedelta(
-                    hours=arg.hour, minutes=arg.minute, seconds=arg.second
-                ).total_seconds()
-            )
 
-    result_time = time(
-        total_seconds // TO_HOUR,
-        (total_seconds % TO_HOUR) // TO_MINUTE,
-        total_seconds % TO_SEC,
-    )
+        result_time = time(
+            total_seconds // TO_HOUR,
+            (total_seconds % TO_HOUR) // TO_MINUTE,
+            total_seconds % TO_SEC,
+        )
 
-    return result_time
+        return result_time
+    except ValueError as e:
+        logger.info(f'Ошибка суммировании общего времени: {args} {e}')
+        abort(500)
 
 
 def data_to_json(data) -> dict:
