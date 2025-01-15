@@ -1,10 +1,10 @@
-from datetime import timedelta, datetime, timezone
 import logging
-from logging.handlers import RotatingFileHandler
 import os
 import sys
+from datetime import timedelta, datetime, timezone
+from logging.handlers import RotatingFileHandler
 
-from flask import Flask, g, jsonify, render_template, redirect, url_for
+from flask import Flask, g, render_template, redirect, url_for
 from flask_jwt_extended import (
     create_access_token,
     get_jwt,
