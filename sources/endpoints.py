@@ -31,23 +31,22 @@ class HomePage(MethodView):
         date_obj = parse_date(data['date'])
 
         now_date = datetime.now().date()
-        values = TimeTrackerModel.query.filter(
+        name_of_work = data['name_of_work']
+        value = TimeTrackerModel.query.filter(
             TimeTrackerModel.date == now_date,
             TimeTrackerModel.username == get_jwt_identity(),
-        )
-        name_of_work = data['name_of_work']
-        for value in values:
-            if value.name_of_work == name_of_work:
-                result_time = sum_time(value.time, time_obj)
-                value.time = result_time
-                db.session.commit()
-                logger.info(
-                    f'Обновлены данные по задаче {name_of_work}.'
-                    f' Время: {result_time}'
-                )
+            TimeTrackerModel.name_of_work == name_of_work,
+        ).first()
 
-                return {'message': 'Item from BD has UPDATE'}, 204
+        if value:
+            value.time = time_obj
+            db.session.commit()
+            logger.info(
+                f'Обновлены данные по задаче {name_of_work}.'
+                f' Время: {time_obj}'
+            )
 
+            return {'message': 'Item from BD has UPDATE'}, 204
         work = TimeTrackerModel(
             name_of_work=name_of_work,
             date=date_obj,
