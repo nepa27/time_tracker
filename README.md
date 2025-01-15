@@ -107,4 +107,4 @@ Press CTRL+C to quit
 
 ## Автор
 + [Александр Непочатых](https://github.com/nepa27)
-+ [Всеволод Могучий](https://github.com/)
++ [Всеволод Могучий](https://github.com/seva123321)
