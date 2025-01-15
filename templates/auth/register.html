@@ -26,6 +26,13 @@
             {% endif %}
         </div>
     </form>
+    <form action="{{ url_for('users.login_github') }}">
+      <button type="submit" >
+          <img src="{{ url_for('static', filename='img/github-logo.svg') }}" class="mr-4" width="30" alt="">
+          Войти через GitHub
+      </button>
+    </form>
+
 {% if 'login' in request.url %}
   <script>
   document.getElementById('login-form').addEventListener('submit', function(event) {
