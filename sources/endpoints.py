@@ -16,12 +16,16 @@ from schemas import TimeTrackerSchema
 from utils.utils import data_to_statistic, data_to_json, parse_date, sum_time
 
 
-class HomePage(MethodView):
+class ReadCreateWorksView(MethodView):
+    """Представление для просмотра и добавления новых дел."""
+
     def get(self):
+        """Представление для просмотра дел."""
         return render_template('index.html')
 
     @jwt_required()
     def post(self):
+        """Представление для добавления новых дел."""
         try:
             data = TimeTrackerSchema(**request.get_json()).dict()
         except ValidationError as err:
@@ -60,9 +64,12 @@ class HomePage(MethodView):
         return {'message': 'Data add in BD'}, 201
 
 
-class EditData(MethodView):
+class EditWorksView(MethodView):
+    """Представление для редактирования дел."""
+
     @jwt_required()
     def get(self, name_of_work, date):
+        """Представление для отображения формы редактирования дела."""
         try:
             date = parse_date(date)
         except ValueError as e:
@@ -82,6 +89,7 @@ class EditData(MethodView):
 
     @jwt_required()
     def post(self, name_of_work, date):
+        """Представление для редактирования дела."""
         try:
             form_data = TimeTrackerSchema(**request.form.to_dict()).dict()
         except ValidationError as err:
@@ -150,7 +158,8 @@ class EditData(MethodView):
 
 
 @jwt_required()
-def delete_item(date, name_of_work):
+def delete_works(date, name_of_work):
+    """Представление для удаления дела."""
     date = parse_date(date)
     if TimeTrackerModel.query.filter(
         TimeTrackerModel.name_of_work == name_of_work,
@@ -170,11 +179,13 @@ def delete_item(date, name_of_work):
 
 @jwt_required()
 def get_statistics():
+    """Представление для отображения страницы статистики."""
     return render_template('statistics.html')
 
 
 @jwt_required()
 def api_data():
+    """Возвращает набора данных обо всех делах из БД."""
     try:
         verify_jwt_in_request(optional=True)
         now_date = datetime.now().date()
@@ -208,6 +219,7 @@ def api_data():
 
 @jwt_required()
 def api_statistics():
+    """Возвращает набора данных из БД для статистики."""
     try:
         date_from = request.args.get('from', type=str)
         date_to = request.args.get('to', type=str)

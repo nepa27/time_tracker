@@ -4,9 +4,9 @@ from flask_smorest import Blueprint
 from flask_dance.contrib.github import make_github_blueprint
 
 from sources.endpoints import (
-    HomePage,
+    ReadCreateWorksView,
     EditData,
-    delete_item,
+    delete_works,
     get_statistics,
     api_data,
     api_statistics,
@@ -28,7 +28,7 @@ users = Blueprint('users', __name__, description='Operations with users')
 
 timer.add_url_rule(
     '/',
-    view_func=HomePage.as_view('home')
+    view_func=ReadCreateWorksView.as_view('home')
 )
 timer.add_url_rule(
     '/edit/<date>/<name_of_work>',
@@ -36,7 +36,7 @@ timer.add_url_rule(
 )
 timer.add_url_rule(
     '/delete/<date>/<name_of_work>',
-    view_func=delete_item,
+    view_func=delete_works,
     methods=('DELETE',),
     endpoint='delete',
 )

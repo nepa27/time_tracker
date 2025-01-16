@@ -23,11 +23,19 @@ from models import BlocklistJwt, UserModel
 
 
 class UserRegister(MethodView):
+    """Представление для регистрации пользователей."""
+
+    def get(self):
+        """Представление для отображения формы регистрации."""
+        form = AuthForm()
+        return render_template('auth/register.html', form=form)
+
     def post(self):
+        """ Создает нового пользователя."""
         form = AuthForm()
         if form.validate_on_submit():
             if UserModel.query.filter(
-                UserModel.username == form.username.data
+                    UserModel.username == form.username.data
             ).first():
                 flash(
                     'Пользователь с таким именем уже существует!',
@@ -57,20 +65,24 @@ class UserRegister(MethodView):
             )
         return redirect(url_for('users.register'))
 
+
+class UserLogin(MethodView):
+    """Представление для аутентификации пользователей."""
+
     def get(self):
+        """Представление для отображения формы аутентификации."""
         form = AuthForm()
         return render_template('auth/register.html', form=form)
 
-
-class UserLogin(MethodView):
     def post(self):
+        """Аутентифицирует пользователя и выдает токен аутентификации."""
         form = AuthForm()
         if form.validate_on_submit():
             user = UserModel.query.filter(
                 UserModel.username == form.username.data
             ).first()
             if not user or not check_password_hash(
-                user.password, form.password.data
+                    user.password, form.password.data
             ):
                 return (
                     jsonify(
@@ -96,14 +108,13 @@ class UserLogin(MethodView):
             401,
         )
 
-    def get(self):
-        form = AuthForm()
-        return render_template('auth/register.html', form=form)
-
 
 class UserLogout(MethodView):
+    """Представление для выхода пользователей из системы."""
+
     @jwt_required()
     def get(self):
+        """Добавляет токен пользователя в BlackList."""
         resp = jsonify({'message': 'logout successful'})
         try:
             user = get_jwt_identity()
@@ -120,6 +131,7 @@ class UserLogout(MethodView):
 
 
 def login_github():
+    """Представление для аутентификации пользователей через GitHub."""
     if not github.authorized:
         return redirect(url_for('github.login'))
     res = github.get('/user')

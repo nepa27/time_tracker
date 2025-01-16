@@ -1,3 +1,4 @@
+"""Модуль, содержащий настройки конфигурации приложения Flask."""
 import logging
 import os
 import sys
@@ -70,6 +71,7 @@ jwt = JWTManager(app)
 
 @app.before_request
 def load_logged_in_user():
+    """Функция для загрузки авторизованного пользователя перед каждым запросом."""
     try:
         verify_jwt_in_request(optional=True)
         user_identity = get_jwt_identity()
@@ -84,11 +86,13 @@ def load_logged_in_user():
 
 @app.context_processor
 def inject_user():
+    """Контекстный процессор для добавления текущего пользователя в шаблон контекста."""
     return dict(user=g.user)
 
 
 @app.after_request
 def refresh_expiring_jwts(response):
+    """Функция для обновления токена доступа перед истечением его времени жизни."""
     try:
         if g.user:
             exp_timestamp = get_jwt()['exp']
@@ -109,51 +113,61 @@ def refresh_expiring_jwts(response):
 
 @app.errorhandler(400)
 def page_not_found(error):
+    """Обработчик ошибки 400."""
     return render_template('errors/400.html'), 400
 
 
 @app.errorhandler(403)
-def page_not_found(error):
+def dont_have_permission(error):
+    """Обработчик ошибки 403."""
     return render_template('errors/403.html'), 403
 
 
 @app.errorhandler(404)
-def page_not_found(error):
+def bad_request(error):
+    """Обработчик ошибки 404."""
     return render_template('errors/404.html'), 404
 
 
 @app.errorhandler(405)
-def page_not_found(error):
+def method_not_allowed(error):
+    """Обработчик ошибки 405."""
     return render_template('errors/405.html'), 405
 
 
 @app.errorhandler(500)
-def page_not_found(error):
+def internal_error_server(error):
+    """Обработчик ошибки 500."""
     return render_template('errors/500.html'), 500
 
 
 @jwt.expired_token_loader
 def expired_token_loader(jwt_header, jwt_payload):
+    """Обработчик истечения жизни токена JWT."""
     return redirect(url_for('timer.home'))
 
 
 @jwt.unauthorized_loader
 def unauthorized_loader_callback(error):
+    """Обработчик недопустимого токена JWT."""
     return redirect(url_for('timer.home'))
 
 
 @jwt.invalid_token_loader
 def invalid_token_callback(error):
+    """Обработчик недействительного токена JWT."""
     return redirect(url_for('timer.home'))
 
 
 @jwt.revoked_token_loader
 def revoked_token_loader(header_jwt, data_jwt):
+    """Обработчик аннулированного токена JWT."""
     return redirect(url_for('timer.home'))
 
 
 @jwt.token_in_blocklist_loader
 def check_if_token_in_blocklist(jwt_header, jwt_payload: dict) -> bool:
+    """Проверка токена JWT на наличие в блокируемом списке."""
     jti = jwt_payload['jti']
     token = db.session.query(BlocklistJwt.id).filter_by(jti=jti).scalar()
     return token is not None
