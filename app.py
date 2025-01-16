@@ -10,8 +10,4 @@ def create_app():
     app.register_blueprint(users)
     app.register_blueprint(github_bp, url_prefix='/login')
     logger.info(f'Зарегистрирован {timer, users}')
-
-
-if __name__ == '__main__':
-    create_app()
-    app.run(port=5001)
+    return app
