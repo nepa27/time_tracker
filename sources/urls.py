@@ -5,7 +5,7 @@ from flask_dance.contrib.github import make_github_blueprint
 
 from sources.endpoints import (
     ReadCreateWorksView,
-    EditData,
+    EditWorksView,
     delete_works,
     get_statistics,
     api_data,
@@ -32,7 +32,7 @@ timer.add_url_rule(
 )
 timer.add_url_rule(
     '/edit/<date>/<name_of_work>',
-    view_func=EditData.as_view('edit')
+    view_func=EditWorksView.as_view('edit')
 )
 timer.add_url_rule(
     '/delete/<date>/<name_of_work>',
