@@ -69,7 +69,7 @@ class Input extends Component {
   createElementTemplate() {
     return `
       <input class ="input" type="text" id="taskName" placeholder="Название дела" list="taskNames"required
-          minlength="3"/>
+          minlength="3" maxlength="25"/>
         `;
   }
 
@@ -131,6 +131,12 @@ class Input extends Component {
           this.input,
           "Название дела слишком короткое - минимум 3 символа"
         );
+      } else if (this.input.value.length === 25) {
+        this.setError(
+          this.input,
+          "Максимальная длина названия дела- 25 символов"
+        );
+        this.input.value = this.input.value.substring(0, 25);
       } else {
         this.setSuccess(this.input);
       }
@@ -285,34 +291,33 @@ class TimerItem extends Component {
   }
 
   handleProductsContainerScroll = async (e) => {
-    const windowBottom =
-      document.documentElement.getBoundingClientRect().bottom;
     const windowHeight = document.documentElement.clientHeight;
-
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollPosition = window.scrollY + windowHeight;
+  
     // Проверяем, нужно ли загружать новые данные
-    if (windowBottom < windowHeight * 1.8 && !TimerItem.isLoading) {
+    if (scrollPosition >= documentHeight * 0.7 && !TimerItem.isLoading) {
       TimerItem.isLoading = true; // Устанавливаем флаг загрузки
       this.renderLoadingLine();
-
+  
       // Обновляем начальный и конечный индексы
       this.rowStart = TimerItem.lastRowEnd;
       this.rowEnd = this.rowStart + 10;
-
+  
       const data = await fetchJson(this.createUrl());
       const { data: dataItems = {} } = data || {};
-
+  
       const items = Object.values(dataItems).reduce((acc, cur) => {
         return (acc += Object.values(cur).length);
       }, 0);
-
+  
       if (items < this.stepFetchData) return;
-      // if (!Object.keys(dataItems).length) return;
-
+  
       const dates = Object.entries(dataItems);
       const sortedDates = dates.sort(
         (a, b) => parseDate(b[0]) - parseDate(a[0])
       );
-
+  
       for (const [date, namesTimes] of sortedDates) {
         for (const [title, time] of Object.entries(namesTimes)) {
           const taskItem = new TimerItem({
@@ -320,11 +325,11 @@ class TimerItem extends Component {
             time: time,
             date: date,
           });
-
+  
           taskItem.renderIn(this.container);
         }
       }
-
+  
       TimerItem.lastRowEnd = this.rowEnd; // Обновляем последний загруженный конец диапазона
       TimerItem.isLoading = false; // Сбрасываем флаг загрузки
     }
