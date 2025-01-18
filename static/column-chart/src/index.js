@@ -246,27 +246,27 @@ export default class ColumnChart {
   }
 }
 
-const from = new Date();
-from.setMonth(from.getMonth() - 1);
-const to = new Date();
+// const from = new Date();
+// from.setMonth(from.getMonth() - 1);
+// const to = new Date();
 
-const tasksChart = new ColumnChart({
-  url: "/api/statistics",
-  range: {
-    from,
-    to,
-  },
-  label: "дел",
-  // link: "#",
-});
+// const tasksChart = new ColumnChart({
+//   url: "/api/statistics",
+//   range: {
+//     from,
+//     to,
+//   },
+//   label: "дел",
+//   // link: "#",
+// });
 
-const tooltip = new Tooltip();
-tooltip.initialize();
+// const tooltip = new Tooltip();
+// tooltip.initialize();
 
-const contentNode = document.querySelector("#content");
-const tasksNode = document.querySelector("[data-element='tasksChart']");
+// const contentNode = document.querySelector("#content");
+// const tasksNode = document.querySelector("[data-element='tasksChart']");
 
-tasksNode.append(tasksChart.element);
+// tasksNode.append(tasksChart.element);
 
 // document.addEventListener('DOMContentLoaded', function() {
 //     fetch('/api/statistics')
