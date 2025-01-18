@@ -55,10 +55,110 @@ class Component {
   //   }
 }
 
-class InputBox {
-  constructor(inputElement) {
+class Input extends Component {
+  constructor({ taskNames } = {}) {
+    super();
     //   this.inputElement = inputElement;
     //   this.inputElement.addEventListener("input", this.onInputChange.bind(this));
+    this.taskNames = taskNames;
+    this.element = this.createElement(this.createElementWrapperTemplate());
+    this.input = this.element.querySelector(".input");
+    this.createEventListener();
+  }
+
+  createElementTemplate() {
+    return `
+      <input class ="input" type="text" id="taskName" placeholder="Название дела" list="taskNames"required
+          minlength="3"/>
+        `;
+  }
+
+  createElementWrapperTemplate() {
+    return `
+          <div class="task-input__inner">
+                ${this.createElementTemplate()}
+                <div class="block-error"></div>
+                ${this.createDatalist()}
+          </div>;
+          `;
+  }
+
+  createDatalist() {
+    const optionsList = this.taskNames
+      .map((task) => {
+        return `<option value="${task}"></option>`;
+      })
+      .join("");
+
+    return `
+            <datalist id="taskNames">
+            ${optionsList}
+            </datalist>
+            `;
+  }
+
+  handleInputValue = (e) => {
+    this.inputCheck(e);
+  };
+
+  createEventListener() {
+    this.input.addEventListener("input", this.handleInputValue);
+  }
+
+  removeEventListener() {
+    this.input.removeEventListener("input", this.handleInputValue);
+  }
+
+  setError(element, msg) {
+    element.style.border = "1px solid rgb(218, 0, 0)";
+    element.nextElementSibling.classList.add("error");
+    element.nextElementSibling.textContent = msg;
+  }
+
+  setSuccess(element) {
+    element.nextElementSibling.textContent = "";
+    element.style.border = "";
+  }
+
+  inputCheck(e) {
+    if (this.input.value === "") {
+      this.setError(this.input, "Поле обязательно!");
+      e.preventDefault();
+    } else {
+      if (this.input.value.length < 3) {
+        e.preventDefault();
+        this.setError(
+          this.input,
+          "Название дела слишком короткое - минимум 3 символа"
+        );
+      } else {
+        this.setSuccess(this.input);
+      }
+    }
+  }
+
+  debounce = (fn, debounceTime) => {
+    let isCalled = false;
+    let idTimer;
+
+    return function () {
+      if (isCalled) {
+        clearTimeout(idTimer);
+        isCalled = false;
+      }
+
+      if (!isCalled) {
+        idTimer = setTimeout(() => {
+          return fn.apply(this, arguments);
+        }, debounceTime);
+
+        isCalled = true;
+      }
+    };
+  };
+
+  renderIn(container = this.container) {
+    container.prepend(this.element);
   }
 }
 
@@ -94,12 +194,6 @@ class Button extends Component {
       this.element.removeEventListener(eventType, callback);
     }
   }
-
-  // createEventListenersClick(event) {
-  //   // console.log(event);
-
-  //   this.element.addEventListener("click", event);
-  // }
 
   update({ title = "" }) {
     this.title = title;
@@ -620,45 +714,52 @@ class ReloadPage {}
 //================================================================
 // const totalTimeBox = document.querySelector(".total-time-container");
 
-const input = document.querySelector("#taskName");
+// const input = document.querySelector("#taskName");
+// let input = new Input();
+let input;
+
 // const workContainer = document.getElementById("work-container");
 const timer = new Timer({ id: "timer" });
 let totalTimer = null;
 const inputBox = document.querySelector(".task-input");
+// input.renderIn(inputBox);
+
 const totalTimeBox = document.querySelector(".total-time-container");
 const startButton = new Button({ id: "startButton", title: "Пуск" });
 
 //===============================================================
 
-function setError(element, msg) {
-  element.style.border = "1px solid rgb(218, 0, 0)";
-  element.nextElementSibling.classList.add("error");
-  element.nextElementSibling.textContent = msg;
-}
+// function setError(element, msg) {
+//   element.style.border = "1px solid rgb(218, 0, 0)";
+//   element.nextElementSibling.classList.add("error");
+//   element.nextElementSibling.textContent = msg;
+// }
 
-function setSuccess(element) {
-  element.nextElementSibling.textContent = "";
-  input.style = "";
-}
+// function setSuccess(element) {
+//   element.nextElementSibling.textContent = "";
+//   element.style.border = ""; // Сброс стиля для элемента
+// }
 
-function inputCheck(e) {
-  if (input.value === "") {
-    setError(input, "Поле обязательно!");
-    e.preventDefault();
-  } else {
-    if (input.value.length < 3) {
-      e.preventDefault();
-      setError(input, "Название дела слишком короткое - минимум 3 символа");
-    } else {
-      setSuccess(input);
-    }
-  }
-}
+// function inputCheck(e) {
 
-input.addEventListener("input", (e) => {
-  inputCheck(e);
-});
+//   if (this.value === "") {
+//     setError(this, "Поле обязательно!");
+//     e.preventDefault();
+//   } else {
+//     if (this.value.length < 3) {
+//       e.preventDefault();
+//       setError(this, "Название дела слишком короткое - минимум 3 символа");
+//     } else {
+//       setSuccess(this);
+//     }
+//   }
+// }
 
+// input.addEventListener("input", function(e) {
+
+//   inputCheck.call(this, e);
+// });
+//
 //================================================================
 
 function parseDate(dateString) {
@@ -733,8 +834,16 @@ TimerItem.prototype.loadInitialData = async function () {
     const response = await fetch("/api/data/?_start=0&_end=10");
     data = await response.json();
 
-    const { total_time: totalTime = "00:00:00", data: dataItems = {} } =
-      data || {};
+    document.createComment;
+
+    const {
+      total_time: totalTime = "00:00:00",
+      data: dataItems = {},
+      task_names: taskNames,
+    } = data || {};
+
+    input = new Input({ taskNames });
+    input.renderIn(inputBox);
 
     // Создаем экземпляр TotalTimer только один раз
     totalTimer = new TotalTimer({
@@ -742,6 +851,7 @@ TimerItem.prototype.loadInitialData = async function () {
       text: totalTime,
       totalSeconds: TimerItem.timeToSeconds(totalTime),
     });
+
     totalTimer.renderIn(totalTimeBox); // Отображаем TotalTimer
 
     // Обработка полученных данных
