@@ -136,12 +136,12 @@ export default class ColumnChart {
 
   getHightColumn(value, maxValue) {
     const scale = this.chartHeight / maxValue;
-
-    if (value !== 0 && Math.floor(value * scale) === 0) {
-      return 1; //(hightColumn = 1);
-    } else {
-      return Math.floor(value * scale);
-    }
+    return Math.floor(value * scale);
+    // if (value !== 0 && Math.floor(value * scale) === 0) {
+    //   return 1; //(hightColumn = 1);
+    // } else {
+      // return Math.floor(value * scale);
+    // }
   }
 
   createTooltip(key, value) {

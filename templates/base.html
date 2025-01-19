@@ -23,7 +23,7 @@
       <div class="logo">
         <a href="{{ url_for('timer.home') }}">Учет рабочего времени</a>
       </div>
-      <div class="nav-links">
+      <nav class="nav-links">
         <a href="{{ url_for('timer.home') }}">Главная</a>
         {% if user %}
         <a href="{{ url_for('timer.statistics') }}">Статистика</a>
@@ -33,7 +33,7 @@
         <a href="{{ url_for('users.login') }}">Войти</a>
         <a href="{{ url_for('users.register') }}">Регистрация</a>
         {% endif %}
-      </div>
+      </nav>
     </div>
     {% block content %} {% endblock %}
   </body>

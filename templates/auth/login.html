@@ -1,46 +1,106 @@
-{% extends 'base.html' %}
+{% extends 'base.html' %} {% block title %}Вход{% endblock %} {% block content
+%}
 
-{% block title %}Вход{% endblock %}
+<form id="login-form">
+  <fieldset class="fieldset">
+    <h2>Вход в аккаунт</h2>
+    <label>
+      Имя пользователя:<input
+        type="text"
+        class="form-control"
+        autocomplete="on"
+        id="username"
+        name="username"
+        required
+      />
+    </label>
+    <label>
+      Пароль:<input
+        type="password"
+        class="form-control"
+        autocomplete="on"
+        id="password"
+        name="password"
+        required
+      />
+    </label>
+    <button type="submit" class="table-button">Войти</button>
+  </fieldset>
+</form>
 
-{% block content %}
+<script type="module">
+    import NotificationMessage from "../../static/notification/src/index.js";
 
-    <form id="login-form">
-        <fieldset class="fieldset">
-            <h2>Вход в аккаунт</h2>
-            <label>Имя пользователя:<input type="text" class="form-control" id="username" name="username" required/></label>
-            <label>Пароль:<input type="password" class="form-control" id="password" name="password" required/></label>
-        <button type="submit" class="table-button">Войти</button>
-        </fieldset>
-    </form>
 
-    <script>
-        document.getElementById('login-form').addEventListener('submit', function(event) {
-            event.preventDefault();
 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+          document.getElementById('login-form').addEventListener('submit', function(event) {
+              event.preventDefault();
 
-            fetch('{{ url_for('users.login') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ username: username, password: password })
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.href = '/';
-                } else if (response.status === 400) {
-                    alert('Неверное имя пользователя или пароль!');
-                } else {
-                    alert('Неудачная регистрация!');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred');
-});
-        });
-    </script>
-{% endblock %}
-{% endblock %}
+              const username = document.getElementById('username').value;
+              const password = document.getElementById('password').value;
+
+              fetch('{{ url_for('users.login') }}', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ username: username, password: password })
+              })
+              .then(response => {
+                  if (response.ok) {
+                      window.location.href = '/';
+                  } else if (response.status === 400) {
+
+                      const notification = new NotificationMessage(
+                        "Неверное имя пользователя или пароль!",
+                        {
+                          duration: 3000,
+                          type: "error",
+                        }
+                      );
+                      notification.show();
+                  } else {
+
+                      const notification = new NotificationMessage(
+                        "Неудачная регистрация!",
+                        {
+                          duration: 3000,
+                          type: "error",
+                        }
+                      );
+                      notification.show();
+                  }
+              })
+              .catch(error => {
+                  console.error('Error:', error);
+                  const notification = new NotificationMessage(
+                        "An error occurred",
+                        {
+                          duration: 3000,
+                          type: "error",
+                        }
+                      );
+                      notification.show();
+
+  });
+          });
+
+        function setError(element, msg) {
+
+            element.style.border = "1px solid rgb(218, 0, 0)";
+            element.nextElementSibling.classList.add("error");
+        }
+
+        // function setSuccess(element) {
+        //     element.nextElementSibling.textContent = "";
+        //     input.style = "";
+        // }
+
+        // function inputCheck(e) {
+        //     if (input.value === "") {
+        //         setError(input, "Поле обязательно!");
+        //         e.preventDefault();
+        //     }
+        // }
+</script>
+{% endblock %} {% endblock %}
