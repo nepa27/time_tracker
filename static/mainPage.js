@@ -1,10 +1,9 @@
-//  <script type="module">
-//   import TimerItem from "../static/scriptTest.js"; */}
+
 import NotificationMessage from "./notification/src/index.js";
 import ConfirmMessage from "./confirm/src/index.js";
-import fetchJson from "./fetch-json.js"
+import fetchJson from "./fetch-json.js";
 
-const BACKEND_URL = "http://127.0.0.1:5000/";
+const BACKEND_URL = "http://127.0.0.1:5001/";
 
 class Component {
   static TIMEOUT = 1_000;
@@ -13,12 +12,10 @@ class Component {
     this.title = title;
     this.element = this.createElement(this.createElementTemplate());
 
-    // this.createEventListeners();
-    // this.createTimer();
   }
 
   createEventListeners(func) {
-    this.element.addEventListener("click", func); //!!!
+    this.element.addEventListener("click", func); 
   }
 
   createElement(template) {
@@ -43,26 +40,130 @@ class Component {
   }
 
   destroyEventListeners() {
-    this.element.removeEventListener("click", this.func); //!!!
+    this.element.removeEventListener("click", this.func); 
   }
 
   destroyTimer() {
     clearInterval(this.intervalId);
   }
 
-  //   update({ title }) {
-  //     this.title = title;
-  //   }
+
 }
 
-class InputBox {
-  constructor(inputElement) {
-    //   this.inputElement = inputElement;
-    //   this.inputElement.addEventListener("input", this.onInputChange.bind(this));
+class Input extends Component {
+  constructor({ taskNames } = {}) {
+    super();
+    this.taskNames = taskNames;
+    this.element = this.createElement(this.createElementWrapperTemplate());
+    this.input = this.element.querySelector(".input");
+    this.createEventListener();
+  }
+
+  createElementTemplate() {
+    return `
+      <input class ="input" type="text" id="taskName" placeholder="Название дела" list="taskNames"required
+          minlength="3" maxlength="25"/>
+        `;
+  }
+
+  createElementWrapperTemplate() {
+    return `
+          <div class="task-input__inner">
+                ${this.createElementTemplate()}
+                <div class="block-error"></div>
+                ${this.createDatalist()}
+          </div>;
+          `;
+  }
+
+  createDatalist() {
+    const optionsList = this.taskNames
+      .map((task) => {
+        return `<option value="${task}"></option>`;
+      })
+      .join("");
+
+    return `
+            <datalist id="taskNames">
+            ${optionsList}
+            </datalist>
+            `;
+  }
+
+  handleInputValue = (e) => {
+    this.inputCheck(e);
+  };
+
+  createEventListener() {
+    this.input.addEventListener("input", this.handleInputValue);
+  }
+
+  removeEventListener() {
+    this.input.removeEventListener("input", this.handleInputValue);
+  }
+
+  setError(element, msg) {
+    element.style.border = "1px solid rgb(218, 0, 0)";
+    element.nextElementSibling.classList.add("error");
+    element.nextElementSibling.textContent = msg;
+  }
+
+  setSuccess(element) {
+    element.nextElementSibling.textContent = "";
+    element.style.border = "";
+  }
+
+  inputCheck(e) {
+    if (this.input.value === "") {
+      this.setError(this.input, "Поле обязательно!");
+      e.preventDefault();
+    } else {
+      if (this.input.value.length < 3) {
+        e.preventDefault();
+        this.setError(
+          this.input,
+          "Название дела слишком короткое - минимум 3 символа"
+        );
+      } else if (this.input.value.length === 25) {
+        this.setError(
+          this.input,
+          "Максимальная длина названия дела- 25 символов"
+        );
+        this.input.value = this.input.value.substring(0, 25);
+      } else {
+        this.setSuccess(this.input);
+      }
+    }
+  }
+
+  debounce = (fn, debounceTime) => {
+    let isCalled = false;
+    let idTimer;
+
+    return function () {
+      if (isCalled) {
+        clearTimeout(idTimer);
+        isCalled = false;
+      }
+
+      if (!isCalled) {
+        idTimer = setTimeout(() => {
+          return fn.apply(this, arguments);
+        }, debounceTime);
+
+        isCalled = true;
+      }
+    };
+  };
+
+  renderIn(container = this.container) {
+    container.prepend(this.element);
   }
 }
 
 class Button extends Component {
+  static isClicked = false;
+
   constructor({ id = "", title = "" }) {
     super();
     this.id = id;
@@ -93,12 +194,6 @@ class Button extends Component {
     }
   }
 
-  // createEventListenersClick(event) {
-  //   // console.log(event);
-
-  //   this.element.addEventListener("click", event);
-  // }
-
   update({ title = "" }) {
     this.title = title;
     this.element.textContent = title;
@@ -107,6 +202,8 @@ class Button extends Component {
 
 class TimerItem extends Component {
   static collection = new Map();
+  static isLoading = false; // Флаг загрузки для всех экземпляров
+  static lastRowEnd = 0; // Хранит последний загруженный конец диапазона
 
   constructor({ title = "", time = "00:00:00", date = null }) {
     super();
@@ -114,14 +211,12 @@ class TimerItem extends Component {
     this.time = time;
     this.date = date || this.formattedDate();
 
-    this.rowStart = 0;
-    this.rowEnd = 20;
-    this.isLoading = false;
-    this.container = document.getElementById('work-container')
+    this.stepFetchData = 10;
+    this.rowStart = 0; // Начальный индекс
+    this.rowEnd = this.rowStart + this.stepFetchData; // Конечный индекс
+    this.container = document.getElementById("work-container");
 
-    // this.createEventListeners();  // !!!!!!!!!!!!!!!!
-
-    // this.element = super.createContainerTemplate(this.createElement(this.createTemplate()));
+    this.createEventListeners();
     this.element = this.createElement(this.createContainerTemplate());
   }
 
@@ -148,7 +243,6 @@ class TimerItem extends Component {
 
   createUrl() {
     const url = new URL("/api/data", BACKEND_URL);
-    // const url = new URL("/api/data/");
     // url.searchParams.append("_order", `${this.order ?? "asc"}`);
     url.searchParams.append("_start", `${this.rowStart}`);
     url.searchParams.append("_end", `${this.rowEnd}`);
@@ -188,49 +282,50 @@ class TimerItem extends Component {
     window.addEventListener("scroll", this.handleProductsContainerScroll);
   }
 
-  handleProductsContainerScroll = async(e) => {
-    const windowBottom =
-      document.documentElement.getBoundingClientRect().bottom;
+  handleProductsContainerScroll = async (e) => {
     const windowHeight = document.documentElement.clientHeight;
-
-    if (windowBottom < windowHeight * 1.8 && !this.isLoading) {
-      this.isLoading = true;
-      // console.log(windowBottom);
-      // console.log(windowHeight);
-      
-
-      this.rowStart = this.rowEnd;
-      this.rowEnd += 20;
-
-      await fetchJson(this.createUrl()).finally(() => {
-        this.isLoading = false;
-
-        // this.container.insertAdjacentHTML(
-        //   "beforeend",
-        //   this.createTableBodyTemplate()
-        // );
-        // this.element.renderIn(this.container) 
-        this.renderIn(this.container) 
-      });
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollPosition = window.scrollY + windowHeight;
+  
+    // Проверяем, нужно ли загружать новые данные
+    if (scrollPosition >= documentHeight * 0.7 && !TimerItem.isLoading) {
+      TimerItem.isLoading = true; // Устанавливаем флаг загрузки
+      this.renderLoadingLine();
+  
+      // Обновляем начальный и конечный индексы
+      this.rowStart = TimerItem.lastRowEnd;
+      this.rowEnd = this.rowStart + 10;
+  
+      const data = await fetchJson(this.createUrl());
+      const { data: dataItems = {} } = data || {};
+  
+      const items = Object.values(dataItems).reduce((acc, cur) => {
+        return (acc += Object.values(cur).length);
+      }, 0);
+  
+      if (items < this.stepFetchData) return;
+  
+      const dates = Object.entries(dataItems);
+      const sortedDates = dates.sort(
+        (a, b) => parseDate(b[0]) - parseDate(a[0])
+      );
+  
+      for (const [date, namesTimes] of sortedDates) {
+        for (const [title, time] of Object.entries(namesTimes)) {
+          const taskItem = new TimerItem({
+            title: title,
+            time: time,
+            date: date,
+          });
+  
+          taskItem.renderIn(this.container);
+        }
+      }
+  
+      TimerItem.lastRowEnd = this.rowEnd; // Обновляем последний загруженный конец диапазона
+      TimerItem.isLoading = false; // Сбрасываем флаг загрузки
     }
   };
-
-  // async fetchData() {
-  //   try {
-  //     this.renderLoadingLine();
-  //     const data = await fetchJson(this.createUrl());
-
-  //     // if (!this.data.length) {
-  //     //   this.messageError();
-  //     //   return;
-  //     // }
-
-  //     console.log(data);
-      
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // }
 
   renderLoadingLine() {
     this.container.insertAdjacentHTML(
@@ -240,21 +335,6 @@ class TimerItem extends Component {
       `
     );
   }
-
-  // selectSubElements() {
-  //   this.element.querySelectorAll("[data-element]").forEach((element) => {
-  //     this.subElements[element.dataset.element] = element;
-  //   });
-  // }
-
-  // removeTimeFromTotalTimer() {
-  //     const totalTimer = document.querySelector("#totalTimer"); // replace 'totalTimer' with the id of your total timer element
-  //     if (totalTimer) {
-  //         const totalSecondsToRemove = TimerItem.timeToSeconds(this.time);
-  //         totalTimer.totalSeconds -= totalSecondsToRemove;
-  //         totalTimer.rerenderTotalTime();
-  //     }
-  // }
 
   formattedDate() {
     const now = new Date();
@@ -303,7 +383,6 @@ class TimerItem extends Component {
     const isExistingDate = TimerItem.collection.has(this.date);
 
     if (isExistingDate && existingItem) {
-      //+
       const newTime = this.addTimeStrings(existingItem, this.time);
 
       this.time = newTime;
@@ -336,10 +415,14 @@ class TimerItem extends Component {
       this.updateCollection();
 
       this.element = this.createElement(this.createContainerTemplate());
-      // super.renderIn(container);
-      container.prepend(this.element);
+
+      if (Button.isClicked) {
+        container.prepend(this.element);
+      } else {
+        container.append(this.element);
+      }
+
       this.attachEventListeners();
-      // this.element = this.createElement(this.createElementTemplate)
     }
   }
 
@@ -415,7 +498,6 @@ class TotalTimer extends Component {
   constructor({
     id = "",
     text = "00:00:00",
-    // seconds = 0,
     totalSeconds = 0,
   } = {}) {
     super();
@@ -425,7 +507,6 @@ class TotalTimer extends Component {
 
     this.element = super.createElement(this.createElementTemplate());
 
-    // this.startUpdateInterval();
   }
 
   createElementTemplate() {
@@ -449,8 +530,6 @@ class TotalTimer extends Component {
   resetTotalTimer = () => {
     TotalTimer.totalSeconds = 0;
     this.text = "00:00:00";
-    // console.log( this.element);
-
     this.element.innerHTML = this.text;
   };
 
@@ -465,10 +544,8 @@ class TotalTimer extends Component {
 
   destroyTotalTimer() {
     super.destroyTimer();
-    // this.totalSeconds += seconds;
-    // this.updateTotalTime()
+   
   }
-  // Rest of your code
 }
 
 class Timer extends TotalTimer {
@@ -477,20 +554,13 @@ class Timer extends TotalTimer {
     this.id = id;
     this.text = text;
     this.seconds = seconds;
-
-    // this.totalSeconds = totalSeconds
-    // console.log(this.totalSeconds);
-
+   
     this.resetTotalTimer();
-
     this.element = this.createElement(this.createElementTemplate());
-    // this.startUpdateInterval();
   }
 
   createTimer() {
-    //  !!!!!!!!!!!
     const timeStart = this.getCurrentTime();
-    // console.log('timeStart =', timeStart);
 
     const timeStartTimestamp = this.getTimestampWithTime(timeStart);
 
@@ -498,10 +568,7 @@ class Timer extends TotalTimer {
     const timeEndTimestamp = this.getTimestampWithTime(timeEnd);
 
     this.differenceTime = timeEndTimestamp - timeStartTimestamp;
-    console.log(this.differenceTime);
-    // console.log('timeStartTimestamp',timeStartTimestamp);
-    // console.log('timeEndTimestamp',timeEndTimestamp);
-
+    
     this.intervalId = setInterval(
       () => this.rerenderTimer(),
       Component.TIMEOUT //1_000
@@ -535,17 +602,13 @@ class Timer extends TotalTimer {
 
   rerenderTimer() {
     this.seconds++;
-    // this.updateText();
     if (this.differenceTime === this.seconds) {
-      // document.querySelector("[data-element='btn-start-stop']").click();
       const input = document.querySelector("#taskName");
       const taskName = input.value;
-
       const elem = document.querySelector(".table-button");
-      // elem.click();
+
       elem.dispatchEvent(new Event("pointerdown"));
 
-      // super.resetTotalTimer();
       TotalTimer.totalSeconds = 0;
       const textTotalTimer = "00:00:00";
       const totalTimer = document.getElementById("total_timer");
@@ -574,17 +637,12 @@ class Timer extends TotalTimer {
   destroyTimer() {
     clearInterval(this.intervalId);
     this.resetTimer();
-    // super.destroyTotalTimer(this.seconds)
   }
 }
 
-class ReloadPage {}
-
 //================================================================
-// const totalTimeBox = document.querySelector(".total-time-container");
+let input;
 
-const input = document.querySelector("#taskName");
-// const workContainer = document.getElementById("work-container");
 const timer = new Timer({ id: "timer" });
 let totalTimer = null;
 const inputBox = document.querySelector(".task-input");
@@ -593,50 +651,68 @@ const startButton = new Button({ id: "startButton", title: "Пуск" });
 
 //===============================================================
 
-function setError(element, msg) {
-  element.style.border = "1px solid rgb(218, 0, 0)";
-  element.nextElementSibling.classList.add("error");
-  element.nextElementSibling.textContent = msg;
-}
-
-function setSuccess(element) {
-  element.nextElementSibling.textContent = "";
-  input.style = "";
-}
-
-function inputCheck(e) {
-  if (input.value === "") {
-    setError(input, "Поле обязательно!");
-    e.preventDefault();
-  } else {
-    if (input.value.length < 3) {
-      e.preventDefault();
-      setError(input, "Название дела слишком короткое - минимум 3 символа");
-    } else {
-      setSuccess(input);
-    }
-  }
-}
-
-input.addEventListener("input", (e) => {
-  inputCheck(e);
-});
-
-//================================================================
-
 function parseDate(dateString) {
   const [day, month, year] = dateString.split(".").map(Number);
   return new Date(year, month - 1, day); // Месяцы в JavaScript начинаются с 0
 }
 
+// Инициализация данных при загрузке страницы
 document.addEventListener("DOMContentLoaded", async function () {
+  const timerItem = new TimerItem({}); // Создаем экземпляр TimerItem
+  await timerItem.loadInitialData(); // Загружаем начальные данные
+});
+
+// Метод для загрузки начальных данных
+TimerItem.prototype.loadInitialData = async function () {
   let data = null;
   try {
-    const response = await fetch("/api/data");
-
+    const response = await fetch("/api/data/?_start=0&_end=10");
     data = await response.json();
+
+    document.createComment;
+
+    const {
+      total_time: totalTime = "00:00:00",
+      data: dataItems = {},
+      task_names: taskNames,
+    } = data || {};
+
+    input = new Input({ taskNames });
+    input.renderIn(inputBox);
+    input = input.input
+    // console.log(input);
+    
+
+    // Создаем экземпляр TotalTimer только один раз
+    totalTimer = new TotalTimer({
+      id: "total_timer",
+      text: totalTime,
+      totalSeconds: TimerItem.timeToSeconds(totalTime),
+    });
+
+    totalTimer.renderIn(totalTimeBox); // Отображаем TotalTimer
+
+    // Обработка полученных данных
+    const dates = Object.entries(dataItems);
+    const container = document.querySelector("#work-container");
+
+    const sortedDates = dates.sort((a, b) => parseDate(b[0]) - parseDate(a[0]));
+    // console.log(sortedDates.reverse());
+
+    for (const [date, namesTimes] of sortedDates) {
+      for (const [title, time] of Object.entries(namesTimes)) {
+        const taskItem = new TimerItem({
+          title: title,
+          time: time,
+          date: date,
+        });
+
+        taskItem.renderIn(container);
+      }
+    }
+
+    TimerItem.lastRowEnd = 10; // Устанавливаем последний загруженный индекс
   } catch (err) {
-    // перехватит любую ошибку в блоке try: и в fetch, и в response.json
     const notification = new NotificationMessage(`${err}`, {
       duration: 3000,
       type: "error",
@@ -644,66 +720,32 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     notification.show();
   }
-
-  const { data: dataItems = {}, total_time: totalTime = "00:00:00" } =
-    data || {};
-
-  totalTimer = new TotalTimer({
-    id: "total_timer",
-    text: totalTime,
-    totalSeconds: TimerItem.timeToSeconds(totalTime),
-  });
-  totalTimer.renderIn(totalTimeBox);
-
-  // if (!dataItems) return;
-  const dates = Object.entries(dataItems);
-  const sortedDates = dates.sort((a, b) => parseDate(a[0]) - parseDate(b[0]));
-
-  for (const [date, namesTimes] of sortedDates) {
-    let time = "";
-    let title = "";
-
-    Object.entries(namesTimes).forEach((item) => {
-      [title, time] = item;
-
-      const taskItem = new TimerItem({
-        title: title,
-        time: time,
-        date: date,
-      });
-
-      taskItem.renderIn(document.querySelector("#work-container"));
-    });
-  }
-
-  TimerItem.collection = new Map(Object.entries(dataItems));
-});
+};
 
 startButton.renderIn(inputBox);
-
 timer.renderIn(inputBox);
 
-// totalTimer.renderIn(totalTimeBox);
-// totalTimer.updateTotalTime()
-
 const workingTimer = (e) => {
+
   if (input.value === "" || input.value.length < 3) {
-    inputCheck(e);
     return;
   }
 
   if (startButton.title === "Пуск") {
     startButton.update({ title: "Стоп" });
 
+    Button.isClicked = false;
+
     timer.createTimer();
 
     totalTimer.createTimer();
   } else if (startButton.title === "Стоп") {
+    Button.isClicked = true;
+
     const taskItem = new TimerItem({
       title: input.value,
       time: timer.text,
     });
-    // const date = document.querySelector(".date");
 
     timer.destroyTimer();
     totalTimer.destroyTotalTimer();
@@ -719,40 +761,6 @@ const workingTimer = (e) => {
 };
 
 startButton.addEventListener("pointerdown", workingTimer);
-
-//===============================================================
-
-// function setError(element, msg) {
-//   element.classList.add("error");
-//   element.placeholder = msg
-//   // element.nextElementSibling.classList.add("error");
-//   // element.nextElementSibling.textContent = msg;
-//   // element.parentElement.querySelector('.error').classList.add("error")
-//   // element.parentElement.querySelector('.error').textContent = msg
-// }
-
-// function setSuccess(element) {
-//   // element.nextElementSibling.textContent = ""
-//   element.nextElementSibling.textContent = "";
-// }
-
-// input.addEventListener("blur", (e) => {
-
-//     if (input.value === "") {
-//       setError(this, "Поле обязательно!");
-//       e.preventDefault();
-//     } else {
-//       // setSuccess(input)
-//       if (input.value.length < 3) {
-//         e.preventDefault();
-//         setError(this, "Пароль слишком короткий - минимум 3 символа");
-//       } else {
-//         setSuccess(input);
-//       }
-//     }
-// });
-
-//================================================================
 
 // let obj = {
 //     '01.12.2024': {

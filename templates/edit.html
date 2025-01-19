@@ -7,11 +7,14 @@
 {% endfor %}
 
 <form id="myForm" action="{{ url_for('timer.edit', username=user, name_of_work=data.name_of_work, date=data.date) }}" method="POST" novalidate>
-  <div class="task-item">
-      <strong>Дата: <input class="form-control" type="date" id="date" name="date" value="{{ data.date }}" required></strong>
-      <p>Название дела:<input class="form-control" type="text" id="name_of_work" name="name_of_work" value="{{ data.name_of_work }}" required></p>
-      <p>Время: <input class="form-control" type="text" id="time" name="time" value="{{ data.time }}" required></p>
-      <button type="submit" class="table-button" >Обновить задачу</button>
-  </div>
+  <fieldset class="fieldset-change">
+      
+    <div class="fieldset__inner">
+        <label style="font-weight: bold;">Дата: <input class="form-control" type="date" id="date" name="date" value="{{ data.date }}" required></label>
+        <label>Название дела:<input class="form-control" type="text" id="name_of_work" name="name_of_work" value="{{ data.name_of_work }}" required></label>
+        <label>Время: <input class="form-control" type="text" id="time" name="time" value="{{ data.time }}" required></label>
+        <button type="submit" class="table-button" >Обновить задачу</button>
+      </div>
+    </fieldset>
 </form>
 {% endblock %}

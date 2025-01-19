@@ -1,63 +1,89 @@
-{% extends 'base.html' %}
-
-{% block title %}Авторизация{% endblock %}
-
-{% block content %}
-{% for cat, msg in get_flashed_messages(True) %}
-  <div class="flash {{ cat }}">{{ msg }}</div>
-{% endfor %}
-{% if 'register' in request.url %}
-    <form id="register-form" action="{{ url_for('users.register') }}" method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        <div class="task-item">
-            <h2>Регистрация</h2>
-{% else %}
-    <form id="login-form" action="{{ url_for('users.login') }}" method="POST" novalidate>
-        {{ form.hidden_tag() }}
-        <div class="task-item">
-            <h2>Вход в аккаунт</h2>
-{% endif %}
-            <p>{{ form.username.label }} {{ form.username(size=32, class="form-control", id="username") }}</p>
-            <p>{{ form.password.label }} {{ form.password(size=32, class="form-control", id="password") }}</p>
-            {% if 'register' in request.url %}
-              <button type="submit" class="table-button">Зарегистрироваться</button>
-            {% else %}
-              <button type="submit" class="table-button">Войти</button>
-            {% endif %}
+{% extends 'base.html' %} {% block title %}Авторизация{% endblock %} {% block
+content %} {% for cat, msg in get_flashed_messages(True) %}
+<div class="flash {{ cat }}">{{ msg }}</div>
+{% endfor %} {% if 'register' in request.url %}
+<form
+  id="register-form"
+  action="{{ url_for('users.register') }}"
+  method="POST"
+  novalidate
+>
+  {{ form.hidden_tag() }}
+  <fieldset class="fieldset">
+    <h2>Регистрация</h2>
+    {% else %}
+    <form
+      id="login-form"
+      action="{{ url_for('users.login') }}"
+      method="POST"
+      novalidate
+    >
+      {{ form.hidden_tag() }}
+      <fieldset class="fieldset">
+        <h2>Вход в аккаунт</h2>
+        {% endif %}
+        <div>
+          {{ form.username.label }} {{ form.username(size=32,
+          class="form-control", id="username") }}
         </div>
+        <div>
+          {{ form.password.label }} {{ form.password(size=32,
+          class="form-control", id="password") }}
+        </div>
+        {% if 'register' in request.url %}
+        <button type="submit" class="table-button table-button--width">
+          Зарегистрироваться
+        </button>
+        {% else %}
+        <button type="submit" class="table-button table-button--width">
+          Войти
+        </button>
+        {% endif %}
+      </fieldset>
     </form>
-<!--    <form action="{{ url_for('users.login_github') }}">-->
-<!--      <button type="submit" >-->
-<!--          <img src="{{ url_for('static', filename='img/github-logo.svg') }}" class="mr-4" width="30" alt="">-->
-<!--          Войти через GitHub-->
-<!--      </button>-->
-<!--    </form>-->
+    {% if 'login' in request.url %}
+    <script type="module">
+      import NotificationMessage from "../../static/notification/src/index.js";
 
-{% if 'login' in request.url %}
-  <script>
-  document.getElementById('login-form').addEventListener('submit', function(event) {
+      document.getElementById('login-form').addEventListener('submit', function(event) {
 
-  event.preventDefault();
-  var form = event.target;
-  var data = new FormData(form);
-        fetch('{{ url_for('users.login') }}', {
-              method: 'POST',
-              body: data
+      event.preventDefault();
+      var form = event.target;
+      var data = new FormData(form);
+            fetch('{{ url_for('users.login') }}', {
+                  method: 'POST',
+                  body: data
+                  })
+                  .then(response => response.json())
+                  .then(data => {
+
+      if (data.message === 'success login') {
+                      window.location.href = '/';
+                  } else {
+
+                      const notification = new NotificationMessage(
+                          "Неверное имя пользователя или пароль!",
+                          {
+                            duration: 3000,
+                            type: "error",
+                          }
+                        );
+                        notification.show();
+                  }
               })
-              .then(response => response.json())
-              .then(data => {
-
-  if (data.message === 'success login') {
-                  window.location.href = '/';
-              } else {
-                  alert('Неверное имя пользователя или пароль!');
-              }
-          })
-          .catch(error => {
-              alert('Произошла ошибка при попытке входа!');
-              console.error('Error: ', error);
-          });
-  });
-  </script>
-{% endif %}
-{% endblock %}
+              .catch(error => {
+                  const notification = new NotificationMessage(
+                          "Произошла ошибка при попытке входа!",
+                          {
+                            duration: 3000,
+                            type: "error",
+                          }
+                        );
+                        notification.show();
+                  console.error('Error: ', error);
+              });
+      });
+    </script>
+    {% endif %} {% endblock %}
+  </fieldset>
+</form>
