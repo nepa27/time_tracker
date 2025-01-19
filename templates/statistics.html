@@ -1,39 +1,13 @@
-{% extends 'base.html' %}
-{% block title %}Статистика{% endblock %}
-{% block content %}
-{% if user %}
-<section class="content" id="content">
-    <!-- <div data-element="chartsRoot" class="dashboard__charts">
-        <div data-element="tasksChart" class="dashboard__chart_tasks"></div>
-        <div data-element="oneTaskChart" class="dashboard__chart_tasks"></div>
-    </div> -->
-</section>
-
+{% extends 'base.html' %} {% block title %}Статистика{% endblock %} {% block
+content %} {% if user %}
+<section class="content" id="content"></section>
 
 {% else %}
-      <div class="hello-message">
-          <h1 class="display-4">Учет рабочего времени</h1>
-          <hr class="my-4">
-          <p>Используйте навигационную панель для доступа к вашему профилю</p>
-      </div>
+<div class="hello-message">
+  <h1 class="display-4">Учет рабочего времени</h1>
+  <hr class="my-4" />
+  <p>Используйте навигационную панель для доступа к вашему профилю</p>
+</div>
 {% endif %}
-<!-- <script>
-document.addEventListener('DOMContentLoaded', function() {
-    fetch('/api/statistics')
-        .then(response => response.json())
-        .then(data => {
-            if (data.data) {
-                console.log(data);
-            } else {
-                console.log('Нет данных для отображения');
-            }
-        })
-        .catch(error => console.error('Ошибка:', error));
-});
-</script> -->
-<!-- <script src="{{ url_for('static', filename='scriptStatistics.js') }}"></script> -->
-<!-- <script type="module" src="../static/scriptStatistics.js"></script> -->
-<!-- <script type="module" src="../static/statistic.js"></script> -->
-<!-- <script type="module" src="../static/column-chart/src/index.js"></script> -->
 <script type="module" src="../static/statisticPage.js"></script>
 {% endblock %}

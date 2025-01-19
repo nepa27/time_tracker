@@ -11,70 +11,9 @@
   <div class="task-list" id="work-container"></div>
 </div>
 
-<!-- <div class="container">
-  <div class="task-input">
-    <input
-      type="text"
-      id="taskName"
-      placeholder="Название дела"
-      list="taskNames"
-    />
-    <datalist id="taskNames"></datalist>
-    <button id="startButton">Пуск</button>
-    <div class="timer" id="timer">00:00:00</div>
-  </div>
-  <div class="total-time-container">
-    <strong>Всего за день:</strong>
-    <p class="timer" id="total_timer">{{ total_time }}</p>
-  </div>
-  <h3>Список дел</h3>
-  <div class="task-list" id="work-container">
-    <template id="template__task-item">
-      <div class="task-item">
-        <p>Название дела: <span class="nameWork">Название</span></p>
-        <p>Время: <span class="time">02:20:10</span></p>
-        <button class="table-button" onclick="location.href='#'">
-          Изменить
-        </button>
-        <button class="table-button" onclick="location.href='#'">
-          Удалить
-        </button>
-      </div>
-    </template>
-  </div>
-</div>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    fetch("/api/data/")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.data) {
-          // Получаем массив пар [дата, значения]
-          const entries = Object.entries(data.data);
-
-          // Сортируем массив по датам в обратном порядке
-          entries.sort((a, b) => new Date(b[0]) - new Date(a[0]));
-
-          // Преобразуем отсортированный массив обратно в объект
-          const sortedData = Object.fromEntries(entries);
-
-          // Обновляем объект данных
-          data.data = sortedData;
-
-          console.log(data.data);
-          console.log(sortedData);
-        } else {
-          console.log("Нет данных для отображения");
-        }
-      })
-      .catch((error) => console.error("Ошибка:", error));
-  });
-</script>
-<script src="{{ url_for('static', filename='script.js') }}"></script> -->
-
 <script
   type="module"
-  src="{{ url_for('static', filename='scriptTest.js') }}"
+  src="{{ url_for('static', filename='mainPage.js') }}"
 ></script>
 
 {% else %}
