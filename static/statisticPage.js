@@ -29,8 +29,7 @@ export default class PageStatistic {
                     <h2 class="page-title">Статистика дел</h2>
                     <div data-element="rangePicker"></div>
                 </div>
-                <div data-element="columnChart" class="dashboard__charts">
-                </div>
+               <div data-element="columnChart" class="dashboard__charts"></div>
             </div>
         `;
   }
@@ -55,8 +54,6 @@ export default class PageStatistic {
   }
 
   async render() {
-    console.log(this.subElements);
-    // debugger
     for (const [name, component] of Object.entries(this.components)) {
       this.subElements[name].append(component.element);
     }
@@ -70,12 +67,12 @@ export default class PageStatistic {
       this.url.searchParams.set("from", from.toISOString().split("T")[0]);
       this.url.searchParams.set("to", to.toISOString().split("T")[0]);
 
-      const data = await fetchJson(this.url);
-      console.log(data);
+      // const data = await fetchJson(this.url);
 
-      this.components.columnChart.update(from, to)
-      
-    //   const data = await this.fetchData(from, to);
+      this.components.columnChart.update(from, to);
+      document.querySelector("[data-element='oneTaskChart']")?.remove();
+
+      //   const data = await this.fetchData(from, to);
     } catch (ex) {
       throw new Error(ex);
     }

@@ -10,7 +10,7 @@ const BACKEND_URL = "http://127.0.0.1:5001/statistics/";
 export default class ColumnChart {
   element;
   subElements = {};
-  chartHeight = 50; //150
+  chartHeight = 120; //50
 
   constructor({
     label = "",
@@ -146,7 +146,7 @@ export default class ColumnChart {
     let hightColumn;
 
     if (value !== 0 && Math.floor(value * scale) === 0) {
-      return (hightColumn = 3);
+      return (hightColumn = 1);
     } else {
       return (hightColumn = Math.floor(value * scale));
     }
@@ -213,12 +213,14 @@ export default class ColumnChart {
         })
         .join("");
 
-
+        
       this.subElementsTask.body.innerHTML = result; // this.getColumnBody(valueTask);
       this.elementTask.classList.remove("column-chart_loading");
-
-      const tasksNode = document.querySelector("[data-element='oneTaskChart']");
-      tasksNode.textContent = "";
+      this.elementTask.dataset.element = 'oneTaskChart'
+     
+      document.querySelector("[data-element='oneTaskChart']")?.remove();
+      const tasksNode = document.querySelector("[data-element='columnChart']")
+        
       tasksNode.appendChild(this.elementTask);
     }
   };

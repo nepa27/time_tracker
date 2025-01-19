@@ -22,7 +22,8 @@ body {
   --grey-skeleton: #f5f6f8;
   --grey-middle: #e0e4eb;
   --white: #ffffff;
-  --chart-column-color:#ffb946
+  --chart-column-color: #1e5c9f
+  /* --chart-column-color: #ffb946 */
 }
 
 body {
