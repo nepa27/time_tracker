@@ -11,6 +11,8 @@ from constants import (
 
 
 class AuthForm(FlaskForm):
+    """Форма ввода имени пользователя и пароля для авторизации."""
+
     username = StringField(
         'Имя пользователя',
         validators=[

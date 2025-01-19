@@ -1,3 +1,4 @@
+"""Модуль, определяющий модели для приложения учета рабочего времени."""
 from datetime import date
 
 from config import db
@@ -12,6 +13,8 @@ from constants import (
 
 
 class TimeTrackerModel(db.Model):
+    """Модель данных для учета времени работы пользователей."""
+
     __tablename__ = 'time_tracker'
 
     id = db.Column(
@@ -55,6 +58,8 @@ class TimeTrackerModel(db.Model):
 
 
 class UserModel(db.Model):
+    """Модель данных для пользователей."""
+
     __tablename__ = 'users'
 
     id = db.Column(
@@ -77,6 +82,8 @@ class UserModel(db.Model):
 
 
 class BlocklistJwt(db.Model):
+    """Модель данных для блокировки недействительных токенов JWT."""
+
     __tablename__ = 'blocklistjwt'
 
     id = db.Column(

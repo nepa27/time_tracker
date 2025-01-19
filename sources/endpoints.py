@@ -16,12 +16,16 @@ from schemas import TimeTrackerSchema
 from utils.utils import data_to_statistic, data_to_json, parse_date, sum_time
 
 
-class HomePage(MethodView):
+class ReadCreateWorksView(MethodView):
+    """Представление для просмотра и добавления новых дел."""
+
     def get(self):
+        """Представление для просмотра дел."""
         return render_template('index.html')
 
     @jwt_required()
     def post(self):
+        """Представление для добавления новых дел."""
         try:
             data = TimeTrackerSchema(**request.get_json()).dict()
         except ValidationError as err:
@@ -31,23 +35,22 @@ class HomePage(MethodView):
         date_obj = parse_date(data['date'])
 
         now_date = datetime.now().date()
-        values = TimeTrackerModel.query.filter(
+        name_of_work = data['name_of_work']
+        value = TimeTrackerModel.query.filter(
             TimeTrackerModel.date == now_date,
             TimeTrackerModel.username == get_jwt_identity(),
-        )
-        name_of_work = data['name_of_work']
-        for value in values:
-            if value.name_of_work == name_of_work:
-                result_time = sum_time(value.time, time_obj)
-                value.time = result_time
-                db.session.commit()
-                logger.info(
-                    f'Обновлены данные по задаче {name_of_work}.'
-                    f' Время: {result_time}'
-                )
+            TimeTrackerModel.name_of_work == name_of_work,
+        ).first()
 
-                return {'message': 'Item from BD has UPDATE'}, 204
+        if value:
+            value.time = time_obj
+            db.session.commit()
+            logger.info(
+                f'Обновлены данные по задаче "{name_of_work}"'
+                f' Время: {time_obj}'
+            )
 
+            return {'message': 'Item from BD has UPDATE'}, 204
         work = TimeTrackerModel(
             name_of_work=name_of_work,
             date=date_obj,
@@ -56,14 +59,17 @@ class HomePage(MethodView):
         )
         db.session.add(work)
         db.session.commit()
-        logger.info(f'Данные по задаче {name_of_work} добавлены в БД')
+        logger.info(f'Данные по задаче "{name_of_work}" добавлены в БД')
 
         return {'message': 'Data add in BD'}, 201
 
 
-class EditData(MethodView):
+class EditWorksView(MethodView):
+    """Представление для редактирования дел."""
+
     @jwt_required()
     def get(self, name_of_work, date):
+        """Представление для отображения формы редактирования дела."""
         try:
             date = parse_date(date)
         except ValueError as e:
@@ -83,6 +89,7 @@ class EditData(MethodView):
 
     @jwt_required()
     def post(self, name_of_work, date):
+        """Представление для редактирования дела."""
         try:
             form_data = TimeTrackerSchema(**request.form.to_dict()).dict()
         except ValidationError as err:
@@ -142,7 +149,7 @@ class EditData(MethodView):
             )
         else:
             logger.info(
-                f'Измененны данные по задаче {old_name}.'
+                f'Изменены данные по задаче "{old_name}".'
                 f' Название: {work_data.name_of_work},'
                 f' Время: {work_data.time},'
                 f' Дата: {work_data.date}.'
@@ -151,7 +158,8 @@ class EditData(MethodView):
 
 
 @jwt_required()
-def delete_item(date, name_of_work):
+def delete_works(date, name_of_work):
+    """Представление для удаления дела."""
     date = parse_date(date)
     if TimeTrackerModel.query.filter(
         TimeTrackerModel.name_of_work == name_of_work,
@@ -171,11 +179,13 @@ def delete_item(date, name_of_work):
 
 @jwt_required()
 def get_statistics():
+    """Представление для отображения страницы статистики."""
     return render_template('statistics.html')
 
 
 @jwt_required()
 def api_data():
+    """Возвращает набора данных обо всех делах из БД."""
     try:
         verify_jwt_in_request(optional=True)
         now_date = datetime.now().date()
@@ -209,6 +219,7 @@ def api_data():
 
 @jwt_required()
 def api_statistics():
+    """Возвращает набора данных из БД для статистики."""
     try:
         date_from = request.args.get('from', type=str)
         date_to = request.args.get('to', type=str)
