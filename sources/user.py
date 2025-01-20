@@ -2,7 +2,6 @@ from datetime import datetime
 
 from flask import flash, jsonify, render_template, redirect, url_for
 from flask.views import MethodView
-from flask_dance.contrib.github import github
 from flask_jwt_extended import (
     get_jwt,
     get_jwt_identity,
@@ -128,28 +127,3 @@ class UserLogout(MethodView):
         except SQLAlchemyError as e:
             logger.error(f'Ошибка при удалении {str(e)[:15]}')
             return resp
-
-
-def login_github():
-    """Представление для аутентификации пользователей через GitHub."""
-    if not github.authorized:
-        return redirect(url_for('github.login'))
-    res = github.get('/user')
-    username = res.json()['login']
-    if UserModel.query.filter(
-            UserModel.username == username
-    ).first():
-        flash(
-            'Пользователь с таким именем уже существует!',
-            category='error',
-        )
-        return redirect(url_for('users.register'))
-
-    user = UserModel(username=username)
-    db.session.add(user)
-    db.session.commit()
-    access_token = create_access_token(
-        identity=user.username, fresh=True
-    )
-    logger.info(f'Пользователь {username} зарегистрирован через GitHub!')
-    return jsonify(access_token=access_token)
