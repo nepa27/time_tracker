@@ -90,9 +90,7 @@ pip install -r requirements.txt
 + Запускаем проект:
 
 ```
-python3 app.py
-либо
-python app.py
+gunicorn -c gunicorn_config.py 'app:create_app()'
 ```
 Если вы все правильно сделали, то высветится приглашение
 ```
