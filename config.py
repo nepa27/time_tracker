@@ -54,8 +54,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv(
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAX_CONTENT_LENGTH'] = MAX_CONTENT_LENGTH
 app.config['WTF_CSRF_ENABLED'] = False
-# TODO: Исправить перед деплоем
-app.config['DEBUG'] = True
+app.config['DEBUG'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.getenv('SECRET_KEY') or 'My-secret-key'
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY') or 'My-secret-key'
