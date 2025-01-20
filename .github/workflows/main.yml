@@ -1,0 +1,14 @@
+name: Main Time-tracker Workflow
+on:
+  push:
+    branches:
+      - main
+# Перечень задач
+jobs:
+  checkout-and-print-tree:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3  # клонирует текущий коммит репозитория
+      - name: Print project tree
+        run: tree .
