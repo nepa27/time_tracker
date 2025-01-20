@@ -666,7 +666,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 TimerItem.prototype.loadInitialData = async function () {
   let data = null;
   try {
-    const response = await fetch("/api/data/?_start=0&_end=10");
+    const response = await fetch("/api/data?_start=0&_end=10");
     data = await response.json();
 
     document.createComment;
