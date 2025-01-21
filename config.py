@@ -71,7 +71,7 @@ jwt = JWTManager(app)
 
 @app.before_request
 def load_logged_in_user():
-    """Функция для загрузки авторизованного пользователя перед каждым запросом."""
+    """Функция для загрузки пользователя перед каждым запросом."""
     try:
         verify_jwt_in_request(optional=True)
         user_identity = get_jwt_identity()
@@ -86,13 +86,13 @@ def load_logged_in_user():
 
 @app.context_processor
 def inject_user():
-    """Контекстный процессор для добавления текущего пользователя в шаблон контекста."""
+    """Контекстный процессор добавления пользователя в шаблон контекста."""
     return dict(user=g.user)
 
 
 @app.after_request
 def refresh_expiring_jwts(response):
-    """Функция для обновления токена доступа перед истечением его времени жизни."""
+    """Функция обновления токена доступа перед истечением времени жизни."""
     try:
         if g.user:
             exp_timestamp = get_jwt()['exp']
