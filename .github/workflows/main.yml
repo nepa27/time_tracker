@@ -61,7 +61,7 @@ jobs:
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
-          key: ${{ secrets.SSH_KEY }}
+          password: ${{ secrets.PASSWORD }}
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/time_tracker:latest
             sudo docker container stop ${{ secrets.DOCKER_USERNAME }}/time_tracker
