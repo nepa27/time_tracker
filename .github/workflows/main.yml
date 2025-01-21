@@ -64,5 +64,5 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/time_tracker:latest
-            sudo docker container stop ${{ secrets.DOCKER_USERNAME }}/time_tracker || true
-            sudo docker run --rm -p 5001:5001 -v tt_sqlite:/app/instance -d --name ${{ secrets.DOCKER_USERNAME }}/time_tracker --env-file=time_tracker/.env ${{ secrets.DOCKER_USERNAME }}/time_tracker
+            sudo docker container stop time_tracker || true
+            sudo docker run --rm -p 5001:5001 -v tt_sqlite:/app/instance -d --name time_tracker --env-file=time_tracker/.env ${{ secrets.DOCKER_USERNAME }}/time_tracker
