@@ -3,7 +3,7 @@ import NotificationMessage from "./notification/src/index.js";
 import ConfirmMessage from "./confirm/src/index.js";
 import fetchJson from "./fetch-json.js";
 
-const BACKEND_URL = "http://127.0.0.1:5001/";
+const BACKEND_URL = "https://yaknep-timetracker.ru:8443/";
 
 class Component {
   static TIMEOUT = 1_000;
