@@ -53,17 +53,23 @@ class ReadCreateWorksView(MethodView):
             )
 
             return {'message': 'Item from BD has UPDATE'}, 204
-        work = TimeTrackerModel(
-            name_of_work=name_of_work,
-            date=date_obj,
-            time=time_obj,
-            username=get_jwt_identity(),
-        )
-        db.session.add(work)
-        db.session.commit()
-        logger.info(f'Данные по задаче "{name_of_work}" добавлены в БД')
+        try:
+            work = TimeTrackerModel(
+                name_of_work=name_of_work,
+                date=date_obj,
+                time=time_obj,
+                username=get_jwt_identity(),
+            )
+            db.session.add(work)
+            db.session.commit()
+            logger.info(f'Данные по задаче "{name_of_work}" добавлены в БД')
 
-        return {'message': 'Data add in BD'}, 201
+            return {'message': 'Data add in BD'}, 201
+        except BaseException as e:
+            logger.error(
+                f'Ошибка при добавлении задачи: {e}'
+            )
+            abort(400)
 
 
 class EditWorksView(MethodView):
