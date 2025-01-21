@@ -1,7 +1,7 @@
 import fetchJson from "../../fetch-json.js";
 import Tooltip from "../../tooltip/src/index.js";
 
-const BACKEND_URL = "http://127.0.0.1:5001/statistics/";
+const BACKEND_URL = "https://yaknep-timetracker.ru:8443/statistics/";
 
 export default class ColumnChart {
   element;
