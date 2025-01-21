@@ -1,3 +1,5 @@
+"""Модуль, содержащий эндпоинты взаимодействия с пользователями"""
+
 from datetime import datetime
 
 from flask import flash, jsonify, render_template, redirect, url_for
@@ -30,11 +32,11 @@ class UserRegister(MethodView):
         return render_template('auth/register.html', form=form)
 
     def post(self):
-        """ Создает нового пользователя."""
+        """Создает нового пользователя."""
         form = AuthForm()
         if form.validate_on_submit():
             if UserModel.query.filter(
-                    UserModel.username == form.username.data
+                UserModel.username == form.username.data
             ).first():
                 flash(
                     'Пользователь с таким именем уже существует!',
@@ -81,13 +83,13 @@ class UserLogin(MethodView):
                 UserModel.username == form.username.data
             ).first()
             if not user or not check_password_hash(
-                    user.password, form.password.data
+                user.password, form.password.data
             ):
                 return (
                     jsonify(
                         {
                             'message': 'Неправильное имя '
-                                       'пользователя или пароль!'
+                            'пользователя или пароль!'
                         }
                     ),
                     401,

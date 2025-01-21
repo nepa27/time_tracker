@@ -1,3 +1,5 @@
+"""Модуль, содержащий эндпоинты взаимодействия с пользователями"""
+
 from datetime import datetime
 
 import sqlalchemy
@@ -210,7 +212,7 @@ def api_data():
         return {
             'data': data_to_json(data),
             'total_time': total_time,
-            'task_names': task_names
+            'task_names': task_names,
         }, 200
     except BaseException as e:
         logger.info(f'Ошибка при получении данных: {e}')
@@ -231,7 +233,7 @@ def api_statistics():
         data = TimeTrackerModel.query.filter(
             TimeTrackerModel.username == get_jwt_identity(),
             TimeTrackerModel.date >= date_from,
-            TimeTrackerModel.date <= date_to
+            TimeTrackerModel.date <= date_to,
         )
 
         return {

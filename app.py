@@ -1,6 +1,7 @@
 """Модуль, инициализирующий объект приложения Flask."""
+
 from config import app, db, logger
-from sources.urls import timer,users
+from sources.urls import timer, users
 
 
 def create_app():

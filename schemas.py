@@ -1,4 +1,5 @@
 """Модуль, содержащий схемы валидации."""
+
 import re
 
 from pydantic import BaseModel, validator
@@ -16,7 +17,9 @@ class TimeTrackerSchema(BaseModel):
     @validator('name_of_work')
     def validate_name_of_work(cls, name):
         """Функция валидации названия дела."""
-        if len(name) > LENGHT_NAME or not re.match("^[a-zA-Z0-9\sА-Яа-яЁё]*$", name):
+        if len(name) > LENGHT_NAME or not re.match(
+            "^[a-zA-Z0-9\sА-Яа-яЁё]*$", name
+        ):
             raise ValueError(
                 'Название проекта может содержать только буквы'
                 ' и цифры, а также не превышать '

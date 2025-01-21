@@ -1,4 +1,5 @@
 """Константы."""
+
 FILE_SIZE_BYTE = 1024
 SIZE_TO_MB = 5
 FILES_COUNT = 5

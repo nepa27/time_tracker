@@ -1,4 +1,5 @@
 """Модуль, содержащий настройки конфигурации приложения Flask."""
+
 import logging
 import os
 import sys
