@@ -62,7 +62,7 @@ class Input extends Component {
   createElementTemplate() {
     return `
       <input class ="input" type="text" id="taskName" placeholder="Название дела" list="taskNames"required
-          minlength="3" maxlength="25"/>
+          minlength="3"/>
         `;
   }
 
@@ -124,12 +124,12 @@ class Input extends Component {
           this.input,
           "Название дела слишком короткое - минимум 3 символа"
         );
-      } else if (this.input.value.length === 25) {
+      }else if (this.input.value.length >= 101) {
         this.setError(
           this.input,
-          "Максимальная длина названия дела- 25 символов"
+          "Максимальная длина названия дела- 100 символов"
         );
-        this.input.value = this.input.value.substring(0, 25);
+        this.input.value = this.input.value.substring(0, 101);
       } else {
         this.setSuccess(this.input);
       }
@@ -450,13 +450,14 @@ class TimerItem extends Component {
       date: `${this.date}`,
     };
 
-    fetch(`/`, {
+   return fetch(`/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
       },
       body: JSON.stringify(objInf),
-    });
+    })
+
   }
 
   async deleteItemInBD() {
@@ -754,11 +755,27 @@ const workingTimer = (e) => {
     input.value = "";
 
     const container = document.querySelector(".task-list");
-    taskItem.renderIn(container);
 
-    taskItem.updateBD();
-  }
-};
+    taskItem.updateBD()
+      .then(res=>res.json())
+      .then(res => {
+      console.log(res)
+      taskItem.renderIn(container)}
+    )
+      .catch(error => {
+      const notification = new NotificationMessage(
+        "Ошибка при добавлении дела. Неверное название дела",
+        {
+          duration: 3000,
+          type: "error",
+        }
+      );
+      notification.show();
+
+    })
+
+  };
+}
 
 startButton.addEventListener("pointerdown", workingTimer);
 
@@ -773,5 +790,4 @@ startButton.addEventListener("pointerdown", workingTimer);
 //         'homework': "00:22:16",
 //         'дело2': "00:02:16",
 //     },
-
 // }
