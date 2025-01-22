@@ -3,7 +3,7 @@ import ColumnChart from "./column-chart/src/index.js";
 import Tooltip from "./tooltip/src/index.js";
 import fetchJson from "./fetch-json.js";
 
-const BACKEND_URL = "https://yaknep-timetracker.ru:8443/statistics/";
+const BACKEND_URL = "http://127.0.0.1:5001/statistics/";
 
 export default class PageStatistic {
   subElements = {};
