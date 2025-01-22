@@ -124,12 +124,12 @@ class Input extends Component {
           this.input,
           "Название дела слишком короткое - минимум 3 символа"
         );
-      }else if (this.input.value.length >= 101) {
+      } else if (this.input.value.length === 25) {
         this.setError(
           this.input,
-          "Максимальная длина названия дела- 100 символов"
+          "Максимальная длина названия дела - 25 символов"
         );
-        this.input.value = this.input.value.substring(0, 101);
+        this.input.value = this.input.value.substring(0, 25);
       } else {
         this.setSuccess(this.input);
       }
@@ -225,15 +225,15 @@ class TimerItem extends Component {
         <div class="task-item" data-name-work="${this.title}">
             <p>Название дела: <span class="nameWork">${this.title}</span></p>
             <p>Время: <span class="time">${this.time}</span></p>
-            <button class="table-button" onclick="location.href='/edit/${this.date}/${this.title}'">Изменить</button> 
-            <button class="table-button btn-delete">Удалить</button> 
+            <button class="table-button" onclick="location.href='/edit/${this.date}/${this.title}'">Изменить</button>
+            <button class="table-button btn-delete">Удалить</button>
         </div>
     `;
   }
   createContainerTemplate() {
     return `
      <div class="date-item" data-date="${this.date}">
-        <strong class="strongDate">Дата: 
+        <strong class="strongDate">Дата:
             <span class="date">${this.date}</span>
         </strong>
         ${this.createElementTemplate()}
@@ -286,30 +286,30 @@ class TimerItem extends Component {
     const windowHeight = document.documentElement.clientHeight;
     const documentHeight = document.documentElement.scrollHeight;
     const scrollPosition = window.scrollY + windowHeight;
-  
+
     // Проверяем, нужно ли загружать новые данные
     if (scrollPosition >= documentHeight * 0.7 && !TimerItem.isLoading) {
       TimerItem.isLoading = true; // Устанавливаем флаг загрузки
       this.renderLoadingLine();
-  
+
       // Обновляем начальный и конечный индексы
       this.rowStart = TimerItem.lastRowEnd;
       this.rowEnd = this.rowStart + 10;
-  
+
       const data = await fetchJson(this.createUrl());
       const { data: dataItems = {} } = data || {};
-  
+
       const items = Object.values(dataItems).reduce((acc, cur) => {
         return (acc += Object.values(cur).length);
       }, 0);
-  
+
       if (items < this.stepFetchData) return;
-  
+
       const dates = Object.entries(dataItems);
       const sortedDates = dates.sort(
         (a, b) => parseDate(b[0]) - parseDate(a[0])
       );
-  
+
       for (const [date, namesTimes] of sortedDates) {
         for (const [title, time] of Object.entries(namesTimes)) {
           const taskItem = new TimerItem({
@@ -317,11 +317,11 @@ class TimerItem extends Component {
             time: time,
             date: date,
           });
-  
+
           taskItem.renderIn(this.container);
         }
       }
-  
+
       TimerItem.lastRowEnd = this.rowEnd; // Обновляем последний загруженный конец диапазона
       TimerItem.isLoading = false; // Сбрасываем флаг загрузки
     }
@@ -450,14 +450,13 @@ class TimerItem extends Component {
       date: `${this.date}`,
     };
 
-   return fetch(`/`, {
+    fetch(`/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
       },
       body: JSON.stringify(objInf),
-    })
-
+    });
   }
 
   async deleteItemInBD() {
@@ -545,7 +544,7 @@ class TotalTimer extends Component {
 
   destroyTotalTimer() {
     super.destroyTimer();
-   
+
   }
 }
 
@@ -555,7 +554,7 @@ class Timer extends TotalTimer {
     this.id = id;
     this.text = text;
     this.seconds = seconds;
-   
+
     this.resetTotalTimer();
     this.element = this.createElement(this.createElementTemplate());
   }
@@ -569,7 +568,7 @@ class Timer extends TotalTimer {
     const timeEndTimestamp = this.getTimestampWithTime(timeEnd);
 
     this.differenceTime = timeEndTimestamp - timeStartTimestamp;
-    
+
     this.intervalId = setInterval(
       () => this.rerenderTimer(),
       Component.TIMEOUT //1_000
@@ -682,7 +681,7 @@ TimerItem.prototype.loadInitialData = async function () {
     input.renderIn(inputBox);
     input = input.input
     // console.log(input);
-    
+
 
     // Создаем экземпляр TotalTimer только один раз
     totalTimer = new TotalTimer({
@@ -755,27 +754,11 @@ const workingTimer = (e) => {
     input.value = "";
 
     const container = document.querySelector(".task-list");
+    taskItem.renderIn(container);
 
-    taskItem.updateBD()
-      .then(res=>res.json())
-      .then(res => {
-      console.log(res)
-      taskItem.renderIn(container)}
-    )
-      .catch(error => {
-      const notification = new NotificationMessage(
-        "Ошибка при добавлении дела. Неверное название дела",
-        {
-          duration: 3000,
-          type: "error",
-        }
-      );
-      notification.show();
-
-    })
-
-  };
-}
+    taskItem.updateBD();
+  }
+};
 
 startButton.addEventListener("pointerdown", workingTimer);
 
@@ -790,4 +773,5 @@ startButton.addEventListener("pointerdown", workingTimer);
 //         'homework': "00:22:16",
 //         'дело2': "00:02:16",
 //     },
+
 // }
