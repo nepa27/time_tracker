@@ -1,3 +1,4 @@
+[![Time tracker workflow](https://github.com/nepa27/time_tracker/actions/workflows/main.yml/badge.svg)](https://github.com/nepa27/time_tracker/actions/workflows/main.yml)
 # Time tracker - таймер учета рабочего времени
 [![Python](https://img.shields.io/badge/-Python-464646?style=flat-square&logo=Python)](https://www.python.org/)
 [![JavaScript](https://img.shields.io/badge/-JavaScript-464646?style=flat-square&logo=JavaScript)](https://www.javascript.com/)
@@ -17,6 +18,8 @@
 задачи в режиме реального времени, обеспечивая максимальную продуктивность и управление временем. Используя Time Tracker,
 вы сможете легко отслеживать проекты, распределение задач, контролировать свой прогресс, идентифицировать области улучшения 
 и сократить рабочие процессы.
+
+[Ссылка на проект](https://yaknep-timetracker.ru:8443/)
 
 ## Основные особенности
 - Возможность отслеживать свои ежедневные задачи в режиме реального времени;
