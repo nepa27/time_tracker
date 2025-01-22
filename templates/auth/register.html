@@ -1,10 +1,7 @@
-{% extends 'base.html' %}
-{% block title %}Авторизация{% endblock %}
-{% block content %}
-  {% for cat, msg in get_flashed_messages(True) %}
-    <div class="flash {{ cat }}">{{ msg }}</div>
-  {% endfor %}
-{% if 'register' in request.url %}
+{% extends 'base.html' %} {% block title %}Авторизация{% endblock %} {% block
+content %} {% for cat, msg in get_flashed_messages(True) %}
+<div class="flash {{ cat }}">{{ msg }}</div>
+{% endfor %} {% if 'register' in request.url %}
 <form
   id="register-form"
   action="{{ url_for('users.register') }}"
