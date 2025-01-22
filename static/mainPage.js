@@ -124,12 +124,12 @@ class Input extends Component {
           this.input,
           "Название дела слишком короткое - минимум 3 символа"
         );
-      } else if (this.input.value.length === 25) {
+      }else if (this.input.value.length >= 101) {
         this.setError(
           this.input,
-          "Максимальная длина названия дела - 25 символов"
+          "Максимальная длина названия дела- 100 символов"
         );
-        this.input.value = this.input.value.substring(0, 25);
+        this.input.value = this.input.value.substring(0, 101);
       } else {
         this.setSuccess(this.input);
       }
