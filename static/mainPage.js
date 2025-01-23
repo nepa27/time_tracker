@@ -555,24 +555,20 @@ class Timer extends TotalTimer {
     this.text = text;
     this.seconds = seconds;
 
-    this.resetTotalTimer();
-    this.element = this.createElement(this.createElementTemplate());
+    this.startTime
+    = Date.now() - this.seconds * 1000;
+
+    this.element
+    = this.createElement(this.createElementTemplate());
+  }
+  getSecondsFromText(text) {
+    const [hours, minutes, seconds] = text.split(':');
+    return (+hours * 60 + +minutes) * 60 + +seconds;
   }
 
   createTimer() {
-    const timeStart = this.getCurrentTime();
-
-    const timeStartTimestamp = this.getTimestampWithTime(timeStart);
-
-    const timeEnd = "23:59:59";
-    const timeEndTimestamp = this.getTimestampWithTime(timeEnd);
-
-    this.differenceTime = timeEndTimestamp - timeStartTimestamp;
-
-    this.intervalId = setInterval(
-      () => this.rerenderTimer(),
-      Component.TIMEOUT //1_000
-    );
+    this.startTime = Date.now();
+    this.intervalId = setInterval(this.rerenderTimer.bind(this), Component.TIMEOUT);
   }
 
   getCurrentTime() {
@@ -624,12 +620,15 @@ class Timer extends TotalTimer {
       console.log("tut");
     }
 
+    const elapsedSeconds = Math.floor((Date.now() - this.startTime) / 1000);
+    this.seconds = elapsedSeconds;
     this.text = TotalTimer.updateSecondsToString(this.seconds);
 
     this.element.innerHTML = this.text;
   }
 
   resetTimer() {
+  this.startTime = Date.now();
     this.seconds = 0;
     this.text = "00:00:00";
     this.element.innerHTML = this.text;
