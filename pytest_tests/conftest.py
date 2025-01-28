@@ -80,11 +80,13 @@ def update_work(client, token):
             'date': '25.01.2025'
         }
     )
+    return response
 
 
 @pytest.fixture()
 def delete_work(client, token):
     response = client.delete(
-        '/delete/2025-01-24/Test',
+        '/delete/25.01.2025/newTest',
         headers={'Autorization': token}
     )
+    return response

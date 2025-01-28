@@ -6,11 +6,15 @@ def test_request_home_page_anonymous(client):
     assert response.status_code == 200
 
 
-def test_request_home_page_user(client, register, token):
+def test_request_home_page_user(client, token):
     response = client.get('/', headers={
         'Autorization': token
     })
     assert response.status_code == 200
+
+
+def test_request_post_home_page_user(client, token, create_work):
+    assert create_work.status_code == 201
 
 
 def test_request_statistics_anonymous(client):
@@ -18,7 +22,7 @@ def test_request_statistics_anonymous(client):
     assert response.status_code == 302
 
 
-def test_request_statistics_user(client, register, token):
+def test_request_statistics_user(client, token):
     response = client.get('/statistics/', headers={
         'Autorization': token
     })
@@ -30,7 +34,7 @@ def test_get_api_data_anonymous(client):
     assert response.status_code == 302
 
 
-def test_get_api_data_user(client, register, token):
+def test_get_api_data_user(client, token):
     response = client.get('/api/data', headers={
         'Autorization': token
     })
@@ -47,9 +51,27 @@ def test_request_edit_anonymous(client):
     assert response.status_code == 302
 
 
-def test_request_edit_user(client, create_work):
+def test_request_edit_user(client, token):
     response = client.get('/edit/2025-01-24/Test')
     assert response.status_code == 200
+
+
+def test_request_post_edit_user(client, update_work):
+    assert update_work.status_code == 302
+
+
+def test_request_post_anonymous(client):
+    response = client.post('/edit/2025-01-24/Test')
+    assert response.status_code == 302
+
+
+def test_request_delete_anonymous(client):
+    response = client.delete('/delete/25.01.2025/newTest')
+    assert response.status_code == 302
+
+
+def test_request_delete_user(client, delete_work):
+    assert delete_work.status_code == 204
 
 
 # __TEST__CONTENT__
