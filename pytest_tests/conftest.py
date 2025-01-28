@@ -42,12 +42,12 @@ def register(client):
 
 
 @pytest.fixture()
-def token(client):
+def token(client, register):
     response = client.post(
         '/login/',
         data={
-            'username': 'wwww',
-            'password': 'wwwwww'
+            'username': USERNAME,
+            'password': PASSWORD
         }
     )
     return response.headers['Set-Cookie'].split('=')[1]

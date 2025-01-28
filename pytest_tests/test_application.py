@@ -1,4 +1,5 @@
-from models import TimeTrackerModel
+from db import db
+from models import TimeTrackerModel, UserModel
 
 
 def test_request_home_page_anonymous(client):
@@ -106,3 +107,19 @@ def test_content_api_data_user(client, token):
 def test_content_edit_user(client, create_work,token):
     response = client.get('/edit/2025-01-24/Test')
     assert 'Обновить задачу' in response.text
+
+
+
+def test_check_test_data(app):
+    with app.app_context():
+        test_data = TimeTrackerModel.query.filter(
+            TimeTrackerModel.name_of_work == 'Test',
+            TimeTrackerModel.date == '2025-01-24',
+        ).delete()
+        test_user = UserModel.query.filter(
+            UserModel.username == 'test',
+        ).delete()
+
+        db.session.commit()
+        assert test_data == 1
+        assert test_user == 1
