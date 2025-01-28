@@ -29,7 +29,7 @@ class ReadCreateWorksView(MethodView):
     def post(self):
         """Представление для добавления новых дел."""
         try:
-            data = TimeTrackerSchema(**request.get_json()).dict()
+            data = TimeTrackerSchema(**request.get_json()).model_dump()
         except ValidationError as err:
             logger.error(err)
             abort(400)
