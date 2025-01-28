@@ -66,18 +66,21 @@ def create_work(client, token):
             'date': '24.01.2025'
         }
     )
+    return response
+
 
 @pytest.fixture()
 def update_work(client, token):
     response = client.post(
         '/edit/2025-01-24/Test',
-        headers={'Autorization': token,},
+        headers={'Autorization': token, },
         data={
             'name_of_work': 'newTest',
             'time': '01:41:34',
             'date': '25.01.2025'
         }
     )
+
 
 @pytest.fixture()
 def delete_work(client, token):
