@@ -3,7 +3,9 @@ import sys
 
 import pytest
 
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.insert(
+    0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+)
 
 from app import create_app
 
@@ -14,9 +16,11 @@ PASSWORD = 'testpass'
 @pytest.fixture(scope='module')
 def app():
     app = create_app()
-    app.config.update({
-        'TESTING': True,
-    })
+    app.config.update(
+        {
+            'TESTING': True,
+        }
+    )
     yield app
 
 
@@ -33,22 +37,14 @@ def runner(app):
 @pytest.fixture()
 def register(client):
     response = client.post(
-        '/register/',
-        data={
-            'username': USERNAME,
-            'password': PASSWORD
-        }
+        '/register/', data={'username': USERNAME, 'password': PASSWORD}
     )
 
 
 @pytest.fixture()
 def token(client, register):
     response = client.post(
-        '/login/',
-        data={
-            'username': USERNAME,
-            'password': PASSWORD
-        }
+        '/login/', data={'username': USERNAME, 'password': PASSWORD}
     )
     return response.headers['Set-Cookie'].split('=')[1]
 
@@ -57,14 +53,12 @@ def token(client, register):
 def create_work(client, token):
     response = client.post(
         '/',
-        headers={
-            'Authorization': token,
-            'Content-Type': 'application/json'},
+        headers={'Authorization': token, 'Content-Type': 'application/json'},
         json={
             'name_of_work': 'Test',
             'time': '01:40:34',
-            'date': '24.01.2025'
-        }
+            'date': '24.01.2025',
+        },
     )
     return response
 
@@ -73,12 +67,14 @@ def create_work(client, token):
 def update_work(client, token):
     response = client.post(
         '/edit/2025-01-24/Test',
-        headers={'Authorization': token, },
+        headers={
+            'Authorization': token,
+        },
         data={
             'name_of_work': 'newTest',
             'time': '01:41:34',
-            'date': '25.01.2025'
-        }
+            'date': '25.01.2025',
+        },
     )
     return response
 
@@ -86,7 +82,6 @@ def update_work(client, token):
 @pytest.fixture()
 def delete_work(client, token):
     response = client.delete(
-        '/delete/25.01.2025/newTest',
-        headers={'Authorization': token}
+        '/delete/25.01.2025/newTest', headers={'Authorization': token}
     )
     return response

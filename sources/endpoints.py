@@ -66,9 +66,7 @@ class ReadCreateWorksView(MethodView):
 
             return {'message': 'Data add in BD'}, 201
         except BaseException as e:
-            logger.error(
-                f'Ошибка при добавлении задачи: {e}'
-            )
+            logger.error(f'Ошибка при добавлении задачи: {e}')
             abort(400)
 
 
@@ -99,7 +97,9 @@ class EditWorksView(MethodView):
     def post(self, name_of_work, date):
         """Представление для редактирования дела."""
         try:
-            form_data = TimeTrackerSchema(**request.form.to_dict()).model_dump()
+            form_data = TimeTrackerSchema(
+                **request.form.to_dict()
+            ).model_dump()
         except ValidationError as err:
             errors = [str(err['msg']) for err in err.errors()]
             error = errors[0].split('error,')[1]

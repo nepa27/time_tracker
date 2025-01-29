@@ -18,9 +18,8 @@ class TimeTrackerSchema(BaseModel):
     def validate_name_of_work(cls, name: str) -> str:
         """Функция валидации названия дела."""
         if len(name) > LENGHT_NAME or not re.match(
-                "^[\w\s!\"#@$%&()*+,-./:;<=>?[\]"
-                "^_{|}~a-zA-Z0-9\sА-Яа-яЁё]*$", name
-
+            "^[\w\s!\"#@$%&()*+,-./:;<=>?[\]" "^_{|}~a-zA-Z0-9\sА-Яа-яЁё]*$",
+            name,
         ):
             raise ValueError(
                 'Название проекта не может превышать '

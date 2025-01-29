@@ -8,9 +8,7 @@ def test_request_home_page_anonymous(client):
 
 
 def test_request_home_page_user(client, token):
-    response = client.get('/', headers={
-        'Authorization': token
-    })
+    response = client.get('/', headers={'Authorization': token})
     assert response.status_code == 200
 
 
@@ -24,9 +22,7 @@ def test_request_statistics_anonymous(client):
 
 
 def test_request_statistics_user(client, token):
-    response = client.get('/statistics/', headers={
-        'Authorization': token
-    })
+    response = client.get('/statistics/', headers={'Authorization': token})
     assert response.status_code == 200
 
 
@@ -36,9 +32,7 @@ def test_get_api_data_anonymous(client):
 
 
 def test_get_api_data_user(client, token):
-    response = client.get('/api/data', headers={
-        'Authorization': token
-    })
+    response = client.get('/api/data', headers={'Authorization': token})
     assert response.status_code == 200
 
 
@@ -77,30 +71,26 @@ def test_request_delete_user(client, delete_work):
 
 # __TEST__CONTENT__
 
+
 def test_content_home_page_anonymous(client):
     response = client.get('/')
-    assert ('Используйте навигационную панель'
-            ' для доступа к вашему профилю') in response.text
+    assert (
+        'Используйте навигационную панель' ' для доступа к вашему профилю'
+    ) in response.text
 
 
 def test_content_home_page_user(client, token):
-    response = client.get('/', headers={
-        'Authorization': token
-    })
+    response = client.get('/', headers={'Authorization': token})
     assert 'Список дел' in response.text
 
 
 def test_content_statistics_user(client, token):
-    response = client.get('/statistics/', headers={
-        'Authorization': token
-    })
+    response = client.get('/statistics/', headers={'Authorization': token})
     assert '<title>Статистика</title>' in response.text
 
 
 def test_content_api_data_user(client, token):
-    response = client.get('/api/data', headers={
-        'Authorization': token
-    })
+    response = client.get('/api/data', headers={'Authorization': token})
     assert isinstance(response.json, dict)
 
 
