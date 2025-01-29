@@ -82,6 +82,9 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/time_tracker:latest
-            sudo docker container stop time_tracker || true
+            if [ "$(sudo docker ps -q -f name=time_tracker)" ]; then
+              sudo docker container stop time_tracker
+              sudo docker container rm time_tracker
+            fi
             sudo docker image prune --filter "until=24h"
             sudo docker run --restart unless-stopped -p 5001:5001 -v tt_sqlite:/app/instance -d --name time_tracker --env-file=time_tracker/.env ${{ secrets.DOCKER_USERNAME }}/time_tracker
