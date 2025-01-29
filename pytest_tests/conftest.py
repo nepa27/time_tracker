@@ -58,7 +58,7 @@ def create_work(client, token):
     response = client.post(
         '/',
         headers={
-            'Autorization': token,
+            'Authorization': token,
             'Content-Type': 'application/json'},
         json={
             'name_of_work': 'Test',
@@ -73,7 +73,7 @@ def create_work(client, token):
 def update_work(client, token):
     response = client.post(
         '/edit/2025-01-24/Test',
-        headers={'Autorization': token, },
+        headers={'Authorization': token, },
         data={
             'name_of_work': 'newTest',
             'time': '01:41:34',
@@ -87,6 +87,6 @@ def update_work(client, token):
 def delete_work(client, token):
     response = client.delete(
         '/delete/25.01.2025/newTest',
-        headers={'Autorization': token}
+        headers={'Authorization': token}
     )
     return response
