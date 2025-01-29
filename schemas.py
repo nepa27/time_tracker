@@ -2,7 +2,7 @@
 
 import re
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator
 
 from constants import LENGHT_NAME
 
@@ -14,8 +14,8 @@ class TimeTrackerSchema(BaseModel):
     time: str
     date: str
 
-    @validator('name_of_work')
-    def validate_name_of_work(cls, name):
+    @field_validator('name_of_work')
+    def validate_name_of_work(cls, name: str) -> str:
         """Функция валидации названия дела."""
         if len(name) > LENGHT_NAME or not re.match(
                 "^[\w\s!\"#@$%&()*+,-./:;<=>?[\]"

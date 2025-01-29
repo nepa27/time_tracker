@@ -29,7 +29,7 @@ class ReadCreateWorksView(MethodView):
     def post(self):
         """Представление для добавления новых дел."""
         try:
-            data = TimeTrackerSchema(**request.get_json()).dict()
+            data = TimeTrackerSchema(**request.get_json()).model_dump()
         except ValidationError as err:
             logger.error(err)
             abort(400)
@@ -99,7 +99,7 @@ class EditWorksView(MethodView):
     def post(self, name_of_work, date):
         """Представление для редактирования дела."""
         try:
-            form_data = TimeTrackerSchema(**request.form.to_dict()).dict()
+            form_data = TimeTrackerSchema(**request.form.to_dict()).model_dump()
         except ValidationError as err:
             errors = [str(err['msg']) for err in err.errors()]
             error = errors[0].split('error,')[1]
