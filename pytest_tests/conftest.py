@@ -36,7 +36,7 @@ def runner(app):
 
 @pytest.fixture()
 def register(client):
-    response = client.post(
+    client.post(
         '/register/', data={'username': USERNAME, 'password': PASSWORD}
     )
 
