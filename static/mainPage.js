@@ -493,8 +493,6 @@ class TimerItem extends Component {
 }
 
 class TotalTimer extends Component {
-  static totalSeconds;
-
   constructor({
     id = "",
     text = "00:00:00",
@@ -503,35 +501,38 @@ class TotalTimer extends Component {
     super();
     this.id = id;
     this.text = text;
-    TotalTimer.totalSeconds = totalSeconds;
+    this.totalSeconds = totalSeconds;
 
     this.element = super.createElement(this.createElementTemplate());
-
   }
 
   createElementTemplate() {
-    return `<div id="${this.id}" class="timer" >${this.text}</div>`;
+    return `<div id="${this.id}" class="timer">${this.text}</div>`;
   }
 
   createTimer() {
-    this.intervalId = setInterval(
-      () => this.rerenderTimer(),
-      Component.TIMEOUT //1_000
-    );
+    // Устанавливаем startTime внутри createTimer()
+    this.startTime = Date.now();
+    this.intervalId = setInterval(() => this.rerenderTimer(), Component.TIMEOUT);
   }
 
   rerenderTimer() {
-    TotalTimer.totalSeconds++;
-    this.element.textContent = TotalTimer.updateSecondsToString(
-      TotalTimer.totalSeconds
-    );
+    const elapsedSeconds = Math.floor((Date.now() - this.startTime) / 1000);
+    const currentTotalSeconds = this.totalSeconds + elapsedSeconds;
+
+    // Обновляем startTime для следующего интервала
+    this.startTime = Date.now();
+    this.totalSeconds = currentTotalSeconds;
+
+    this.element.textContent = TotalTimer.updateSecondsToString(currentTotalSeconds);
   }
 
-  resetTotalTimer = () => {
-    TotalTimer.totalSeconds = 0;
+  resetTotalTimer() {
+    this.totalSeconds = 0;
+    this.startTime = Date.now();
     this.text = "00:00:00";
     this.element.innerHTML = this.text;
-  };
+  }
 
   static updateSecondsToString(seconds) {
     const hrs = Math.floor(seconds / 3600);
@@ -544,7 +545,6 @@ class TotalTimer extends Component {
 
   destroyTotalTimer() {
     super.destroyTimer();
-
   }
 }
 
