@@ -25,6 +25,7 @@
       </div>
       <nav class="nav-links">
         <a href="{{ url_for('timer.home') }}">Главная</a>
+        <a href="{{ url_for('timer.export_file') }}">Экспорт в файл</a>
         {% if user %}
         <a href="{{ url_for('timer.statistics') }}">Статистика</a>
         <span>| Пользователь: <b>{{ user }}</b> |</span>

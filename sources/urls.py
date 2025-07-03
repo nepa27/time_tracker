@@ -9,6 +9,7 @@ from sources.endpoints import (
     get_statistics,
     api_data,
     api_statistics,
+    export_file
 )
 from sources.user import UserRegister, UserLogin, UserLogout
 
@@ -32,6 +33,12 @@ timer.add_url_rule(
     view_func=get_statistics,
     methods=('GET',),
     endpoint='statistics',
+)
+timer.add_url_rule(
+    '/export_file',
+    view_func=export_file,
+    methods=('GET',),
+    endpoint='export_file',
 )
 timer.add_url_rule(
     '/api/data', methods=('GET',), view_func=api_data, endpoint='api_data'

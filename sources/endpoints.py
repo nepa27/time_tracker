@@ -1,6 +1,6 @@
 """Модуль, содержащий эндпоинты взаимодействия с пользователями"""
 
-from datetime import datetime
+from datetime import datetime, date
 
 import sqlalchemy
 from flask import abort, flash, redirect, render_template, request, url_for
@@ -15,7 +15,13 @@ from pydantic import ValidationError
 from config import db, logger
 from models import TimeTrackerModel
 from schemas import TimeTrackerSchema
-from utils.utils import data_to_statistic, data_to_json, parse_date, sum_time
+from utils.utils import (
+    data_to_statistic,
+    data_to_json,
+    parse_date,
+    sum_time,
+    data_to_obsidian
+)
 
 
 class ReadCreateWorksView(MethodView):
@@ -170,9 +176,9 @@ def delete_works(date, name_of_work):
     """Представление для удаления дела."""
     date = parse_date(date)
     if TimeTrackerModel.query.filter(
-        TimeTrackerModel.name_of_work == name_of_work,
-        TimeTrackerModel.date == date,
-        TimeTrackerModel.username == get_jwt_identity(),
+            TimeTrackerModel.name_of_work == name_of_work,
+            TimeTrackerModel.date == date,
+            TimeTrackerModel.username == get_jwt_identity(),
     ).delete():
         db.session.commit()
         logger.info(
@@ -245,6 +251,26 @@ def api_statistics():
         return {
             'data': data_to_statistic(data),
         }, 200
+    except BaseException as e:
+        logger.info(f'Ошибка при получении данных: {e}')
+        abort(500)
+
+
+@jwt_required()
+def export_file():
+    """Экспортирует данные в файл."""
+    try:
+        today = parse_date(str(date.today()))
+
+        verify_jwt_in_request(optional=True)
+        data = TimeTrackerModel.query.filter(
+            TimeTrackerModel.username == get_jwt_identity(),
+            TimeTrackerModel.date == today,
+        )
+        today_data = data_to_obsidian(data)
+        with open(f'obsidian_{today}.txt', 'w') as file:
+            file.write(today_data)
+        return redirect(url_for('timer.home'))
     except BaseException as e:
         logger.info(f'Ошибка при получении данных: {e}')
         abort(500)

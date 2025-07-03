@@ -70,6 +70,21 @@ def data_to_statistic(data) -> dict:
     return result_data
 
 
+def data_to_obsidian(data) -> str:
+    """Функция преобразует данные из БД в строку для Obsidian."""
+    result_data = ''
+
+    for value in data:
+        name = value.name_of_work
+        date = value.date.strftime('%d.%m.%Y')
+        time_data = value.time.strftime('%H:%M:%S')
+
+        if name not in result_data:
+            result_data += (f'- <span style="background:#affad1">{name}'
+                            f'</span>: <u>{date}</u> - *{time_data}*\n')
+    return result_data
+
+
 def parse_date(date_str):
     """Функция преобразует строку в дату в зависимости от формата."""
     formats = ('%d.%m.%Y', '%Y-%m-%d')
