@@ -1,0 +1,12 @@
+venv
+.git
+.env
+time_tracker.log
+
+instance/
+.webassets-cache
+.github
+
+__pycache__/
+*.py[cod]
+*$py.class
